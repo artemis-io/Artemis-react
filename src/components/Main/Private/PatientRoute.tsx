@@ -7,7 +7,7 @@ const PatientRoute = ({ children }: any) => {
 
   if (!user) {
     return <Navigate to="/signIn" />;
-  } else if (user.role !== "patient") {
+  } else if (user?.role !== "patient") {
     return <NotFound />;
   }
 

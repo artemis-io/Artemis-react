@@ -41,7 +41,7 @@ export function PatientInfo() {
     e.preventDefault();
 
     try {
-      const response = await apiMed.post("/api/user", formDataPatient);
+      const response = await apiMed.post("/user", formDataPatient);
       console.log(formDataPatient, "43");
       router("/patient/homepage");
       console.log(response);

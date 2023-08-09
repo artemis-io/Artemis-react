@@ -13,17 +13,17 @@ const VideoChat = () => {
   const { roomName } = useParams();
 
   const { user } = useAuth();
-
+  console.log(user);
   const [room, setRoom] = useState(null);
   const [connecting, setConnecting] = useState(false);
 
   const handleSubmit = useCallback(
-    async (event) => {
+    async (event: any) => {
       event.preventDefault();
       setConnecting(true);
 
       try {
-        const response = await apiMed.post("api/twilio/video/token", {
+        const response = await apiMed.post("twilio/video/token", {
           identity: user?.id,
           room: roomName,
         });
@@ -51,9 +51,9 @@ const VideoChat = () => {
   );
 
   const handleLogout = useCallback(() => {
-    setRoom((prevRoom) => {
+    setRoom((prevRoom: any) => {
       if (prevRoom) {
-        prevRoom.localParticipant.tracks.forEach((trackPub) => {
+        prevRoom.localParticipant.tracks.forEach((trackPub: any) => {
           trackPub.track.stop();
         });
         prevRoom.disconnect();
@@ -64,7 +64,7 @@ const VideoChat = () => {
 
   useEffect(() => {
     if (room) {
-      const tidyUp = (event) => {
+      const tidyUp = (event: any) => {
         if (event.persisted) {
           return;
         }

@@ -6,7 +6,7 @@ export type DoctorImage = {
   name?: string;
   specialty?: string;
   imageUrl?: string;
-}
+};
 
 export type loginProps = {
   email: string;
@@ -60,6 +60,8 @@ export type DoctorStep2Data = {
 
 export type DoctorStep3Data = {
   crm: string;
+  pricing: number | undefined | readonly string[] | string;
+  bio: string;
   speciality: string[];
 };
 
