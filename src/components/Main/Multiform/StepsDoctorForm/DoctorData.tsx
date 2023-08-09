@@ -3,8 +3,6 @@ import {
   Box,
   Button,
   FormControl,
-  FormLabel,
-  Heading,
   Input,
   InputGroup,
   InputRightElement,
@@ -12,8 +10,9 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setStep1Data } from "../../../../shared/reducer/DoctorReducer";
 import { DoctorStep1Data } from "../../../../shared/types";
+import { setStep1Data } from "../../../../shared/reducer/DoctorReducer";
+import StyledLabel from "../../Forms/StyledLabel";
 
 export function DoctorData({ handleNextStep }: any) {
   const dispatch = useDispatch();
@@ -59,13 +58,17 @@ export function DoctorData({ handleNextStep }: any) {
   };
 
   return (
-    <Box>
-      <Stack spacing={4} w={"full"} maxW={"md"} p={4}>
-        <Heading fontSize={{ base: "2xl", sm: "3xl" }}>
-          Cadastro de médico
-        </Heading>
+    <Box
+    display="flex"
+    flexDirection="column"
+    alignItems="center"
+    justifyContent="center"
+    >
+      <Stack spacing={4} w={"full"} maxW={"md"} p={2}>
         <FormControl id="name">
-          <FormLabel>Nome Completo</FormLabel>
+          <StyledLabel>
+            Nome Completo
+          </StyledLabel>
           <Input
             backgroundColor="white"
             type="text"
@@ -81,12 +84,11 @@ export function DoctorData({ handleNextStep }: any) {
         </FormControl>
 
         <FormControl id="email" mt={4}>
-          <FormLabel>Email</FormLabel>
+          <StyledLabel>Email</StyledLabel>
           <Input
             backgroundColor="white"
             type="email"
             name="email"
-            placeholder="exemplo@mail.com"
             value={step1.email}
             onChange={handleInputChange}
             borderRadius="md"
@@ -98,13 +100,14 @@ export function DoctorData({ handleNextStep }: any) {
         </FormControl>
 
         <FormControl id="password" mt={4}>
-          <FormLabel>Senha</FormLabel>
+          <StyledLabel>
+            Senha
+          </StyledLabel>
           <InputGroup>
             <Input
               backgroundColor="white"
               type={showPassword ? "text" : "password"}
               name="password"
-              placeholder="123@Abcd"
               value={step1.password}
               onChange={handleInputChange}
               borderRadius="md"
@@ -130,7 +133,9 @@ export function DoctorData({ handleNextStep }: any) {
         </FormControl>
 
         <FormControl id="confirmPassword" mt={4}>
-          <FormLabel>Confirme sua Senha</FormLabel>
+          <StyledLabel>
+            Confirme sua Senha
+          </StyledLabel>
           <InputGroup>
             <Input
               backgroundColor="white"
@@ -167,7 +172,7 @@ export function DoctorData({ handleNextStep }: any) {
             bg: "blue.500",
           }}
         >
-          Proximo
+          Próximo
         </Button>
       </Stack>
     </Box>
