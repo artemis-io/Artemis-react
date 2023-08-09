@@ -11,15 +11,17 @@ import {
   Input,
   Link,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { apiMed } from "../../../services/api";
-import { useNavigate } from "react-router-dom";
+import StyledLabel from "../../../components/Main/Forms/StyledLabel";
 
-const ForgotPassword: React.FC = () => {
-  const router = useNavigate();
+
+const PasswordForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const toast = useToast();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -29,18 +31,30 @@ const ForgotPassword: React.FC = () => {
     e.preventDefault();
 
     try {
-      await apiMed.post("/security-token/forgot-password", { email });
-      setSuccessMessage("Verifique sua caixa de entrada ou spam.")
-      console.log('Email:', email)
+      await apiMed.post("/api/security-token/forgot-password", { email });
+      console.log("Email:", email);
+      toast({
+        position: "top",
+        title: "Sucesso",
+        description: "As instruções foram enviadas para seu e-mail",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
     } catch (error) {
       console.error(error);
-      setErrorMessage("Ocorreu um erro ao enviar o e-mail de recuperação de senha.");
+      toast({
+        position: "top",
+        title: "Erro",
+        description:
+          "Ocorreu um erro, verifique as informações e tente novamente.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
-  
-  const handleGoBack = (route: any) => {
-    router(route);
-  };
+
 
   return (
     <Box
@@ -56,12 +70,12 @@ const ForgotPassword: React.FC = () => {
       <Image src="/assets/images/logo.png" alt="logo" maxWidth="400px" />
       <Center minWidth="max-content" alignItems="center" gap="2">
         <Heading size="md" pb="10" mb="10" fontWeight="bold" color="#747B7D">
-         Informe o e-mail cadastrado
+          Recuperação de senha
         </Heading>
       </Center>
       <form onSubmit={handleSubmit}>
         <FormControl id="email">
-          <FormLabel>Email</FormLabel>
+          <StyledLabel>Email</StyledLabel>
           <Input
             backgroundColor="white"
             type="email"
@@ -76,26 +90,21 @@ const ForgotPassword: React.FC = () => {
           </Button>
         </Flex>
         {successMessage && (
-        <Center minWidth="max-content" alignItems="center" gap="2">
-          <Text color="green" pt="2">
-            {successMessage}
-          </Text>
-        </Center>
-      )}
+          <Center minWidth="max-content" alignItems="center" gap="2">
+            <Text color="green" pt="2">
+              {successMessage}
+            </Text>
+          </Center>
+        )}
         {errorMessage && (
+          <Center minWidth="max-content" alignItems="center" gap="2">
+            <Text color="red" pt="2">
+              {errorMessage}
+            </Text>
+          </Center>
+        )}
         <Center minWidth="max-content" alignItems="center" gap="2">
-          <Text color="red" pt="2">
-            {errorMessage}
-          </Text>
-        </Center>
-      )}
-        <Center
-          minWidth="max-content"
-          alignItems="center"
-          gap="2"
-          onClick={() => handleGoBack('/signIn')}
-        >
-         <Link href="../signIn">
+          <Link href="/security/login">
             <Text pt="15" pb="40" fontWeight="bold" color="#747B7D">
               Voltar para login
             </Text>
@@ -106,4 +115,4 @@ const ForgotPassword: React.FC = () => {
   );
 };
 
-export default ForgotPassword;
+export default PasswordForm;

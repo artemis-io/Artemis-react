@@ -1,11 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useEffect, useState } from "react";
-
+import React, { useCallback, useEffect, useState } from "react";
 import { Container } from "@chakra-ui/react";
 import { useAuth } from "../../hooks/useAuth";
 import { apiMed } from "../../services/api";
 import RoomVideo from "../../components/Main/Room";
-import Lobby from "../../components/Main/Lobby";
 import { useParams } from "react-router-dom";
 
 import { Room as TwilioRoom } from "twilio-video";
@@ -15,7 +12,7 @@ const VideoChat = () => {
   const { roomName } = useParams();
 
   const { user } = useAuth();
-  console.log(user);
+
   const [room, setRoom] = useState<TwilioRoom | null>(null);
   const [connecting, setConnecting] = useState(false);
 
@@ -34,7 +31,6 @@ const VideoChat = () => {
           networkQuality: true,
           name: roomName,
           preferredVideoCodecs: ["H264", "VP8"],
-          // preferredVideoCodecs: ["H264"],
         })
           .then((room) => {
             setConnecting(false);
@@ -93,12 +89,9 @@ const VideoChat = () => {
           handleLogout={handleLogout}
         />
       ) : (
-        <Lobby
-          username={user?.name}
-          roomName={roomName}
-          handleSubmit={handleSubmit}
-          connecting={connecting}
-        />
+        <button onClick={handleSubmit} disabled={connecting}>
+          {connecting ? "Connecting..." : "Join Video Chat"}
+        </button>
       )}
     </Container>
   );

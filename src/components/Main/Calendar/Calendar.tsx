@@ -12,10 +12,12 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
-
 import { useMediaQuery } from "@chakra-ui/react";
-
 import CalendarButton from "../../Style/Buttons/CalendarButton";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { useDispatch } from "react-redux";
+import { setStep6Data } from "../../../shared/reducer/AppointmentReducer";
 
 interface CalendarWeek {
   week: number;
@@ -36,8 +38,14 @@ export default function Calendar({
   selectedDate,
   onDateSelected,
 }: CalendarProps) {
+  const dispatch = useDispatch();
   const [isSmallerThanMd] = useMediaQuery("(max-width: 48em)");
   const [isSmallerThanLg] = useMediaQuery("(max-width: 62em)");
+
+  const handleSubmit = (e: any) => {
+    console.log(`teste: ${e}`);
+    dispatch(setStep6Data({ date: e }));
+  };
 
   const [currentDate, setCurrentDate] = useState(() => {
     return dayjs().set("date", 1);
@@ -53,7 +61,8 @@ export default function Calendar({
     setCurrentDate(previousMonthDate);
   }
 
-  const currentMonth = currentDate.format("MMMM");
+  const currentMonth = format(currentDate.toDate(), "MMMM", { locale: ptBR });
+
   const currentYear = currentDate.format("YYYY");
 
   const calendarWeeks = useMemo(() => {
@@ -146,7 +155,6 @@ export default function Calendar({
           </Heading>
           <Heading>{currentYear}</Heading>
         </Box>
-
         <IconButton
           bg="none"
           colorScheme="gray"
@@ -173,11 +181,13 @@ export default function Calendar({
             return (
               <Tr key={week}>
                 {days.map(({ date, isDisabled }) => {
+                  const isSelected =
+                    selectedDate && date.isSame(selectedDate, "day");
                   return (
                     <Td key={date.toString()}>
                       <CalendarButton
+                        isSelected={isSelected || false} // Provide a default value of false
                         onClick={() => onDateSelected(date.toDate())}
-                        fontSize={isSmallerThanMd ? "sm" : "md"}
                         isDisabled={isDisabled}
                       >
                         {date.get("date")}
