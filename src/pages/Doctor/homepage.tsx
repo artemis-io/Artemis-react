@@ -6,8 +6,8 @@ import { apiMed } from "../../services/api";
 import Sidebar from "../../components/Main/SideBar/Sidebar";
 import SearchBar from "../../components/Main/SearchBar";
 import AppointmentCard from "../../components/Style/Cards/AppointmentCard";
-import UpcomingAppointments from "../../components/Main/UpcomingAppointments";
 import { AUTH_TOKEN_STORAGE } from "../../shared/storage/config";
+import UpcomingAppointmentsDoctor from "../../components/Main/UpcomingAppointmentsDoctor";
 
 const fetchData = async (userId: string) => {
   const currentDate = new Date();
@@ -52,7 +52,7 @@ const HomepageDoctor = () => {
       <VStack spacing={5}>
         <SearchBar />
         <AppointmentCard totalAppointments={totalAppointments} />
-        <UpcomingAppointments appointments={upcomingAppointments} />
+        <UpcomingAppointmentsDoctor appointments={upcomingAppointments} />
       </VStack>
     </Sidebar>
   );

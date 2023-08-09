@@ -57,7 +57,7 @@ export const getUserInformationRequest = async () => {
     const accessToken = localStorage.getItem(AUTH_TOKEN_STORAGE);
 
     if (accessToken) {
-      const response = await apiMed.get("/api/auth", {
+      const response = await apiMed.get("/auth", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

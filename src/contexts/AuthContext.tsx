@@ -10,8 +10,6 @@ import {
   AUTH_TOKEN_STORAGE,
 } from "../shared/storage/config";
 
-//import jwtDecode from "jwt-decode";
-
 import { apiMed } from "../services/api";
 import { loginProps } from "../shared/types";
 import { UserAuth } from "../shared/interface";

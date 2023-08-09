@@ -42,6 +42,9 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
 }) => {
   const router = useNavigate();
 
+  console.log(appointments);
+
+
   const handleNav = () => {
     router("/patient/appointment");
   };
@@ -51,7 +54,7 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
       <Text fontSize="xl" fontWeight="bold" mt={4}>
         Próximas Consultas
       </Text>
-      {appointments.map((appointment) => (
+      {appointments.map((appointment) => (        
         <Box
           key={appointment.id}
           bg="white"
@@ -75,32 +78,32 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
                 width="50px"
                 borderRadius={10}
                 objectFit="cover"
-                src={appointment.doctor.avatar_url}
+                src={appointment?.doctor?.avatar_url}
                 alt="Foto de perfil"
               />
             </GridItem>
             <GridItem area={"name"}>
               <Text fontSize="lg" fontWeight="bold" pt="5px ">
-                {appointment.doctor.name}
+                {appointment?.doctor?.name}
               </Text>
             </GridItem>
             <GridItem area={"spec"}>
               <Text fontSize="sm" color="gray.500">
-                {appointment.doctor.doctor.speciality.join(", ")}
+                {appointment?.doctor?.doctor?.speciality.join(", ")}
               </Text>
               <Text fontSize="xm" color="gray.500" pt="5px">
-                {appointment.query === "person" ? "Presencial" : "Teleconsulta"}
+                {appointment?.query === "person" ? "Presencial" : "Teleconsulta"}
               </Text>
             </GridItem>
             <GridItem area={"date"} pl="10px">
               <Text fontSize="sm">
-                {new Date(appointment.date).toLocaleDateString("pt-BR", {
+                {new Date(appointment?.date).toLocaleDateString("pt-BR", {
                   day: "numeric",
                   month: "short",
                 })}
               </Text>
               <Text fontSize="sm" color="gray.500">
-                {new Date(appointment.date).toLocaleTimeString("pt-BR", {
+                {new Date(appointment?.date).toLocaleTimeString("pt-BR", {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}
@@ -108,10 +111,10 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
             </GridItem>
 
             <GridItem area={"vid"}>
-              {appointment.query === "teleconsultation" && (
+              {appointment?.query === "teleconsultation" && (
                 <IconButton
                   as={RouterLink}
-                  to={`/video/${appointment.id}`}
+                  to={`/video/${appointment?.id}`}
                   variant="outline"
                   colorScheme="blue"
                   aria-label="Entrar na chamada de vídeo"
@@ -123,8 +126,8 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
             <GridItem area={"footer"} pt="5px">
               <Text fontSize="md">
                 Status:{" "}
-                <Badge colorScheme={appointment.payment ? "green" : "red"}>
-                  {appointment.payment ? "Pago" : "Aguardando pagamento"}
+                <Badge colorScheme={appointment?.payment ? "green" : "red"}>
+                  {appointment?.payment ? "Pago" : "Aguardando pagamento"}
                 </Badge>
               </Text>
             </GridItem>
