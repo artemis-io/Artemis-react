@@ -60,6 +60,8 @@ export type DoctorStep2Data = {
 
 export type DoctorStep3Data = {
   crm: string;
+  pricing: number;
+  bio: string;
   speciality: string[];
 };
 

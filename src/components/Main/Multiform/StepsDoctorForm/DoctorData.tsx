@@ -3,8 +3,6 @@ import {
   Box,
   Button,
   FormControl,
-  FormLabel,
-  Heading,
   Input,
   InputGroup,
   InputRightElement,
@@ -12,8 +10,9 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setStep1Data } from "../../../../shared/reducer/DoctorReducer";
 import { DoctorStep1Data } from "../../../../shared/types";
+import { setStep1Data } from "../../../../shared/reducer/DoctorReducer";
+import StyledLabel from "../../Forms/StyledLabel";
 
 export function DoctorData({ handleNextStep }: any) {
   const dispatch = useDispatch();
@@ -30,10 +29,8 @@ export function DoctorData({ handleNextStep }: any) {
     setStep1((prevFormData) => ({ ...prevFormData, [name]: value }));
     dispatch(
       setStep1Data({
-        name: step1.name,
-        email: step1.email,
-        passoword: step1.password,
-        confirmPassword: step1.confirmPassword,
+        ...step1, // Spread the previous step1 data
+        [name]: value, // Update the changed field
       })
     );
   };
@@ -41,12 +38,14 @@ export function DoctorData({ handleNextStep }: any) {
   const isPasswordValid = () => {
     const { password } = step1;
     const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/;
     return passwordRegex.test(password);
   };
+
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isPasswordValid()) {
@@ -55,17 +54,20 @@ export function DoctorData({ handleNextStep }: any) {
       );
       return;
     }
+    dispatch(setStep1Data(step1));
     handleNextStep();
   };
 
   return (
-    <Box>
-      <Stack spacing={4} w={"full"} maxW={"md"} p={4}>
-        <Heading fontSize={{ base: "2xl", sm: "3xl" }}>
-          Cadastro de médico
-        </Heading>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Stack spacing={4} w={"full"} maxW={"md"} p={2}>
         <FormControl id="name">
-          <FormLabel>Nome Completo</FormLabel>
+          <StyledLabel>Nome Completo</StyledLabel>
           <Input
             backgroundColor="white"
             type="text"
@@ -81,12 +83,11 @@ export function DoctorData({ handleNextStep }: any) {
         </FormControl>
 
         <FormControl id="email" mt={4}>
-          <FormLabel>Email</FormLabel>
+          <StyledLabel>Email</StyledLabel>
           <Input
             backgroundColor="white"
             type="email"
             name="email"
-            placeholder="exemplo@mail.com"
             value={step1.email}
             onChange={handleInputChange}
             borderRadius="md"
@@ -98,13 +99,12 @@ export function DoctorData({ handleNextStep }: any) {
         </FormControl>
 
         <FormControl id="password" mt={4}>
-          <FormLabel>Senha</FormLabel>
+          <StyledLabel>Senha</StyledLabel>
           <InputGroup>
             <Input
               backgroundColor="white"
               type={showPassword ? "text" : "password"}
               name="password"
-              placeholder="123@Abcd"
               value={step1.password}
               onChange={handleInputChange}
               borderRadius="md"
@@ -130,7 +130,7 @@ export function DoctorData({ handleNextStep }: any) {
         </FormControl>
 
         <FormControl id="confirmPassword" mt={4}>
-          <FormLabel>Confirme sua Senha</FormLabel>
+          <StyledLabel>Confirme sua Senha</StyledLabel>
           <InputGroup>
             <Input
               backgroundColor="white"
@@ -158,6 +158,7 @@ export function DoctorData({ handleNextStep }: any) {
             </InputRightElement>
           </InputGroup>
         </FormControl>
+
         <Button
           onClick={handleSubmit}
           bg={"blue.400"}
@@ -167,7 +168,7 @@ export function DoctorData({ handleNextStep }: any) {
             bg: "blue.500",
           }}
         >
-          Proximo
+          Próximo
         </Button>
       </Stack>
     </Box>

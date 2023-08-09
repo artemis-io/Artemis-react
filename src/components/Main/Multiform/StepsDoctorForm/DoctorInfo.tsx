@@ -1,15 +1,18 @@
+
 import {
   Box,
   Button,
   FormControl,
-  FormLabel,
   Input,
+  Select,
   Stack,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { FiArrowDown } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { setStep2Data } from "../../../../shared/reducer/DoctorReducer";
 import { DoctorStep2Data } from "../../../../shared/types";
+import { setStep2Data } from "../../../../shared/reducer/DoctorReducer";
+import StyledLabel from "../../Forms/StyledLabel";
 
 export function DoctorInfo({ handleNextStep }: any) {
   const dispatch = useDispatch();
@@ -44,10 +47,15 @@ export function DoctorInfo({ handleNextStep }: any) {
   };
 
   return (
-    <Box>
-      <Stack spacing={4} w={"full"} maxW={"md"} p={4}>
-        <FormControl id="cpf" isRequired>
-          <FormLabel>CPF</FormLabel>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Stack spacing={6} w={"full"} maxW={"md"} p={2}>
+        <FormControl id="cpf">
+          <StyledLabel>CPF</StyledLabel>
           <Input
             onChange={handleSubmit}
             value={step2.cpf}
@@ -56,14 +64,17 @@ export function DoctorInfo({ handleNextStep }: any) {
             placeholder="000.000.000-00"
             _placeholder={{ color: "gray.500" }}
             type="text"
-            boxShadow="md"
-            borderColor="gray.300"
-            _hover={{ borderColor: "blue.400" }}
-            _focus={{ borderColor: "blue.400" }}
           />
         </FormControl>
-        <FormControl id="rg" isRequired>
-          <FormLabel>RG</FormLabel>
+        <FormControl>
+          <Select icon={<FiArrowDown />} placeholder="Gênero">
+            <option value="option1">Masculino</option>
+            <option value="option2">Feminino</option>
+          </Select>
+        </FormControl>
+
+        <FormControl id="rg">
+          <StyledLabel>RG</StyledLabel>
           <Input
             onChange={handleSubmit}
             value={step2.rg}
@@ -72,14 +83,10 @@ export function DoctorInfo({ handleNextStep }: any) {
             placeholder="00000000"
             _placeholder={{ color: "gray.500" }}
             type="text"
-            boxShadow="md"
-            borderColor="gray.300"
-            _hover={{ borderColor: "blue.400" }}
-            _focus={{ borderColor: "blue.400" }}
           />
         </FormControl>
-        <FormControl id="cep" isRequired>
-          <FormLabel>CEP</FormLabel>
+        <FormControl id="cep">
+          <StyledLabel>CEP</StyledLabel>
           <Input
             onChange={handleSubmit}
             value={step2.cep}
@@ -90,8 +97,8 @@ export function DoctorInfo({ handleNextStep }: any) {
             type="text"
           />
         </FormControl>
-        <FormControl id="address" isRequired>
-          <FormLabel>Endereço</FormLabel>
+        <FormControl id="address">
+          <StyledLabel>Endereço</StyledLabel>
           <Input
             onChange={handleSubmit}
             value={step2.address}
@@ -103,8 +110,8 @@ export function DoctorInfo({ handleNextStep }: any) {
           />
         </FormControl>
 
-        <FormControl id="number" isRequired>
-          <FormLabel>Número</FormLabel>
+        <FormControl id="number">
+          <StyledLabel>Número</StyledLabel>
           <Input
             onChange={handleSubmit}
             value={step2.number}
@@ -115,8 +122,8 @@ export function DoctorInfo({ handleNextStep }: any) {
           />
         </FormControl>
 
-        <FormControl id="state" isRequired>
-          <FormLabel>Estado</FormLabel>
+        <FormControl id="state">
+          <StyledLabel>Estado</StyledLabel>
           <Input
             onChange={handleSubmit}
             value={step2.state}
@@ -127,8 +134,8 @@ export function DoctorInfo({ handleNextStep }: any) {
           />
         </FormControl>
 
-        <FormControl id="city" isRequired>
-          <FormLabel>Cidade</FormLabel>
+        <FormControl id="city">
+          <StyledLabel>Cidade</StyledLabel>
           <Input
             onChange={handleSubmit}
             value={step2.city}
@@ -139,8 +146,8 @@ export function DoctorInfo({ handleNextStep }: any) {
           />
         </FormControl>
 
-        <FormControl id="district" isRequired>
-          <FormLabel>Bairro</FormLabel>
+        <FormControl id="district">
+          <StyledLabel>Bairro</StyledLabel>
           <Input
             onChange={handleSubmit}
             value={step2.district}
