@@ -6,7 +6,7 @@ export type DoctorImage = {
   name?: string;
   specialty?: string;
   imageUrl?: string;
-}
+};
 
 export type loginProps = {
   email: string;

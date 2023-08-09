@@ -96,7 +96,6 @@ const SidebarContent = ({
         justifyContent="space-between"
         mb={4}
       >
-        <Box></Box>
         <Image
           src="/assets/images/logo.png"
           alt="logo"

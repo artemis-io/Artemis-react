@@ -59,16 +59,14 @@ export function DoctorData({ handleNextStep }: any) {
 
   return (
     <Box
-    display="flex"
-    flexDirection="column"
-    alignItems="center"
-    justifyContent="center"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
     >
       <Stack spacing={4} w={"full"} maxW={"md"} p={2}>
         <FormControl id="name">
-          <StyledLabel>
-            Nome Completo
-          </StyledLabel>
+          <StyledLabel>Nome Completo</StyledLabel>
           <Input
             backgroundColor="white"
             type="text"
@@ -100,9 +98,7 @@ export function DoctorData({ handleNextStep }: any) {
         </FormControl>
 
         <FormControl id="password" mt={4}>
-          <StyledLabel>
-            Senha
-          </StyledLabel>
+          <StyledLabel>Senha</StyledLabel>
           <InputGroup>
             <Input
               backgroundColor="white"
@@ -133,9 +129,7 @@ export function DoctorData({ handleNextStep }: any) {
         </FormControl>
 
         <FormControl id="confirmPassword" mt={4}>
-          <StyledLabel>
-            Confirme sua Senha
-          </StyledLabel>
+          <StyledLabel>Confirme sua Senha</StyledLabel>
           <InputGroup>
             <Input
               backgroundColor="white"
