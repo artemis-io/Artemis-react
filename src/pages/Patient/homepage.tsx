@@ -1,56 +1,56 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import { Box, Text, Button, VStack } from "@chakra-ui/react";
-
-import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 import { apiMed } from "../../services/api";
 import { AUTH_TOKEN_STORAGE } from "../../shared/storage/config";
 import UpcomingAppointments from "../../components/Main/UpcomingAppointments";
 import PatientSidebar from "../../components/Main/PatientSideBar";
 
+// Separate the fetchData function
+const fetchData = async (
+  userId: any,
+  setTotalAppointments: any,
+  setUpcomingAppointments: any
+) => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1;
+  const day = currentDate.getDate();
+
+  const token = localStorage.getItem(AUTH_TOKEN_STORAGE);
+
+  const response = await apiMed.get(
+    `/appointment/${userId}/day-appointment-patient/${year}/${month}/${day}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const { data } = response;
+  setTotalAppointments(data.length);
+  setUpcomingAppointments(data);
+};
+
 export default function HomepagePatient() {
   const router = useNavigate();
   const { user } = useAuth();
-
   const [totalAppointments, setTotalAppointments] = useState(0);
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
 
-  // Função assíncrona para buscar os dados dos compromissos do paciente
-  const fetchData = async () => {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth() + 1;
-    const day = currentDate.getDate();
+  // Fetch data when component mounts and when user changes
+  useEffect(() => {
+    if (user?.id) {
+      fetchData(user.id, setTotalAppointments, setUpcomingAppointments);
+    }
+  }, [user]);
 
-    // Obtém o token de autenticação do localStorage
-    const token = localStorage.getItem(AUTH_TOKEN_STORAGE);
-
-    // Faz a requisição para buscar os compromissos do paciente
-    const response = await apiMed.get(
-      `/api/appointment/${user?.id}/day-appointment-patient/${year}/${month}/${day}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    // Atualiza os estados com os dados obtidos
-    const { data } = response;
-    setTotalAppointments(data.length);
-    setUpcomingAppointments(data);
-  };
-
-  // Restante do código...
   const handleNav = () => {
     router("/patient/appointment");
   };
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
 
   return (
     <PatientSidebar>

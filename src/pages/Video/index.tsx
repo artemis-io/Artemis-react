@@ -1,20 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from "react";
-import { connect as ConnectVideo } from "twilio-video";
 
 import { Container } from "@chakra-ui/react";
 import { useAuth } from "../../hooks/useAuth";
 import { apiMed } from "../../services/api";
-import Room from "../../components/Main/Room";
+import RoomVideo from "../../components/Main/Room";
 import Lobby from "../../components/Main/Lobby";
 import { useParams } from "react-router-dom";
+
+import { Room as TwilioRoom } from "twilio-video";
+import { connect as ConnectVideo } from "twilio-video";
 
 const VideoChat = () => {
   const { roomName } = useParams();
 
   const { user } = useAuth();
   console.log(user);
-  const [room, setRoom] = useState(null);
+  const [room, setRoom] = useState<TwilioRoom | null>(null);
   const [connecting, setConnecting] = useState(false);
 
   const handleSubmit = useCallback(
@@ -51,7 +53,7 @@ const VideoChat = () => {
   );
 
   const handleLogout = useCallback(() => {
-    setRoom((prevRoom: any) => {
+    setRoom((prevRoom: TwilioRoom | null) => {
       if (prevRoom) {
         prevRoom.localParticipant.tracks.forEach((trackPub: any) => {
           trackPub.track.stop();
@@ -84,7 +86,12 @@ const VideoChat = () => {
   return (
     <Container maxW="xl" centerContent>
       {room ? (
-        <Room roomName={roomName} room={room} handleLogout={handleLogout} />
+        <RoomVideo
+          roomName={roomName}
+          username={user?.name}
+          room={room}
+          handleLogout={handleLogout}
+        />
       ) : (
         <Lobby
           username={user?.name}
