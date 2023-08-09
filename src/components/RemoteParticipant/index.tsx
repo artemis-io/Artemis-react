@@ -1,14 +1,26 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Box, Heading, VStack } from "@chakra-ui/react";
-import ControlsBar from "../Controls";
+import {
+  Box,
+  Button,
+  Heading,
+  Tooltip,
+  VStack,
+  Icon,
+  HStack,
+  Text,
+  Card,
+  CardBody,
+  IconButton,
+  Flex,
+} from "@chakra-ui/react";
 
 
-interface ParticipantProps {
+interface RemoteParticipantProps {
   participant: any;
   handleLogout: () => void;
 }
 
-const Participant: React.FC<ParticipantProps> = ({
+const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   participant,
   handleLogout,
 }) => {
@@ -30,15 +42,15 @@ const Participant: React.FC<ParticipantProps> = ({
 
   const toggleAudioEnabled = useCallback(() => {
     if (audioTrack) {
-      setIsAudioEnabled((prevIsAudioEnabled) => !prevIsAudioEnabled);
       audioTrack.isEnabled ? audioTrack.disable() : audioTrack.enable();
+      setIsAudioEnabled(!audioTrack.isEnabled);
     }
   }, [audioTrack]);
 
   const toggleVideoEnabled = useCallback(() => {
     if (videoTrack) {
-      setIsVideoEnabled((prevIsVideoEnabled) => !prevIsVideoEnabled);
       videoTrack.isEnabled ? videoTrack.disable() : videoTrack.enable();
+      setIsVideoEnabled(!videoTrack.isEnabled);
     }
   }, [videoTrack]);
 
@@ -93,39 +105,26 @@ const Participant: React.FC<ParticipantProps> = ({
   }, [audioTracks]);
 
   return (
-    <Box textAlign="center" bg="#202124" p={1} mb={16}>
+    <Flex bg="#202124" p={1} mt={12}>
       <VStack>
-        <Box textAlign="left">
+        <Box>
           <Box
-            maxW="sm"
             borderWidth="2px"
             borderRadius="lg"
             overflow="hidden"
             borderColor="#202124"
           >
-            <video
-              ref={videoRef}
-              autoPlay={true}
-              style={{ width: "200px", height: "150px" }}
-            />
+            <video ref={videoRef} autoPlay={true} />
           </Box>
           <Heading color="#fafafa" fontSize="16px" mt={1}>
             {participant.identity}
           </Heading>
         </Box>
 
-        <ControlsBar
-          handleLogout={handleLogout}
-          isAudioEnabled={isAudioEnabled}
-          isVideoEnabled={isVideoEnabled}
-          toggleAudioEnabled={toggleAudioEnabled}
-          toggleVideoEnabled={toggleVideoEnabled}
-        />
-
         <audio ref={audioRef} autoPlay={true} style={{ display: "none" }} />
       </VStack>
-    </Box>
+    </Flex>
   );
 };
 
-export default Participant;
+export default RemoteParticipant;

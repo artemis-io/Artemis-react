@@ -18,9 +18,7 @@ const ControlsBar = ({
       left="50%"
       transform="translateX(-50%)"
       width="100%"
-      bgColor="rgba(0, 0, 0, 0.5)"
       padding="12px 36px"
-      borderRadius="20px"
     >
       <HStack
         borderRadius="20px"
@@ -31,7 +29,7 @@ const ControlsBar = ({
         <IconButton
           aria-label=""
           icon={<FiPhone />}
-          bg="red"
+          bg="#EF4037"
           colorScheme="white"
           onClick={handleLogout}
         />
@@ -48,7 +46,7 @@ const ControlsBar = ({
             <IconButton
               aria-label=""
               icon={<MdMicOff />}
-              bg="red"
+              bg="#EF4037"
               colorScheme="white"
               onClick={toggleAudioEnabled}
             />
@@ -67,7 +65,7 @@ const ControlsBar = ({
             <IconButton
               aria-label=""
               icon={<MdVideocamOff />}
-              bg="red"
+              bg="#EF4037"
               colorScheme="white"
               onClick={toggleVideoEnabled}
             />
