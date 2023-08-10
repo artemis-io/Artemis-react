@@ -90,10 +90,31 @@ export default function SettingsDoctor() {
     >
   ) => {
     const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  
+    if (name.includes("profile.")) {
+      const profileField = name.split(".")[1];
+      setFormData((prevData) => ({
+        ...prevData,
+        profile: {
+          ...prevData.profile,
+          [profileField]: value,
+        },
+      }));
+    } else if (name.includes("doctor.")) {
+      const doctorField = name.split(".")[1];
+      setFormData((prevData) => ({
+        ...prevData,
+        doctor: {
+          ...prevData.doctor,
+          [doctorField]: value,
+        },
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
 
     if (name === "avatar_url") {
       const file = (event.target as HTMLInputElement).files?.[0];
@@ -123,29 +144,34 @@ export default function SettingsDoctor() {
       setLoading(true);
       const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
       const formDataToSend = new FormData();
+      
       formDataToSend.append("name", formData.name);
-      formDataToSend.append("cep", formData.profile.cep);
-      formDataToSend.append("address", formData.profile.address);
-      formDataToSend.append("number", formData.profile.number);
-      formDataToSend.append("state", formData.profile.state);
-      formDataToSend.append("district", formData.profile.district);
-      formDataToSend.append("city", formData.profile.city);
-      formDataToSend.append("pricing", formData.doctor.pricing);
-      formDataToSend.append("bio", formData.doctor.bio);
-      formDataToSend.append(
-        "speciality",
-        JSON.stringify(formData.doctor.speciality)
-      );
-
+      
+      // Append profile fields
+      const profile = formData.profile;
+      formDataToSend.append("profile[cep]", profile.cep);
+      formDataToSend.append("profile[address]", profile.address);
+      formDataToSend.append("profile[number]", profile.number);
+      formDataToSend.append("profile[state]", profile.state);
+      formDataToSend.append("profile[district]", profile.district);
+      formDataToSend.append("profile[city]", profile.city);
+      
+      // Append doctor fields
+      const doctor = formData.doctor;
+      formDataToSend.append("doctor[pricing]", doctor.pricing);
+      formDataToSend.append("doctor[bio]", doctor.bio);
+      formDataToSend.append("doctor[speciality]", JSON.stringify(doctor.speciality));
+      
       if (imageFile) {
-        formDataToSend.append("avatar", imageFile);
+        formDataToSend.append("avatar_url", imageFile);
+        formDataToSend.append("Authorization", `Bearer ${item}`); // Include Authorization in FormData
         await handleUpdateImage(formDataToSend);
       } else {
         await apiMed.post("/doctor/update", formDataToSend, {
-            headers: {
-              Authorization: `Bearer ${item}`,
-            },
-          });
+          headers: {
+            Authorization: `Bearer ${item}`,
+          },
+        });
       }
 
       router("/doctor/homepage");

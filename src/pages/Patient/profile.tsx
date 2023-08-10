@@ -20,15 +20,17 @@ import { useNavigate } from "react-router-dom";
 interface UserData {
   avatar_url: string;
   name: string;
-  cep: string;
-  address: string;
-  number: string;
-  state: string;
-  district: string;
-  city: string;
+  profile: {
+    cep: string;
+    address: string;
+    number: string;
+    state: string;
+    district: string;
+    city: string;
+  };
 }
 
-export default function Settings() {
+export default function SettingsPatient() {
   const router = useNavigate();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -36,12 +38,14 @@ export default function Settings() {
   const [formData, setFormData] = useState<UserData>({
     avatar_url: "",
     name: "",
-    cep: "",
-    address: "",
-    number: "",
-    state: "",
-    district: "",
-    city: "",
+    profile: {
+        cep: "",
+        address: "",
+        number: "",
+        state: "",
+        district: "",
+        city: "",
+      },
   });
 
   const [imagePreview, setImagePreview] = useState(
@@ -52,14 +56,14 @@ export default function Settings() {
     const fetchUserData = async () => {
       try {
         const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
-        const response = await apiMed.get("/auth", {
+        const response = await apiMed.get("/auth/patient", {
           headers: {
             Authorization: `Bearer ${item}`,
           },
         });
         console.log("Response:", response.data);
         console.log("Item:", item);
-        const userData: UserData = response.data; // Assuming the response contains the user data
+        const userData: UserData = response.data;
         setFormData(userData);
         setImagePreview(userData.avatar_url || "/assets/images/profile.png");
       } catch (error) {
@@ -76,10 +80,22 @@ export default function Settings() {
     >
   ) => {
     const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  
+    if (name.includes("profile.")) {
+      const profileField = name.split(".")[1];
+      setFormData((prevData) => ({
+        ...prevData,
+        profile: {
+          ...prevData.profile,
+          [profileField]: value,
+        },
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
 
     if (name === "avatar_url") {
       const file = (event.target as HTMLInputElement).files?.[0];
@@ -110,18 +126,18 @@ export default function Settings() {
 
       const formDataToSend = new FormData();
       formDataToSend.append("name", formData.name);
-      formDataToSend.append("cep", formData.cep);
-      formDataToSend.append("address", formData.address);
-      formDataToSend.append("number", formData.number);
-      formDataToSend.append("state", formData.state);
-      formDataToSend.append("district", formData.district);
-      formDataToSend.append("city", formData.city);
+      formDataToSend.append("cep", formData.profile.cep);
+      formDataToSend.append("address", formData.profile.address);
+      formDataToSend.append("number", formData.profile.number);
+      formDataToSend.append("state", formData.profile.state);
+      formDataToSend.append("district", formData.profile.district);
+      formDataToSend.append("city", formData.profile.city);
 
       if (imageFile) {
         formDataToSend.append("avatar", imageFile);
         await handleUpdateImage(formDataToSend);
       } else {
-        await apiMed.post("/api/user/update", formDataToSend);
+        await apiMed.post("/user/update", formDataToSend);
       }
 
       router("/patient/homepage");
@@ -149,7 +165,7 @@ export default function Settings() {
           </Heading>
           <FormControl marginTop={10}>
             <Center>
-              <FormLabel>Imagem de Perfil</FormLabel>
+              <FormLabel fontWeight="bold">Imagem de Perfil</FormLabel>
             </Center>
 
             <Stack direction={["column", "row"]} spacing={6}>
@@ -183,7 +199,7 @@ export default function Settings() {
           </FormControl>
 
           <FormControl id="name">
-            <FormLabel>Nome</FormLabel>
+            <FormLabel fontWeight="bold">Nome</FormLabel>
             <Input
               variant="flushed"
               _placeholder={{ color: "gray.500" }}
@@ -194,68 +210,68 @@ export default function Settings() {
             />
           </FormControl>
           <FormControl id="cep">
-            <FormLabel>CEP</FormLabel>
+            <FormLabel fontWeight="bold">CEP</FormLabel>
             <Input
               variant="flushed"
               _placeholder={{ color: "gray.500" }}
               type="text"
-              name="cep"
-              value={formData.cep}
+              name="profile.cep"
+              value={formData.profile.cep}
               onChange={handleChange}
             />
           </FormControl>
           <FormControl id="address">
-            <FormLabel>Endereço</FormLabel>
+            <FormLabel fontWeight="bold">Endereço</FormLabel>
             <Input
               variant="flushed"
               _placeholder={{ color: "gray.500" }}
               type="text"
-              name="address"
-              value={formData.address}
+              name="profile.address"
+              value={formData.profile.address}
               onChange={handleChange}
             />
           </FormControl>
           <FormControl id="number">
-            <FormLabel>Número</FormLabel>
+            <FormLabel fontWeight="bold">Número</FormLabel>
             <Input
               variant="flushed"
               _placeholder={{ color: "gray.500" }}
               type="text"
-              name="number"
-              value={formData.number}
+              name="profile.number"
+              value={formData.profile.number}
               onChange={handleChange}
             />
           </FormControl>
           <FormControl id="state">
-            <FormLabel>Estado</FormLabel>
+            <FormLabel fontWeight="bold">Estado</FormLabel>
             <Input
               variant="flushed"
               _placeholder={{ color: "gray.500" }}
               type="text"
-              name="state"
-              value={formData.state}
+              name="profile.state"
+              value={formData.profile.state}
               onChange={handleChange}
             />
           </FormControl>
           <FormControl id="district">
-            <FormLabel>Bairro</FormLabel>
+            <FormLabel fontWeight="bold">Bairro</FormLabel>
             <Input
               variant="flushed"
               _placeholder={{ color: "gray.500" }}
               type="text"
-              name="district"
-              value={formData.district}
+              name="profile.district"
+              value={formData.profile.district}
               onChange={handleChange}
             />
           </FormControl>
           <FormControl id="city">
-            <FormLabel>Cidade</FormLabel>
+            <FormLabel fontWeight="bold">Cidade</FormLabel>
             <Input
               variant="flushed"
               _placeholder={{ color: "gray.500" }}
               type="text"
-              name="city"
-              value={formData.city}
+              name="profile.city"
+              value={formData.profile.city}
               onChange={handleChange}
             />
           </FormControl>
