@@ -83,7 +83,7 @@ const SignIn = () => {
       padding={4}
       mx={5}
     >
-      <Box>
+
         <Image src="/assets/images/logo.png" alt="logo" maxWidth="400px" />
 
         <form onSubmit={handleSignIn}>
@@ -145,7 +145,6 @@ const SignIn = () => {
           Versão 1.0.00
         </Text>
       </Box>
-    </Box>
   );
 };
 
