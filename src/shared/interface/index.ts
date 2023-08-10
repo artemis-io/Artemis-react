@@ -20,7 +20,7 @@ export interface UserAuth {
   name: string;
   role: string;
   email: string;
-  refreshToken: string;
+  avatar_url: string;
   tokens?: {
     accessToken?: string;
     refreshToken?: string;

@@ -1,19 +1,19 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Container } from "@chakra-ui/react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useEffect, useState } from "react";
+import { connect as ConnectVideo, Room } from "twilio-video";
+import { Box } from "@chakra-ui/react";
 import { useAuth } from "../../hooks/useAuth";
+import { useParams } from "react-router-dom";
 import { apiMed } from "../../services/api";
 import RoomVideo from "../../components/Main/Room";
-import { useParams } from "react-router-dom";
-
-import { Room as TwilioRoom } from "twilio-video";
-import { connect as ConnectVideo } from "twilio-video";
+import Lobby from "../../components/Main/Lobby";
 
 const VideoChat = () => {
   const { roomName } = useParams();
 
   const { user } = useAuth();
 
-  const [room, setRoom] = useState<TwilioRoom | null>(null);
+  const [room, setRoom] = useState<Room | null>(null);
   const [connecting, setConnecting] = useState(false);
 
   const handleSubmit = useCallback(
@@ -22,8 +22,8 @@ const VideoChat = () => {
       setConnecting(true);
 
       try {
-        const response = await apiMed.post("twilio/video/token", {
-          identity: user?.id,
+        const response = await apiMed.post("/twilio/video/token", {
+          identity: user?.name,
           room: roomName,
         });
 
@@ -31,6 +31,7 @@ const VideoChat = () => {
           networkQuality: true,
           name: roomName,
           preferredVideoCodecs: ["H264", "VP8"],
+          // preferredVideoCodecs: ["H264"],
         })
           .then((room) => {
             setConnecting(false);
@@ -49,7 +50,7 @@ const VideoChat = () => {
   );
 
   const handleLogout = useCallback(() => {
-    setRoom((prevRoom: TwilioRoom | null) => {
+    setRoom((prevRoom: any) => {
       if (prevRoom) {
         prevRoom.localParticipant.tracks.forEach((trackPub: any) => {
           trackPub.track.stop();
@@ -80,7 +81,7 @@ const VideoChat = () => {
   }, [room, handleLogout]);
 
   return (
-    <Container maxW="xl" centerContent>
+    <Box>
       {room ? (
         <RoomVideo
           roomName={roomName}
@@ -89,11 +90,14 @@ const VideoChat = () => {
           handleLogout={handleLogout}
         />
       ) : (
-        <button onClick={handleSubmit} disabled={connecting}>
-          {connecting ? "Connecting..." : "Join Video Chat"}
-        </button>
+        <Lobby
+          username={user?.name}
+          roomName={roomName}
+          handleSubmit={handleSubmit}
+          connecting={connecting}
+        />
       )}
-    </Container>
+    </Box>
   );
 };
 

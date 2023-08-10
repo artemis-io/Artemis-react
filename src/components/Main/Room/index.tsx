@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, VStack, Text } from "@chakra-ui/react";
-import { Room as TwilioRoom } from "twilio-video";
+import { Room } from "twilio-video";
 
 import Participant from "../Participant/index";
 import RemoteParticipant from "../RemoteParticipant";
@@ -8,11 +8,11 @@ import RemoteParticipant from "../RemoteParticipant";
 interface RoomProps {
   roomName: string | undefined;
   username: string | undefined;
-  room: TwilioRoom;
+  room: Room;
   handleLogout: () => void;
 }
 
-const Room = ({ room, handleLogout }: RoomProps) => {
+const RoomVideo = ({ room, handleLogout }: RoomProps) => {
   const [participants, setParticipants] = useState<any[]>([]);
 
   const participantConnected = (participant: any) => {
@@ -84,4 +84,4 @@ const Room = ({ room, handleLogout }: RoomProps) => {
   );
 };
 
-export default Room;
+export default RoomVideo;
