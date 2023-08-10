@@ -17,6 +17,7 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
+import PrimaryButton from "../../../components/Style/Buttons/Primarybutton";
 
 const SignIn = () => {
   const router = useNavigate(); // Inicialize o useHistory
@@ -121,14 +122,10 @@ const SignIn = () => {
             </InputGroup>
           </FormControl>
           <Flex flexDirection="column" gap="12px">
-            <Button type="submit" colorScheme="blue" px={140} mt={4}>
+            <Button type="submit" bg="#0078D7" px={140} mt={4} color='#fafafa'>
               Entrar
             </Button>
-            <Button
-              onClick={() => handleNav("/signUp")}
-              colorScheme="blue"
-              px={140}
-            >
+            <Button onClick={() => handleNav("/signUp")} bg="#0078D7" px={140} color='#fafafa'>
               Registrar
             </Button>
           </Flex>
@@ -140,9 +137,11 @@ const SignIn = () => {
             </Text>
           </Link>
         </Center>
-        <Text mt={4} color="#494949">
-          Versão 1.0.00
-        </Text>
+        <Center>
+          <Text mt={4} color="#494949">
+            Versão 1.0.00
+          </Text>
+        </Center>
       </Box>
     </Box>
   );

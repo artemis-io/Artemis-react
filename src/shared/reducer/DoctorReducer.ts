@@ -10,6 +10,7 @@ const initialState: DoctorState = {
   },
   doctorStep2Data: {
     cpf: "",
+    gender: "",
     rg: "",
     cep: "",
     address: "",

@@ -1,7 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-
 import PrivateRoute from "../components/Main/Private/PrivateRoute";
-
 import Home from "../pages/Home";
 import NotFound from "../pages/404";
 import SignIn from "../pages/Auth/SignIn";
@@ -28,7 +26,6 @@ const AppRoutes = () => {
       <Route path="/register/:category" element={<Register />} />
       <Route path="/forgot-Password" element={<ForgotPassword />} />
       <Route path="/reset-Password/:token" element={<ResetPasswordPage />} />
-
       <Route path="/video/:roomName" element={<VideoChat />} />
 
       <Route

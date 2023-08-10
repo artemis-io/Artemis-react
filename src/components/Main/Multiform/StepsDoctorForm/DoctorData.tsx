@@ -27,12 +27,15 @@ export function DoctorData({ handleNextStep }: any) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setStep1((prevFormData) => ({ ...prevFormData, [name]: value }));
+
+    // Update the state in the action dispatch using the new value
     dispatch(
       setStep1Data({
-        name: step1.name,
-        email: step1.email,
-        passoword: step1.password,
-        confirmPassword: step1.confirmPassword,
+        name: name === "name" ? value : step1.name,
+        email: name === "email" ? value : step1.email,
+        password: name === "password" ? value : step1.password,
+        confirmPassword:
+          name === "confirmPassword" ? value : step1.confirmPassword,
       })
     );
   };
@@ -68,32 +71,22 @@ export function DoctorData({ handleNextStep }: any) {
         <FormControl id="name">
           <StyledLabel>Nome Completo</StyledLabel>
           <Input
-            backgroundColor="white"
+            variant="flushed"
             type="text"
             name="name"
             value={step1.name}
             onChange={handleInputChange}
-            borderRadius="md"
-            boxShadow="md"
-            borderColor="gray.300"
-            _hover={{ borderColor: "blue.400" }}
-            _focus={{ borderColor: "blue.400" }}
           />
         </FormControl>
 
         <FormControl id="email" mt={4}>
           <StyledLabel>Email</StyledLabel>
           <Input
-            backgroundColor="white"
+            variant="flushed"
             type="email"
             name="email"
             value={step1.email}
             onChange={handleInputChange}
-            borderRadius="md"
-            boxShadow="md"
-            borderColor="gray.300"
-            _hover={{ borderColor: "blue.400" }}
-            _focus={{ borderColor: "blue.400" }}
           />
         </FormControl>
 
@@ -101,16 +94,11 @@ export function DoctorData({ handleNextStep }: any) {
           <StyledLabel>Senha</StyledLabel>
           <InputGroup>
             <Input
-              backgroundColor="white"
+              variant="flushed"
               type={showPassword ? "text" : "password"}
               name="password"
               value={step1.password}
               onChange={handleInputChange}
-              borderRadius="md"
-              boxShadow="md"
-              borderColor="gray.300"
-              _hover={{ borderColor: "blue.400" }}
-              _focus={{ borderColor: "blue.400" }}
             />
             <InputRightElement width="4.5rem">
               <Button
@@ -132,17 +120,14 @@ export function DoctorData({ handleNextStep }: any) {
           <StyledLabel>Confirme sua Senha</StyledLabel>
           <InputGroup>
             <Input
-              backgroundColor="white"
+            variant="flushed"
               type={showPassword ? "text" : "password"}
               name="confirmPassword"
               value={step1.confirmPassword}
               onChange={handleInputChange}
-              boxShadow="md"
-              borderColor="gray.300"
-              _hover={{ borderColor: "blue.400" }}
-              _focus={{ borderColor: "blue.400" }}
+           
             />
-            <InputRightElement width="4.5rem">
+            {/*   <InputRightElement width="4.5rem">
               <Button
                 h="1.75rem"
                 size="sm"
@@ -154,7 +139,7 @@ export function DoctorData({ handleNextStep }: any) {
                   <ViewIcon color="gray.500" />
                 )}
               </Button>
-            </InputRightElement>
+            </InputRightElement> */}
           </InputGroup>
         </FormControl>
         <Button
