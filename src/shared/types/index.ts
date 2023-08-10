@@ -50,6 +50,7 @@ export type DoctorStep1Data = {
 export type DoctorStep2Data = {
   gender: any;
   cpf: string;
+  gender: string;
   rg: string;
   cep: string;
   address: string;

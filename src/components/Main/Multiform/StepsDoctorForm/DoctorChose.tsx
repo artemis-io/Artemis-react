@@ -19,7 +19,6 @@ import {
   setStep3Data,
   submitDoctorData,
 } from "../../../../shared/reducer/DoctorReducer";
-
 import StyledLabel from "../../Forms/StyledLabel";
 import { useNavigate } from "react-router-dom";
 
@@ -122,36 +121,28 @@ export function DoctorChose() {
         <FormControl id="crm">
           <StyledLabel>CRM</StyledLabel>
           <Input
-            backgroundColor="white"
+            variant="flushed"
             onChange={handleInputChange}
             value={step3.crm}
             name="crm"
             type="number"
-            boxShadow="md"
-            borderColor="gray.300"
-            _hover={{ borderColor: "blue.400" }}
-            _focus={{ borderColor: "blue.400" }}
           />
         </FormControl>
         <FormControl id="pricing">
           <StyledLabel>Preço da Consulta</StyledLabel>
           <Input
-            backgroundColor="white"
+            variant="flushed"
             onChange={handleInputChange}
             value={step3?.pricing}
             name="pricing"
             type="number"
-            boxShadow="md"
-            borderColor="gray.300"
-            _hover={{ borderColor: "blue.400" }}
-            _focus={{ borderColor: "blue.400" }}
           />
         </FormControl>
 
         <FormControl id="bio">
           <StyledLabel>Sobre você</StyledLabel>
           <Input
-            backgroundColor="white"
+            variant="flushed"
             placeholder="Breve descrição sobre suas atividades"
             onChange={handleInputChange}
             value={step3.bio}
@@ -159,9 +150,6 @@ export function DoctorChose() {
             type="textarea"
             boxShadow="md"
             h="100px"
-            borderColor="gray.300"
-            _hover={{ borderColor: "blue.400" }}
-            _focus={{ borderColor: "blue.400" }}
           />
         </FormControl>
 
