@@ -4,7 +4,7 @@ import NotFound from "../../../pages/404";
 
 const PatientRoute = ({ children }: any) => {
   const { user } = useAuth();
-
+  
   if (!user) {
     return <Navigate to="/signIn" />;
   } else if (user?.role !== "patient") {

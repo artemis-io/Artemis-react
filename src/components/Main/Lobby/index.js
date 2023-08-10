@@ -2,78 +2,97 @@ import React from "react";
 import {
   FormControl,
   Input,
+  Button,
+  Center,
   Box,
   Heading,
   VStack,
   InputGroup,
   InputLeftElement,
-  Image,
-  FormLabel,
+  Spinner,
 } from "@chakra-ui/react";
-import { FaUser, FaVideo } from "react-icons/fa";
-import PrimaryButton from "../../Style/Buttons/Primarybutton";
+import { FiUser, FiVideo } from "react-icons/fi";
+import StyledLabel from "../Forms/StyledLabel";
+import { useAuth } from "../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
-const Lobby = ({ username, roomName, handleSubmit, connecting }: any) => {
+const Lobby = ({ username, roomName, handleSubmit, connecting, role }) => {
+  const router = useNavigate();
+  const user = useAuth();
+  const handleNav = () => {
+    router(`../../${role}/homepage`);
+  };
+
   return (
-    <Box h="100vh">
-      <VStack spacing={6}>
-        <Image src="/assets/images/logo.png" alt="logo" maxWidth="300px" />
-        <Box w="400px" p="6" bg="white" borderRadius="lg" boxShadow="lg">
+    <Center h="100vh">
+      <Box w="400px" p="6" bg="white" borderRadius="lg" boxShadow="lg">
+        <VStack spacing={6}>
           <Heading as="h2" size="lg">
-            Join a Video Chat
+            Entrar na E-consulta
           </Heading>
 
           <form onSubmit={handleSubmit} style={{ width: "100%" }}>
             <FormControl>
-              <FormLabel htmlFor="name">Paciente:</FormLabel>
+              <StyledLabel htmlFor="name">Nome:</StyledLabel>
               <InputGroup>
                 <InputLeftElement pointerEvents="none">
-                  <FaUser />
+                  <FiUser />
                 </InputLeftElement>
                 <Input
                   type="text"
                   id="name"
                   value={username}
                   readOnly={connecting}
-                  placeholder="Enter your name"
                   required
                 />
               </InputGroup>
             </FormControl>
 
             <FormControl>
-              <FormLabel mt={2} htmlFor="room">
+              <StyledLabel mt={2} htmlFor="room">
                 Sala:
-              </FormLabel>
+              </StyledLabel>
               <InputGroup>
                 <InputLeftElement pointerEvents="none">
-                  <FaVideo />
+                  <FiVideo />
                 </InputLeftElement>
                 <Input
                   type="text"
                   id="room"
                   value={roomName}
                   readOnly={connecting}
-                  placeholder="Enter room name"
                   required
                 />
               </InputGroup>
             </FormControl>
 
-            <PrimaryButton
+            <Button
+              bg="#0078D7"
               type="submit"
               mt={4}
-              height="50px"
+              colorScheme="blue"
+              size="lg"
               width="full"
               isLoading={connecting}
               loadingText="Entrando"
+              loadingRight={<Spinner size="sm" />}
             >
               {connecting ? "Entrando" : "Ir para consulta"}
-            </PrimaryButton>
+            </Button>
+            <Button
+              bg="#0078D7"
+              onClick={handleNav}
+              mt={4}
+              colorScheme="blue"
+              size="lg"
+              width="full"
+            >
+              Voltar
+            </Button>
           </form>
-        </Box>
-      </VStack>
-    </Box>
+        </VStack>
+      </Box>
+    </Center>
   );
 };
 
