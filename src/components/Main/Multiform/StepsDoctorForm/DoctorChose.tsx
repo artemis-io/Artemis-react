@@ -17,7 +17,6 @@ import { DoctorStep3Data } from "../../../../shared/types";
 import { apiMed } from "../../../../services/api";
 import {
   setStep3Data,
-  submitDoctorData,
 } from "../../../../shared/reducer/DoctorReducer";
 import StyledLabel from "../../Forms/StyledLabel";
 import { useNavigate } from "react-router-dom";
