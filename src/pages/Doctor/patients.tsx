@@ -19,11 +19,15 @@ import {
 import { useState, useEffect } from "react";
 import { apiMed } from "../../services/api";
 import SearchBar from "../../components/Main/SearchBar";
+import { differenceInYears } from "date-fns";
 
 type Patient = {
   id: string;
   name: string;
   avatar_url: string;
+  profile: {
+    dateOfBirth: Date;
+  };
 };
 
 const AlphabeticalListPage: React.FC = () => {
@@ -33,7 +37,7 @@ const AlphabeticalListPage: React.FC = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await apiMed.get("/api/user/all");
+        const response = await apiMed.get("/user/all");
         setPatients(response.data);
         console.log("response:", response.data);
       } catch (error) {
@@ -59,7 +63,7 @@ const AlphabeticalListPage: React.FC = () => {
       patient.name.startsWith(letter)
     );
     return (
-      <VStack align="start" spacing={2} mt={2} minW="100%">
+      <VStack align="start" spacing={2} minW="100%">
         {filteredPatients.map((patient) => (
           <Box
             key={patient.name}
@@ -67,24 +71,39 @@ const AlphabeticalListPage: React.FC = () => {
             borderRadius="md"
             w="100%"
             display="flex"
-            height="80px"
+            height="90px"
             width="360px"
-            padding="24px 12px"
+            padding="12px"
           >
-            <Grid templateColumns="repeat(5, 1fr)" gap={4}>
-            <GridItem colSpan={2}>
-              <Image
-                boxSize="70px"
-                width="50px"
-                borderRadius={10}
-                objectFit="cover"
-                src={patient.avatar_url}
-                alt="Foto de perfil"
-              />
+            <Grid
+              templateAreas={`"img name"
+                                  "img age"`}
+              gridTemplateRows={"30px 1fr"}
+              gridTemplateColumns={"50px 260px"}
+              gap={4}
+            >
+              <GridItem area={"img"}>
+                <Image
+                  boxSize="70px"
+                  width="50px"
+                  borderRadius={10}
+                  objectFit="cover"
+                  src={patient.avatar_url}
+                  alt="Foto de perfil"
+                />
               </GridItem>
-              <GridItem colSpan={2}>
+              <GridItem area={"name"}>
                 <Text fontSize="lg" fontWeight="bold">
                   {patient.name}
+                </Text>
+              </GridItem>
+              <GridItem area={"age"}>
+                <Text fontSize="sm">
+                  {differenceInYears(
+                    new Date(),
+                    new Date(patient.profile.dateOfBirth)
+                  )}{" "}
+                  anos
                 </Text>
               </GridItem>
               {/* <GridItem colStart={4} colEnd={6}>

@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import PrivateRoute from "../components/Main/Private/PrivateRoute";
 import Home from "../pages/Home";
 import NotFound from "../pages/404";
 import SignIn from "../pages/Auth/SignIn";
@@ -8,7 +7,6 @@ import Register from "../pages/Auth/SignUp/category";
 import HomepageDoctor from "../pages/Doctor/homepage";
 import ForgotPassword from "../pages/Auth/Forgot-Password";
 import ResetPasswordPage from "../pages/Auth/Recover-Password";
-import Profile from "../pages/Profile";
 import HomepagePatient from "../pages/Patient/homepage";
 import DoctorRoute from "../components/Main/Private/DoctorRoutes";
 import PatientRoute from "../components/Main/Private/PatientRoute";
@@ -16,6 +14,9 @@ import AdminRoute from "../components/Main/Private/AdminRoute";
 import VideoChat from "../pages/Video";
 import HomepageAdmin from "../pages/Admin/homepage";
 import FormAppointment from "../pages/Patient/appointment";
+import AlphabeticalListPage from "../pages/Doctor/patients";
+import SettingsDoctor from "../pages/Doctor/profile";
+import SettingsPatient from "../pages/Patient/profile";
 
 const AppRoutes = () => {
   return (
@@ -28,17 +29,11 @@ const AppRoutes = () => {
       <Route path="/forgot-Password" element={<ForgotPassword />} />
       <Route path="/reset-Password/:token" element={<ResetPasswordPage />} />
       <Route path="patient/appointment" element={<FormAppointment />} />
+      <Route path="doctor/patients" element={<AlphabeticalListPage />} />
+      <Route path="doctor/profile" element={<SettingsDoctor />} />
+      <Route path="patient/profile" element={<SettingsPatient />} />
 
       <Route path="/video/:roomName" element={<VideoChat />} />
-
-      <Route
-        path="/profile"
-        element={
-          <PrivateRoute>
-            <Profile />
-          </PrivateRoute>
-        }
-      />
 
       <Route
         path="/doctor/homepage"
