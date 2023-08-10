@@ -16,15 +16,14 @@ interface APIInstanceProps extends AxiosInstance {
   }: RegisterInterceptTokenManager) => void;
 }
 
-export function getApiClient() {
-  const api = axios.create({
-     baseURL: "https://artemis-api-production.up.railway.app/api",
-    /* baseURL: "http://localhost:3333/api", */
-    timeout: 10000,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }) as APIInstanceProps;
+const api = axios.create({
+  // Configure your default baseURL, headers, and other settings here
+  baseURL: "https://artemis-api-production.up.railway.app/api",
+  timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+}) as APIInstanceProps;
 
 // Interceptor for refreshing access token
 let isRefreshing = false;
