@@ -24,7 +24,7 @@ export function DoctorChose() {
   const [specialties, setSpecialties] = useState<string[]>([]);
   const [step3, setStep3] = useState<DoctorStep3Data>({
     crm: "",
-    pricing: 0,
+    pricing: "",
     bio: "",
     speciality: [],
   });
@@ -54,8 +54,9 @@ export function DoctorChose() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setStep3((prevFormData) => ({ ...prevFormData, [name]: value }));
-    dispatch(setStep3Data({ crm: step3.crm, specialties: step3.speciality }));
+    dispatch(setStep3Data({ ...step3, [name]: value }));
   };
+  
 
   const handleSpecialityChange = (speciality: string) => {
     if (step3.speciality.includes(speciality)) {
@@ -65,32 +66,51 @@ export function DoctorChose() {
           (item) => item !== speciality
         ),
       }));
+      dispatch(
+        setStep3Data({
+          ...step3Data,
+          speciality: step3Data.speciality.filter((item: string) => item !== speciality),
+        })
+      );
     } else {
       setStep3((prevFormData) => ({
         ...prevFormData,
         speciality: [...prevFormData.speciality, speciality],
       }));
+      dispatch(
+        setStep3Data({
+          ...step3Data,
+          speciality: [...step3Data.speciality, speciality],
+        })
+      );
     }
   };
 
   const handleFinish = async (e: React.FormEvent) => {
-    const formDataDoctor = {
-      step1Data,
-      step2Data,
-      step3Data,
-    };
-    dispatch(submitDoctorData(formDataDoctor));
-    console.log(formDataDoctor);
     e.preventDefault();
+  
+    const formDataDoctor = {
+      ...step1Data,
+      ...step2Data,
+      ...step3Data,
+    };
+  console.log('FormData:', formDataDoctor)
     try {
-      const response = await apiMed.post("/doctor", formDataDoctor);
+      const response = await apiMed.post("/doctor", formDataDoctor, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
       console.log(response);
-
+  
       router("/doctor/homepage");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
+  
+
 
   return (
     <Box>
@@ -132,7 +152,7 @@ export function DoctorChose() {
             onChange={handleInputChange}
             value={step3.bio}
             name="bio"
-            type="text area"
+            type="textarea"
             boxShadow="md"
             h="100px"
             borderColor="gray.300"

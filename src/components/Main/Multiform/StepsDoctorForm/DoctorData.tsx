@@ -27,15 +27,18 @@ export function DoctorData({ handleNextStep }: any) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setStep1((prevFormData) => ({ ...prevFormData, [name]: value }));
+  
+    // Update the state in the action dispatch using the new value
     dispatch(
       setStep1Data({
-        name: step1.name,
-        email: step1.email,
-        passoword: step1.password,
-        confirmPassword: step1.confirmPassword,
+        name: name === 'name' ? value : step1.name,
+        email: name === 'email' ? value : step1.email,
+        password: name === 'password' ? value : step1.password,
+        confirmPassword: name === 'confirmPassword' ? value : step1.confirmPassword,
       })
     );
   };
+  
 
   const isPasswordValid = () => {
     const { password } = step1;
