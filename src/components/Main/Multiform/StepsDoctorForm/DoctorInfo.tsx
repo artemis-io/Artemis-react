@@ -83,6 +83,17 @@ export function DoctorInfo({ handleNextStep }: any) {
             type="text"
           />
         </FormControl>
+        <FormControl id="birthDate">
+          <StyledLabel>Data de Nascimento</StyledLabel>
+          <Input
+            type="date"
+            name="birthDate"
+          /*   value={step2.birthDate} */
+         /*    onChange={handleInputChange} */
+            variant="flushed"
+            _placeholder={{ color: "gray.500" }}
+          />
+        </FormControl>
         <FormControl>
           <StyledLabel>Gênero</StyledLabel>
           <Select
