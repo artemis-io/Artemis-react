@@ -141,9 +141,11 @@ const SignIn = () => {
             </Text>
           </Link>
         </Center>
+        <Center minWidth="max-content" alignItems="center" gap="2">
         <Text mt={4} color="#494949">
           Versão 1.0.00
         </Text>
+        </Center>
       </Box>
   );
 };
