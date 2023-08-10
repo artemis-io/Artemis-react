@@ -1,19 +1,16 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import jwtDecode from "jwt-decode"; // Import the library for decoding JWT tokens
-
+import jwtDecode from "jwt-decode";
 import {
   AUTH_REFRESH_STORAGE,
   AUTH_TOKEN_STORAGE,
   USER_STORAGE,
 } from "../shared/storage/config";
-
-import { apiMed } from "../services/api";
+import { refreshAccessTokenRequest, signInRequest } from "../services/auth";
 import { loginProps } from "../shared/types";
 import { UserAuth } from "../shared/interface";
-import { refreshAccessTokenRequest, signInRequest } from "../services/auth";
+import { apiMed } from "../services/api";
 
 export type User = {
   id: string;
@@ -96,18 +93,10 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     }
   };
 
-  const authContextData: AuthContextType = {
-    user,
-    isLoadingUserStorageData,
-    signIn,
-    signOut,
-    isAuthenticated,
-  };
-
   useEffect(() => {
     const token = localStorage.getItem(AUTH_TOKEN_STORAGE);
     const refreshToken = localStorage.getItem(AUTH_REFRESH_STORAGE);
-    
+
     if (token && refreshToken) {
       const refreshAccessToken = async () => {
         const decodedToken: any = jwtDecode(token);
@@ -115,9 +104,16 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
         if (decodedToken.exp < currentTimestamp) {
           try {
-            const data = await refreshAccessTokenRequest(refreshToken);
+            const response = await refreshAccessTokenRequest(refreshToken);
+            const newAccessToken = response.accessToken;
+            const newRefreshToken = response.refreshToken;
 
-            setTokensStorage(data.accessToken, data.refreshToken);
+            setTokensStorage(newAccessToken, newRefreshToken);
+
+            // Update API instance's Authorization header with the new token
+            apiMed.defaults.headers[
+              "Authorization"
+            ] = `Bearer ${newAccessToken}`;
           } catch (error) {
             signOut();
           }
@@ -128,10 +124,18 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     } else {
       setIsLoadingUserStorageData(false); // No need to continue loading
     }
-  }, []); // Empty dependency array to run only on component mount
+  }, []);
 
   return (
-    <AuthContext.Provider value={authContextData}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isLoadingUserStorageData,
+        signIn,
+        signOut,
+        isAuthenticated,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
