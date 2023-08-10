@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { apiMed } from "../../../../services/api";
-import { setStep3Data } from "../../../../shared/reducer/DoctorReducer";
+import { setStep3Data } from "../../../../shared/reducer/AppointmentReducer";
 
 export default function SelectSpecialty({ handleNextStep }: any) {
   const [specialties, setSpecialties] = useState<string[]>([]);
@@ -26,7 +26,7 @@ export default function SelectSpecialty({ handleNextStep }: any) {
     dispatch(setStep3Data({ speciality: e }));
     handleNextStep();
   };
-
+  
   useEffect(() => {
     const fetchSpecialties = async () => {
       try {
@@ -36,6 +36,7 @@ export default function SelectSpecialty({ handleNextStep }: any) {
             (speciality: { speciality: any }) => speciality.speciality
           )
         );
+        
       } catch (error) {
         console.error("Erro ao obter especialidades:", error);
       }

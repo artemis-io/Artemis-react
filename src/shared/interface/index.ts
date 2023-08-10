@@ -75,3 +75,15 @@ export interface PatientState {
   patientStep1Data: PatientStep1Data;
   patientStep2Data: PatientStep2Data;
 }
+
+export interface Doctor {  
+  id: string;
+  name: string;
+  avatar_url: string;
+  doctor: {
+    pricing: string;
+    bio: string;
+    speciality: string[];
+    gender: string;
+  };
+};

@@ -12,6 +12,7 @@ const initialState: DoctorState = {
     cpf: "",
     gender: "",
     rg: "",
+    gender: "",
     cep: "",
     address: "",
     number: "",

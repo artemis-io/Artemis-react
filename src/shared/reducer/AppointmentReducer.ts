@@ -61,4 +61,5 @@ export const {
   submitFormData,
 } = appointmentSlice.actions;
 
+
 export default appointmentSlice.reducer;

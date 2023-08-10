@@ -59,6 +59,7 @@ export function DoctorChose() {
     setStep3((prevFormData) => ({ ...prevFormData, [name]: value }));
     dispatch(setStep3Data({ ...step3, [name]: value }));
   };
+  
 
   const handleSpecialityChange = (speciality: string) => {
     if (step3.speciality.includes(speciality)) {
@@ -71,9 +72,7 @@ export function DoctorChose() {
       dispatch(
         setStep3Data({
           ...step3Data,
-          speciality: step3Data.speciality.filter(
-            (item: string) => item !== speciality
-          ),
+          speciality: step3Data.speciality.filter((item: string) => item !== speciality),
         })
       );
     } else {
@@ -92,31 +91,29 @@ export function DoctorChose() {
 
   const handleFinish = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     const formDataDoctor = {
-      step1Data,
-      step2Data,
-      step3Data,
+      ...step1Data,
+      ...step2Data,
+      ...step3Data,
     };
-
-    dispatch(submitDoctorData(formDataDoctor));
-
+  console.log('FormData:', formDataDoctor)
     try {
-      await dispatch(submitDoctorData(formDataDoctor));
-
       const response = await apiMed.post("/doctor", formDataDoctor, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
-
+  
       console.log(response);
-
+  
       router("/doctor/homepage");
     } catch (error) {
       console.error(error);
     }
   };
+  
+
 
   return (
     <Box>
@@ -151,6 +148,7 @@ export function DoctorChose() {
             value={step3.bio}
             name="bio"
             type="textarea"
+            boxShadow="md"
             h="100px"
           />
         </FormControl>

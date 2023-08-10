@@ -39,6 +39,7 @@ export function DoctorInfo({ handleNextStep }: any) {
     );
   };
 
+
   const handleDistrictChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setStep2((prevFormData) => ({ ...prevFormData, district: value }));
@@ -83,6 +84,19 @@ export function DoctorInfo({ handleNextStep }: any) {
             type="text"
           />
         </FormControl>
+        <FormControl>
+          <StyledLabel>Gênero</StyledLabel>
+          <Select
+            icon={<FiArrowDown />}
+            placeholder="Gênero"
+            onChange={handleGenderChange}
+            value={step2.gender}
+          >
+            <option value="male">Masculino</option>
+            <option value="female">Feminino</option>
+          </Select>
+        </FormControl>
+
         <FormControl id="rg">
           <StyledLabel>RG</StyledLabel>
           <Input
