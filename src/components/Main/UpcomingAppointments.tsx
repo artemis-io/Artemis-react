@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Box,
   Text,
@@ -7,10 +8,14 @@ import {
   Image,
   Grid,
   GridItem,
-  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
+  ModalBody,
+  Link,
 } from "@chakra-ui/react";
-import { AiOutlineVideoCamera } from "react-icons/ai"; // Importar o ícone da câmera
-import { Link as RouterLink, useNavigate } from "react-router-dom"; // Importe o Link correto
+import { AiOutlineVideoCamera } from "react-icons/ai";
 
 interface Appointment {
   id: string;
@@ -30,6 +35,9 @@ interface Appointment {
     doctor: {
       speciality: string[];
     };
+    profile: {
+      gender: string;
+    };
   };
 }
 
@@ -40,10 +48,12 @@ interface UpcomingAppointmentsProps {
 const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
   appointments,
 }) => {
-  const router = useNavigate();
+  const [selectedAppointment, setSelectedAppointment] =
+    useState<Appointment | null>(null);
+  const isOpen = !!selectedAppointment;
 
-  const handleNav = () => {
-    router("/patient/appointment");
+  const handleCloseModal = () => {
+    setSelectedAppointment(null);
   };
 
   return (
@@ -51,7 +61,7 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
       <Text fontSize="xl" fontWeight="bold" mt={4}>
         Próximas Consultas
       </Text>
-      {appointments.map((appointment) => (        
+      {appointments.map((appointment) => (
         <Box
           key={appointment.id}
           bg="white"
@@ -60,6 +70,7 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
           w="100%"
           boxShadow="md"
           position="relative"
+          onClick={() => setSelectedAppointment(appointment)}
         >
           <Grid
             templateAreas={`"img name vid"
@@ -75,32 +86,35 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
                 width="50px"
                 borderRadius={10}
                 objectFit="cover"
-                src={appointment?.doctor?.avatar_url}
+                src={appointment.doctor.avatar_url}
                 alt="Foto de perfil"
               />
             </GridItem>
             <GridItem area={"name"}>
               <Text fontSize="lg" fontWeight="bold" pt="5px ">
-                {appointment?.doctor?.name}
+                {appointment.doctor.profile.gender === "male"
+                  ? "Dr. "
+                  : "Dra. "}
+                {appointment.doctor.name}
               </Text>
             </GridItem>
             <GridItem area={"spec"}>
               <Text fontSize="sm" color="gray.500">
-                {appointment?.doctor?.doctor?.speciality.join(", ")}
+                {appointment.doctor.doctor.speciality.join(", ")}
               </Text>
               <Text fontSize="xm" color="gray.500" pt="5px">
-                {appointment?.query === "person" ? "Presencial" : "Teleconsulta"}
+                {appointment.query === "person" ? "Presencial" : "Teleconsulta"}
               </Text>
             </GridItem>
             <GridItem area={"date"} pl="10px">
               <Text fontSize="sm">
-                {new Date(appointment?.date).toLocaleDateString("pt-BR", {
+                {new Date(appointment.date).toLocaleDateString("pt-BR", {
                   day: "numeric",
                   month: "short",
                 })}
               </Text>
               <Text fontSize="sm" color="gray.500">
-                {new Date(appointment?.date).toLocaleTimeString("pt-BR", {
+                {new Date(appointment.date).toLocaleTimeString("pt-BR", {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}
@@ -108,10 +122,10 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
             </GridItem>
 
             <GridItem area={"vid"}>
-              {appointment?.query === "teleconsultation" && (
+              {appointment.query === "teleconsultation" && (
                 <IconButton
-                  as={RouterLink}
-                  to={`/video/${appointment?.id}`}
+                  as={Link}
+                  href={`/video/${appointment.id}`}
                   variant="outline"
                   colorScheme="blue"
                   aria-label="Entrar na chamada de vídeo"
@@ -123,25 +137,74 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
             <GridItem area={"footer"} pt="5px">
               <Text fontSize="md">
                 Status:{" "}
-                <Badge colorScheme={appointment?.payment ? "green" : "red"}>
-                  {appointment?.payment ? "Pago" : "Aguardando pagamento"}
+                <Badge colorScheme={appointment.payment ? "green" : "red"}>
+                  {appointment.payment ? "Pago" : "Aguardando pagamento"}
                 </Badge>
               </Text>
             </GridItem>
           </Grid>
         </Box>
       ))}
-      <Button
-        bg="#19A588"
-        w="293px"
-        h="50px"
-        color="#fafafa"
-        alignSelf="center"
-        fontSize="16px"
-        onClick={handleNav}
-      >
-        Adicionar novo atendimento
-      </Button>
+
+      {selectedAppointment && (
+        <Modal isOpen={isOpen} onClose={handleCloseModal}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalCloseButton />
+            <ModalBody>
+              <VStack>
+                <Image
+                  boxSize="150px"
+                  width="100px"
+                  borderRadius={10}
+                  objectFit="cover"
+                  src={selectedAppointment.doctor.avatar_url}
+                  alt="Foto de perfil"
+                />
+                <Text fontSize="lg" fontWeight="bold" pt="5px" color="gray.500">
+                  {selectedAppointment.doctor.name}
+                </Text>
+                <Text fontSize="md" color="gray.500" pt="5px">
+                  {selectedAppointment.doctor.doctor.speciality.join(", ")}
+                </Text>
+                <Text
+                  fontSize="lg"
+                  fontWeight="bold"
+                  color="gray.500"
+                  pt="20px"
+                >
+                  Atendimento Particular
+                </Text>
+                <Text fontSize="md" color="gray.500" pt="5px">
+                  Data:<>&nbsp;</>
+                  {new Date(selectedAppointment.date).toLocaleDateString(
+                    "pt-BR",
+                    {
+                      day: "numeric",
+                      month: "long",
+                    }
+                  )}
+                </Text>
+                <Text fontSize="md" color="gray.500">
+                  Horário:<>&nbsp;</>
+                  {new Date(selectedAppointment.date).toLocaleTimeString(
+                    "pt-BR",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}
+                </Text>
+                <Text fontSize="md" color="gray.500" pt="5px">
+                  {selectedAppointment.query === "person"
+                    ? "Presencial"
+                    : "Teleconsulta"}
+                </Text>
+              </VStack>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
     </VStack>
   );
 };

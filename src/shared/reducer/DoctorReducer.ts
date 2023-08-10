@@ -10,6 +10,7 @@ const initialState: DoctorState = {
   },
   doctorStep2Data: {
     cpf: "",
+    gender: "",
     rg: "",
     cep: "",
     address: "",
@@ -17,6 +18,7 @@ const initialState: DoctorState = {
     state: "",
     district: "",
     city: "",
+    dateOfBirth: new Date(),
   },
   doctorStep3Data: {
     crm: "",

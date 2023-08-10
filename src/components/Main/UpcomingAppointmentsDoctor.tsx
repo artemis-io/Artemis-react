@@ -7,10 +7,9 @@ import {
   Image,
   Grid,
   GridItem,
-  Button,
 } from "@chakra-ui/react";
 import { AiOutlineVideoCamera } from "react-icons/ai";
-import { Link as RouterLink, useNavigate } from "react-router-dom"; // Importe o Link correto
+import { Link as RouterLink } from "react-router-dom"; // Importe o Link correto
 
 interface Appointment {
   id: string;
@@ -37,11 +36,7 @@ interface UpcomingAppointmentsProps {
 const UpcomingAppointmentsDoctor: React.FC<UpcomingAppointmentsProps> = ({
   appointments,
 }) => {
-  const router = useNavigate();
-
-  const handleNav = () => {
-    router("/patient/appointment");
-  };
+ 
 
   return (
     <VStack spacing={4} alignItems="flex-start" w="95%" mx="auto">
@@ -125,17 +120,6 @@ const UpcomingAppointmentsDoctor: React.FC<UpcomingAppointmentsProps> = ({
           </Grid>
         </Box>
       ))}
-      <Button
-        bg="#19A588"
-        w="293px"
-        h="50px"
-        color="#fafafa"
-        alignSelf="center"
-        fontSize="16px"
-        onClick={handleNav}
-      >
-        Adicionar novo atendimento
-      </Button>
     </VStack>
   );
 };

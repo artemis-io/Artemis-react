@@ -4,7 +4,6 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
-  Button,
   Heading,
 } from "@chakra-ui/react";
 import {
@@ -15,6 +14,7 @@ import {
   GridItem,
   Text,
   VStack,
+  Image,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { apiMed } from "../../services/api";
@@ -23,6 +23,7 @@ import SearchBar from "../../components/Main/SearchBar";
 type Patient = {
   id: string;
   name: string;
+  avatar_url: string;
 };
 
 const AlphabeticalListPage: React.FC = () => {
@@ -71,16 +72,26 @@ const AlphabeticalListPage: React.FC = () => {
             padding="24px 12px"
           >
             <Grid templateColumns="repeat(5, 1fr)" gap={4}>
+            <GridItem colSpan={2}>
+              <Image
+                boxSize="70px"
+                width="50px"
+                borderRadius={10}
+                objectFit="cover"
+                src={patient.avatar_url}
+                alt="Foto de perfil"
+              />
+              </GridItem>
               <GridItem colSpan={2}>
                 <Text fontSize="lg" fontWeight="bold">
                   {patient.name}
                 </Text>
               </GridItem>
-              <GridItem colStart={4} colEnd={6}>
+              {/* <GridItem colStart={4} colEnd={6}>
                 <Button bg="#E7EEF8" color="#0078D7" w="132px" h="24px">
                   Histórico
                 </Button>
-              </GridItem>
+              </GridItem> */}
             </Grid>
             {/* <Text fontSize="sm">{patient.age}</Text> */}
           </Box>

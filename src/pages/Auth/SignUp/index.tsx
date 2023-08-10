@@ -28,7 +28,7 @@ const SignUp = () => {
   };
 
   const handleGoBack = () => {
-    router("/signIn"); // Redirecionar para a página de login
+    router("/signIn"); 
   };
 
   return (
@@ -50,18 +50,18 @@ const SignUp = () => {
         </Text>
         <RadioGroup value={selectedRole} onChange={handleRoleSelection}>
           <VStack spacing={2} align="start">
-            <Radio value="doctor" colorScheme="green">
+            <Radio value="doctor" colorScheme="blue">
               Médico
             </Radio>
-            <Radio value="patient" colorScheme="green">
+            <Radio value="patient" colorScheme="blue">
               Paciente
             </Radio>
           </VStack>
         </RadioGroup>
         <Button
-          bg="#19A588"
+          bg="#0078D7"
           onClick={handleConfirmation}
-          colorScheme="green"
+          color="#fafafa"
           isDisabled={!selectedRole}
           w={{ base: "100%", md: "300px" }}
           h="45px"

@@ -2,6 +2,7 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Center,
   FormControl,
   Input,
   InputGroup,
@@ -13,8 +14,10 @@ import { useDispatch } from "react-redux";
 import { setStep1Data } from "../../../../shared/reducer/PatientReducer";
 import StyledLabel from "../../Forms/StyledLabel";
 import { PatientStep1Data } from "../../../../shared/types";
+import { useNavigate } from "react-router-dom";
 
 export function PatientData({ handleNextStep }: any) {
+  const router = useNavigate();
   const [step1, setStep1] = useState<PatientStep1Data>({
     name: "",
     email: "",
@@ -52,6 +55,10 @@ export function PatientData({ handleNextStep }: any) {
     handleNextStep();
   };
 
+  const handleGoBack = () => {
+    router("/signIn");
+  };
+
   return (
     <Box
       display="flex"
@@ -63,33 +70,23 @@ export function PatientData({ handleNextStep }: any) {
         <FormControl id="name">
           <StyledLabel>Nome Completo</StyledLabel>
           <Input
-            backgroundColor="white"
+            variant="flushed"
             type="text"
             name="name"
             value={step1.name}
             onChange={handleInputChange}
-            borderRadius="md"
-            boxShadow="md"
-            borderColor="gray.300"
-            _hover={{ borderColor: "blue.400" }}
-            _focus={{ borderColor: "blue.400" }}
           />
         </FormControl>
 
         <FormControl id="email" mt={4}>
           <StyledLabel>Email</StyledLabel>
           <Input
-            backgroundColor="white"
+            variant="flushed"
             type="email"
             name="email"
             placeholder="exemplo@mail.com"
             value={step1.email}
             onChange={handleInputChange}
-            borderRadius="md"
-            boxShadow="md"
-            borderColor="gray.300"
-            _hover={{ borderColor: "blue.400" }}
-            _focus={{ borderColor: "blue.400" }}
           />
         </FormControl>
 
@@ -97,17 +94,12 @@ export function PatientData({ handleNextStep }: any) {
           <StyledLabel>Senha</StyledLabel>
           <InputGroup>
             <Input
-              backgroundColor="white"
+              variant="flushed"
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="123@Abcd"
               value={step1.password}
               onChange={handleInputChange}
-              borderRadius="md"
-              boxShadow="md"
-              borderColor="gray.300"
-              _hover={{ borderColor: "blue.400" }}
-              _focus={{ borderColor: "blue.400" }}
             />
             <InputRightElement width="4.5rem">
               <Button
@@ -129,29 +121,12 @@ export function PatientData({ handleNextStep }: any) {
           <StyledLabel>Confirme sua Senha</StyledLabel>
           <InputGroup>
             <Input
-              backgroundColor="white"
+              variant="flushed"
               type={showPassword ? "text" : "password"}
               name="confirmPassword"
               value={step1.confirmPassword}
               onChange={handleInputChange}
-              boxShadow="md"
-              borderColor="gray.300"
-              _hover={{ borderColor: "blue.400" }}
-              _focus={{ borderColor: "blue.400" }}
             />
-            <InputRightElement width="4.5rem">
-              <Button
-                h="1.75rem"
-                size="sm"
-                onClick={handleTogglePasswordVisibility}
-              >
-                {showPassword ? (
-                  <ViewOffIcon color="gray.500" />
-                ) : (
-                  <ViewIcon color="gray.500" />
-                )}
-              </Button>
-            </InputRightElement>
           </InputGroup>
         </FormControl>
         <Button
@@ -165,6 +140,11 @@ export function PatientData({ handleNextStep }: any) {
         >
           Proximo
         </Button>
+        <Center mt={4}>
+          <Button onClick={handleGoBack} variant="link" color="#747B7D">
+            Voltar para login
+          </Button>
+        </Center>
       </Stack>
     </Box>
   );

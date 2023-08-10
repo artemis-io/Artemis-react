@@ -2,6 +2,7 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Center,
   FormControl,
   Input,
   InputGroup,
@@ -13,8 +14,10 @@ import { useDispatch } from "react-redux";
 import { DoctorStep1Data } from "../../../../shared/types";
 import { setStep1Data } from "../../../../shared/reducer/DoctorReducer";
 import StyledLabel from "../../Forms/StyledLabel";
+import { useNavigate } from "react-router-dom";
 
 export function DoctorData({ handleNextStep }: any) {
+  const router = useNavigate();
   const dispatch = useDispatch();
   const [step1, setStep1] = useState<DoctorStep1Data>({
     name: "",
@@ -27,15 +30,18 @@ export function DoctorData({ handleNextStep }: any) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setStep1((prevFormData) => ({ ...prevFormData, [name]: value }));
+  
+    // Update the state in the action dispatch using the new value
     dispatch(
       setStep1Data({
-        name: step1.name,
-        email: step1.email,
-        passoword: step1.password,
-        confirmPassword: step1.confirmPassword,
+        name: name === 'name' ? value : step1.name,
+        email: name === 'email' ? value : step1.email,
+        password: name === 'password' ? value : step1.password,
+        confirmPassword: name === 'confirmPassword' ? value : step1.confirmPassword,
       })
     );
   };
+  
 
   const isPasswordValid = () => {
     const { password } = step1;
@@ -57,6 +63,11 @@ export function DoctorData({ handleNextStep }: any) {
     handleNextStep();
   };
 
+  
+  const handleGoBack = () => {
+    router("/signIn"); 
+  };
+
   return (
     <Box
       display="flex"
@@ -68,32 +79,22 @@ export function DoctorData({ handleNextStep }: any) {
         <FormControl id="name">
           <StyledLabel>Nome Completo</StyledLabel>
           <Input
-            backgroundColor="white"
+            variant="flushed"
             type="text"
             name="name"
             value={step1.name}
             onChange={handleInputChange}
-            borderRadius="md"
-            boxShadow="md"
-            borderColor="gray.300"
-            _hover={{ borderColor: "blue.400" }}
-            _focus={{ borderColor: "blue.400" }}
           />
         </FormControl>
 
         <FormControl id="email" mt={4}>
           <StyledLabel>Email</StyledLabel>
           <Input
-            backgroundColor="white"
+            variant="flushed"
             type="email"
             name="email"
             value={step1.email}
             onChange={handleInputChange}
-            borderRadius="md"
-            boxShadow="md"
-            borderColor="gray.300"
-            _hover={{ borderColor: "blue.400" }}
-            _focus={{ borderColor: "blue.400" }}
           />
         </FormControl>
 
@@ -101,16 +102,11 @@ export function DoctorData({ handleNextStep }: any) {
           <StyledLabel>Senha</StyledLabel>
           <InputGroup>
             <Input
-              backgroundColor="white"
+              variant="flushed"
               type={showPassword ? "text" : "password"}
               name="password"
               value={step1.password}
               onChange={handleInputChange}
-              borderRadius="md"
-              boxShadow="md"
-              borderColor="gray.300"
-              _hover={{ borderColor: "blue.400" }}
-              _focus={{ borderColor: "blue.400" }}
             />
             <InputRightElement width="4.5rem">
               <Button
@@ -132,29 +128,14 @@ export function DoctorData({ handleNextStep }: any) {
           <StyledLabel>Confirme sua Senha</StyledLabel>
           <InputGroup>
             <Input
-              backgroundColor="white"
+            variant="flushed"
               type={showPassword ? "text" : "password"}
               name="confirmPassword"
               value={step1.confirmPassword}
               onChange={handleInputChange}
-              boxShadow="md"
-              borderColor="gray.300"
-              _hover={{ borderColor: "blue.400" }}
-              _focus={{ borderColor: "blue.400" }}
+           
             />
-            <InputRightElement width="4.5rem">
-              <Button
-                h="1.75rem"
-                size="sm"
-                onClick={handleTogglePasswordVisibility}
-              >
-                {showPassword ? (
-                  <ViewOffIcon color="gray.500" />
-                ) : (
-                  <ViewIcon color="gray.500" />
-                )}
-              </Button>
-            </InputRightElement>
+   
           </InputGroup>
         </FormControl>
         <Button
@@ -168,6 +149,11 @@ export function DoctorData({ handleNextStep }: any) {
         >
           Próximo
         </Button>
+        <Center mt={4}>
+          <Button onClick={handleGoBack} variant="link" color="#747B7D">
+            Voltar para login
+          </Button>
+        </Center>
       </Stack>
     </Box>
   );
