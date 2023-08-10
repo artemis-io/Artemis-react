@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
 import { Box } from "@chakra-ui/react";
 import { Doctor } from "../../../../shared/interface";
 import { apiMed } from "../../../../services/api";
 import DoctorCard from "../../../Style/Cards/DoctorCard";
 import CalendarStep from "./CalendarStep";
-
 
 export default function Schedule() {
   const [doctor, setDoctor] = useState<Doctor | null>(null);
