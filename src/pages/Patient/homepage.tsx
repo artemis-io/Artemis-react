@@ -29,7 +29,7 @@ export default function HomepagePatient() {
 
     // Faz a requisição para buscar os compromissos do paciente
     const response = await apiMed.get(
-      `/api/appointment/${user?.id}/day-appointment-patient/${year}/${month}/${day}`,
+      `/appointment/${user?.id}/day-appointment-patient/${year}/${month}/${day}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

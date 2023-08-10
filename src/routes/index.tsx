@@ -16,6 +16,7 @@ import DoctorRoute from "../components/Main/Private/DoctorRoutes";
 import PatientRoute from "../components/Main/Private/PatientRoute";
 import AdminRoute from "../components/Main/Private/AdminRoute";
 import VideoChat from "../pages/Video";
+import HomepageAdmin from "../pages/Admin/homepage";
 
 const AppRoutes = () => {
   return (
@@ -52,7 +53,7 @@ const AppRoutes = () => {
         path="/admin/homepage"
         element={
           <AdminRoute>
-            <HomepagePatient />
+            <HomepageAdmin />
           </AdminRoute>
         }
       />

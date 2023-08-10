@@ -4,14 +4,13 @@ import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 import Participant from "../Participant/index";
 import RemoteParticipant from "../../RemoteParticipant";
 
-
 interface RoomProps {
   room: any;
   participant: any;
   handleLogout: () => void;
 }
 
-const Room = ({ room, handleLogout }: RoomProps) => {
+const RoomVideo = ({ room, handleLogout }: RoomProps) => {
   const [participants, setParticipants] = useState<any[]>([]);
 
   const participantConnected = (participant: any) => {
@@ -55,11 +54,6 @@ const Room = ({ room, handleLogout }: RoomProps) => {
           Remote Participants
         </Text>
 
-        <RemoteParticipant
-          key={room.localParticipant.sid}
-          participant={room.localParticipant}
-          handleLogout={handleLogout}
-        />
         {remoteParticipants}
       </VStack>
 
@@ -83,4 +77,4 @@ const Room = ({ room, handleLogout }: RoomProps) => {
   );
 };
 
-export default Room;
+export default RoomVideo;
