@@ -88,4 +88,3 @@ function registerInterceptTokenManager({
 }
 
 apiMed.registerInterceptTokenManager = registerInterceptTokenManager;
-

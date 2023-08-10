@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Heading, VStack, Flex } from "@chakra-ui/react";
-
 
 interface RemoteParticipantProps {
   participant: any;
@@ -13,8 +12,6 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
 }) => {
   const [videoTracks, setVideoTracks] = useState<any[]>([]);
   const [audioTracks, setAudioTracks] = useState<any[]>([]);
-  const [isAudioEnabled, setIsAudioEnabled] = useState(true);
-  const [isVideoEnabled, setIsVideoEnabled] = useState(true);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -23,23 +20,6 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
     Array.from(trackMap.values())
       .map((publication) => publication.track)
       .filter((track) => track !== null);
-
-  const audioTrack = audioTracks.find((track) => track.kind === "audio");
-  const videoTrack = videoTracks.find((track) => track.kind === "video");
-
-  const toggleAudioEnabled = useCallback(() => {
-    if (audioTrack) {
-      audioTrack.isEnabled ? audioTrack.disable() : audioTrack.enable();
-      setIsAudioEnabled(!audioTrack.isEnabled);
-    }
-  }, [audioTrack]);
-
-  const toggleVideoEnabled = useCallback(() => {
-    if (videoTrack) {
-      videoTrack.isEnabled ? videoTrack.disable() : videoTrack.enable();
-      setIsVideoEnabled(!videoTrack.isEnabled);
-    }
-  }, [videoTrack]);
 
   useEffect(() => {
     setVideoTracks(trackpubsToTracks(participant.videoTracks));
