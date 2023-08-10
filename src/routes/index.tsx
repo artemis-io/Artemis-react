@@ -1,7 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-
 import PrivateRoute from "../components/Main/Private/PrivateRoute";
-
 import Home from "../pages/Home";
 import NotFound from "../pages/404";
 import SignIn from "../pages/Auth/SignIn";
