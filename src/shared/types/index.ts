@@ -57,6 +57,7 @@ export type DoctorStep2Data = {
   state: string;
   district: string;
   city: string;
+  dateOfBirth: Date;
 };
 
 export type DoctorStep3Data = {

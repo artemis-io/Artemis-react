@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { FiArrowDown } from "react-icons/fi";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { DoctorStep2Data } from "../../../../shared/types";
 import { setStep2Data } from "../../../../shared/reducer/DoctorReducer";
 import StyledLabel from "../../Forms/StyledLabel";
@@ -25,20 +25,30 @@ export function DoctorInfo({ handleNextStep }: any) {
     state: "",
     district: "",
     city: "",
+    dateOfBirth: new Date(),
   });
-  const step1Data = useSelector((state: any) => state.doctor.doctorStep1Data);
 
-  const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setStep2((prevFormData) => ({ ...prevFormData, [name]: value }));
-    dispatch(
-      setStep2Data({
-        ...step2,
-        [name]: value,
-      })
-    );
+    if (name === 'dateOfBirth') {
+      const selectedDate = new Date(value);
+      setStep2((prevFormData) => ({ ...prevFormData, [name]: selectedDate }));
+      dispatch(
+        setStep2Data({
+          ...step2,
+          [name]: selectedDate,
+        })
+      );
+    } else {
+      setStep2((prevFormData) => ({ ...prevFormData, [name]: value }));
+      dispatch(
+        setStep2Data({
+          ...step2,
+          [name]: value,
+        })
+      );
+    }
   };
-
 
   const handleDistrictChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -75,7 +85,7 @@ export function DoctorInfo({ handleNextStep }: any) {
         <FormControl id="cpf">
           <StyledLabel>CPF</StyledLabel>
           <Input
-            onChange={handleSubmit}
+            onChange={handleInputChange}
             value={step2.cpf}
             name="cpf"
             variant="flushed"
@@ -100,7 +110,7 @@ export function DoctorInfo({ handleNextStep }: any) {
         <FormControl id="rg">
           <StyledLabel>RG</StyledLabel>
           <Input
-            onChange={handleSubmit}
+            onChange={handleInputChange}
             value={step2.rg}
             name="rg"
             variant="flushed"
@@ -109,36 +119,22 @@ export function DoctorInfo({ handleNextStep }: any) {
             type="text"
           />
         </FormControl>
-        <FormControl id="birthDate">
+        <FormControl id="dateOfBirth">
           <StyledLabel>Data de Nascimento</StyledLabel>
           <Input
             type="date"
-            name="birthDate"
-          /*   value={step2.birthDate} */
-         /*    onChange={handleInputChange} */
+            name="dateOfBirth"
+            value={step2.dateOfBirth.toISOString().split('T')[0]}
+          onChange={handleInputChange}
             variant="flushed"
             _placeholder={{ color: "gray.500" }}
           />
         </FormControl>
-        <FormControl>
-          <StyledLabel>Gênero</StyledLabel>
-          <Select
-            icon={<FiArrowDown />}
-            placeholder="Gênero"
-            onChange={handleGenderChange}
-            value={step2.gender}
-            defaultValue="Gênero"
-          >
-            <option value="male">Masculino</option>
-            <option value="female">Feminino</option>
-          </Select>
-        </FormControl>
-
-     
+        
         <FormControl id="cep">
           <StyledLabel>CEP</StyledLabel>
           <Input
-            onChange={handleSubmit}
+            onChange={handleInputChange}
             value={step2.cep}
             name="cep"
             variant="flushed"
@@ -150,7 +146,7 @@ export function DoctorInfo({ handleNextStep }: any) {
         <FormControl id="address">
           <StyledLabel>Endereço</StyledLabel>
           <Input
-            onChange={handleSubmit}
+            onChange={handleInputChange}
             value={step2.address}
             name="address"
             variant="flushed"
@@ -163,7 +159,7 @@ export function DoctorInfo({ handleNextStep }: any) {
         <FormControl id="number">
           <StyledLabel>Número</StyledLabel>
           <Input
-            onChange={handleSubmit}
+            onChange={handleInputChange}
             value={step2.number}
             name="number"
             variant="flushed"
@@ -175,7 +171,7 @@ export function DoctorInfo({ handleNextStep }: any) {
         <FormControl id="state">
           <StyledLabel>Estado</StyledLabel>
           <Input
-            onChange={handleSubmit}
+            onChange={handleInputChange}
             value={step2.state}
             name="state"
             variant="flushed"
@@ -187,7 +183,7 @@ export function DoctorInfo({ handleNextStep }: any) {
         <FormControl id="city">
           <StyledLabel>Cidade</StyledLabel>
           <Input
-            onChange={handleSubmit}
+            onChange={handleInputChange}
             value={step2.city}
             name="city"
             variant="flushed"
