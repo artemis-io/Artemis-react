@@ -96,7 +96,6 @@ const SidebarContent = ({
         justifyContent="space-between"
         mb={4}
       >
-        <Box></Box>
         <Image
           src="/assets/images/logo.png"
           alt="logo"
@@ -131,35 +130,33 @@ const SidebarContent = ({
 
 const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
   return (
-    <Link style={{ textDecoration: "none" }}>
-      <Flex
-        fontWeight="semibold"
-        _focus={{ boxShadow: "none" }}
-        color="#747B7D"
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        _hover={{
-          bg: "#0078D7",
-          color: "white",
-        }}
-        {...rest}
-      >
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: "white",
-            }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
-    </Link>
+    <Flex
+      fontWeight="semibold"
+      _focus={{ boxShadow: "none" }}
+      color="#747B7D"
+      align="center"
+      p="4"
+      mx="4"
+      borderRadius="lg"
+      role="group"
+      cursor="pointer"
+      _hover={{
+        bg: "#0078D7",
+        color: "white",
+      }}
+      {...rest}
+    >
+      {icon && (
+        <Icon
+          mr="4"
+          fontSize="16"
+          _groupHover={{
+            color: "white",
+          }}
+          as={icon}
+        />
+      )}
+      {children}
+    </Flex>
   );
 };

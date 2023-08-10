@@ -1,3 +1,5 @@
+
+
 import { SearchIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -11,8 +13,8 @@ import {
 
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setStep3Data } from "../../../../shared/reducer/AppointmentReducer";
 import { apiMed } from "../../../../services/api";
+import { setStep3Data } from "../../../../shared/reducer/DoctorReducer";
 
 export default function SelectSpecialty({ handleNextStep }: any) {
   const [specialties, setSpecialties] = useState<string[]>([]);
@@ -28,7 +30,7 @@ export default function SelectSpecialty({ handleNextStep }: any) {
   useEffect(() => {
     const fetchSpecialties = async () => {
       try {
-        const response = await apiMed.get("/api/admin/all/speciality");
+        const response = await apiMed.get("/admin/all/speciality");
         setSpecialties(
           response.data.map(
             (speciality: { speciality: any }) => speciality.speciality
@@ -48,7 +50,7 @@ export default function SelectSpecialty({ handleNextStep }: any) {
   );
 
   return (
-    <Box p={4}>
+    <Box>
       <Heading color="#747B7D">Especialidade</Heading>
       <InputGroup mb={8} mt={4}>
         <InputLeftElement pointerEvents="none">
@@ -64,13 +66,14 @@ export default function SelectSpecialty({ handleNextStep }: any) {
       <SimpleGrid columns={1} spacing={4}>
         {filteredSpecialties.map((speciality) => (
           <Card
+            cursor="pointer"
             key={speciality}
             onClick={() => handleSubmit(speciality)}
             h={50}
             alignItems="center"
             justifyContent="center"
             boxShadow="0px 2px 2px 0px rgba(0, 0, 0, 0.10)"
-            color="#494949"
+            color="#747B7D"
             fontSize="16px"
             fontWeight="700"
           >

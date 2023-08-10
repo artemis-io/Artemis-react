@@ -21,7 +21,7 @@ export default function MedBio({ handleNextStep }: any) {
   useEffect(() => {
     const fetchDoctor = async () => {
       try {
-        const response = await apiMed.get(`api/user/doctor/${id}`);
+        const response = await apiMed.get(`/user/doctor/${id}`);
         setDoctor(response.data);
         console.log(response.data);
       } catch (error) {

@@ -15,7 +15,7 @@ export default function Schedule() {
   useEffect(() => {
     const fetchDoctor = async () => {
       try {
-        const response = await apiMed.get(`api/user/doctor/${id}`);
+        const response = await apiMed.get(`/user/doctor/${id}`);
         console.log(response.data);
 
         setDoctor(response.data);

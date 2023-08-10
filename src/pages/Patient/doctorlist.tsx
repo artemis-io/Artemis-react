@@ -24,7 +24,7 @@ export default function DoctorList() {
     const fetchDoctors = async () => {
       try {
         if (typeof speciality === "string") {
-          const response = await apiMed.get(`/api/doctor/${speciality}`);
+          const response = await apiMed.get(`/doctor/${speciality}`);
           setDoctors(response.data);
         }
       } catch (error) {

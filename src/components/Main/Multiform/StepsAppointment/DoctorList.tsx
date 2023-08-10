@@ -46,7 +46,7 @@ const DoctorList = ({ handleNextStep }: DoctorListProps) => {
   const fetchDoctors = useCallback(async () => {
     try {
       if (doctorsRef.current.length === 0) {
-        const response = await apiMed.get(`api/doctor/${step3Data}`);
+        const response = await apiMed.get(`/doctor/${step3Data}`);
         doctorsRef.current = response.data;
         setTimeout(() => {
           setIsLoading(false);

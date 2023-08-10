@@ -15,7 +15,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DoctorStep3Data } from "../../../../shared/types";
 import { apiMed } from "../../../../services/api";
-import { setStep3Data, submitDoctorData } from "../../../../shared/reducer/DoctorReducer";
+import {
+  setStep3Data,
+  submitDoctorData,
+} from "../../../../shared/reducer/DoctorReducer";
+
 import StyledLabel from "../../Forms/StyledLabel";
 import { useNavigate } from "react-router-dom";
 
@@ -165,7 +169,13 @@ export function DoctorChose() {
           <Accordion allowMultiple>
             <AccordionItem>
               <AccordionButton>
-                <Box as="span" flex="1" textAlign="left" fontWeight='bold' color="#494949">
+                <Box
+                  as="span"
+                  flex="1"
+                  textAlign="left"
+                  fontWeight="bold"
+                  color="#494949"
+                >
                   Especialidades Médicas
                 </Box>
                 <AccordionIcon />

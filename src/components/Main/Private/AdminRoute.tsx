@@ -7,7 +7,7 @@ const AdminRoute = ({ children }: any) => {
 
   if (!user) {
     return <Navigate to="/signIn" />;
-  } else if (user.role !== "admin") {
+  } else if (user?.role !== "admin") {
     return <NotFound />;
   }
 

@@ -1,65 +1,91 @@
-/* eslint-disable no-empty-pattern */
 import axios, { AxiosInstance } from "axios";
-import { refreshAccessTokenRequest } from "./auth";
+
 import {
   AUTH_REFRESH_STORAGE,
   AUTH_TOKEN_STORAGE,
 } from "../shared/storage/config";
+import { refreshAccessTokenRequest } from "../services/auth";
 
 interface RegisterInterceptTokenManager {
   signOut: () => void;
 }
 
 interface APIInstanceProps extends AxiosInstance {
-  registerInterceptTokenManager: ({}: RegisterInterceptTokenManager) => () => void;
+  registerInterceptTokenManager: ({
+    signOut,
+  }: RegisterInterceptTokenManager) => void;
 }
 
-export function getApiClient() {
-  const api = axios.create({
-    baseURL: "https://artemis-api-production.up.railway.app/api",
+const api = axios.create({
+  // Configure your default baseURL, headers, and other settings here
+  baseURL: "http://localhost:3333/api",
+  timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+}) as APIInstanceProps;
 
-    timeout: 10000,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }) as APIInstanceProps;
+// Interceptor for refreshing access token
+let isRefreshing = false;
+let refreshSubscribers: ((accessToken: string) => void)[] = [];
 
-  api.registerInterceptTokenManager = ({ signOut }) => {
-    const interceptTokenManager = api.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        if (error.response?.status === 401 && !error.config._retry) {
-          const refreshToken = localStorage.getItem(AUTH_REFRESH_STORAGE);
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const originalRequest = error.config;
 
-          if (refreshToken) {
-            try {
-              const response = await refreshAccessTokenRequest(refreshToken);
+    if (error.response && error.response.status === 401) {
+      if (!isRefreshing) {
+        isRefreshing = true;
 
-              const newAccessToken = response.accessToken;
-              const newRefreshToken = response.refreshToken;
+        // Perform the refresh token request
+        const refreshToken = localStorage.getItem(AUTH_REFRESH_STORAGE);
+        if (refreshToken) {
+          refreshAccessTokenRequest(refreshToken)
+            .then((response) => {
+              if (response.accessToken) {
+                // Update the access token in local storage
+                localStorage.setItem(AUTH_TOKEN_STORAGE, response.accessToken);
 
-              localStorage.setItem(AUTH_TOKEN_STORAGE, newAccessToken);
-              localStorage.setItem(AUTH_REFRESH_STORAGE, newRefreshToken);
+                // Execute all the pending requests with the new token
+                refreshSubscribers.forEach((callback) =>
+                  callback(response.accessToken)
+                );
+                refreshSubscribers = [];
 
-              api.defaults.headers.common[
-                "Authorization"
-              ] = `Bearer ${newAccessToken}`;
-
-              // Retry the original request with the new updated token
-              return api(error.config);
-            } catch (refreshError) {
-              signOut();
-            }
-          }
+                // Retry the original request
+                originalRequest.headers.Authorization = `Bearer ${response.accessToken}`;
+                return api.request(originalRequest);
+              }
+            })
+            .catch(() => {
+              // Handle refresh token failure (e.g., log out user)
+            })
+            .finally(() => {
+              isRefreshing = false;
+            });
         }
-
-        return Promise.reject(error);
       }
-    );
-    return () => {
-      api.interceptors.response.eject(interceptTokenManager);
-    };
-  };
 
-  return api;
+      return new Promise((resolve) => {
+        refreshSubscribers.push((accessToken) => {
+          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+          resolve(api.request(originalRequest));
+        });
+      });
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+function registerInterceptTokenManager({
+  signOut,
+}: RegisterInterceptTokenManager) {
+  refreshSubscribers = []; // Reset subscribers on sign out
+  // Define other management logic as needed
 }
+
+api.registerInterceptTokenManager = registerInterceptTokenManager;
+
+export default api;
