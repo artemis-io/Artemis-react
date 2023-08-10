@@ -83,6 +83,18 @@ export function DoctorInfo({ handleNextStep }: any) {
             type="text"
           />
         </FormControl>
+        <FormControl id="rg">
+          <StyledLabel>RG</StyledLabel>
+          <Input
+            onChange={handleSubmit}
+            value={step2.rg}
+            name="rg"
+            variant="flushed"
+            placeholder="00000000"
+            _placeholder={{ color: "gray.500" }}
+            type="text"
+          />
+        </FormControl>
         <FormControl id="birthDate">
           <StyledLabel>Data de Nascimento</StyledLabel>
           <Input
@@ -108,18 +120,7 @@ export function DoctorInfo({ handleNextStep }: any) {
           </Select>
         </FormControl>
 
-        <FormControl id="rg">
-          <StyledLabel>RG</StyledLabel>
-          <Input
-            onChange={handleSubmit}
-            value={step2.rg}
-            name="rg"
-            variant="flushed"
-            placeholder="00000000"
-            _placeholder={{ color: "gray.500" }}
-            type="text"
-          />
-        </FormControl>
+     
         <FormControl id="cep">
           <StyledLabel>CEP</StyledLabel>
           <Input

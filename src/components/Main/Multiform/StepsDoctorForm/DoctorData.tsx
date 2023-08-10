@@ -2,6 +2,7 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Center,
   FormControl,
   Input,
   InputGroup,
@@ -13,8 +14,10 @@ import { useDispatch } from "react-redux";
 import { DoctorStep1Data } from "../../../../shared/types";
 import { setStep1Data } from "../../../../shared/reducer/DoctorReducer";
 import StyledLabel from "../../Forms/StyledLabel";
+import { useNavigate } from "react-router-dom";
 
 export function DoctorData({ handleNextStep }: any) {
+  const router = useNavigate();
   const dispatch = useDispatch();
   const [step1, setStep1] = useState<DoctorStep1Data>({
     name: "",
@@ -58,6 +61,11 @@ export function DoctorData({ handleNextStep }: any) {
       return;
     }
     handleNextStep();
+  };
+
+  
+  const handleGoBack = () => {
+    router("/signIn"); 
   };
 
   return (
@@ -127,19 +135,7 @@ export function DoctorData({ handleNextStep }: any) {
               onChange={handleInputChange}
            
             />
-            {/*   <InputRightElement width="4.5rem">
-              <Button
-                h="1.75rem"
-                size="sm"
-                onClick={handleTogglePasswordVisibility}
-              >
-                {showPassword ? (
-                  <ViewOffIcon color="gray.500" />
-                ) : (
-                  <ViewIcon color="gray.500" />
-                )}
-              </Button>
-            </InputRightElement> */}
+   
           </InputGroup>
         </FormControl>
         <Button
@@ -153,6 +149,11 @@ export function DoctorData({ handleNextStep }: any) {
         >
           Próximo
         </Button>
+        <Center mt={4}>
+          <Button onClick={handleGoBack} variant="link" color="#747B7D">
+            Voltar para login
+          </Button>
+        </Center>
       </Stack>
     </Box>
   );

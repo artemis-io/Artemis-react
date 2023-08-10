@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Input, Stack } from "@chakra-ui/react";
+import { Box, Button, FormControl, Input, Select, Stack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PatientStep2Data } from "../../../../shared/types";
@@ -6,6 +6,7 @@ import { submitPatientData } from "../../../../shared/reducer/PatientReducer";
 import { apiMed } from "../../../../services/api";
 import StyledLabel from "../../Forms/StyledLabel";
 import { useNavigate } from "react-router-dom";
+import { FiArrowDown } from "react-icons/fi";
 
 export function PatientInfo() {
   const router = useNavigate();
@@ -83,6 +84,31 @@ export function PatientInfo() {
             type="text"
           />
         </FormControl>
+        <FormControl id="birthDate">
+          <StyledLabel>Data de Nascimento</StyledLabel>
+          <Input
+            type="date"
+            name="birthDate"
+          /*   value={step2.birthDate} */
+         /*    onChange={handleInputChange} */
+            variant="flushed"
+            _placeholder={{ color: "gray.500" }}
+          />
+        </FormControl>
+        <FormControl>
+          <StyledLabel>Gênero</StyledLabel>
+          <Select
+            icon={<FiArrowDown />}
+            placeholder="Gênero"
+         /*    onChange={handleGenderChange}
+            value={step2.gender} */
+            defaultValue="Gênero"
+          >
+            <option value="male">Masculino</option>
+            <option value="female">Feminino</option>
+          </Select>
+        </FormControl>
+      
         <FormControl id="gender">
           <StyledLabel>Gênero</StyledLabel>
           <Input

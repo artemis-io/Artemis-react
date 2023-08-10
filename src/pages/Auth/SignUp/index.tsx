@@ -28,7 +28,7 @@ const SignUp = () => {
   };
 
   const handleGoBack = () => {
-    router("/signIn"); // Redirecionar para a página de login
+    router("/signIn"); 
   };
 
   return (
