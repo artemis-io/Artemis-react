@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from "react";
-import { connect as ConnectVideo, Room } from "twilio-video";
+import { connect as ConnectVideo } from "twilio-video";
 import { Box } from "@chakra-ui/react";
 import { useAuth } from "../../hooks/useAuth";
 import { useParams } from "react-router-dom";
@@ -89,6 +89,7 @@ const VideoChat = () => {
         />
       ) : (
         <Lobby
+          role={user?.role}
           username={user?.name}
           roomName={roomName}
           handleSubmit={handleSubmit}

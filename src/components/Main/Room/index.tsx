@@ -48,6 +48,7 @@ const RoomVideo = ({ room, handleLogout }: RoomProps) => {
       display="flex"
       flexDirection="column"
       alignItems="center"
+    
     >
       <VStack spacing={4} align="center">
         <Text fontSize="lg" fontWeight="bold">

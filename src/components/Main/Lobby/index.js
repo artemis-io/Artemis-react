@@ -1,7 +1,6 @@
 import React from "react";
 import {
   FormControl,
-  FormLabel,
   Input,
   Button,
   Center,
@@ -10,13 +9,20 @@ import {
   VStack,
   InputGroup,
   InputLeftElement,
-  InputRightElement,
   Spinner,
 } from "@chakra-ui/react";
 import { FiUser, FiVideo } from "react-icons/fi";
 import StyledLabel from "../Forms/StyledLabel";
+import { useAuth } from "../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
-const Lobby = ({ username, roomName, handleSubmit, connecting }) => {
+const Lobby = ({ username, roomName, handleSubmit, connecting, role }) => {
+  const router = useNavigate();
+  const user = useAuth();
+  const handleNav = () => {
+    router(`../../${role}/homepage`);
+  };
+
   return (
     <Center h="100vh">
       <Box w="400px" p="6" bg="white" borderRadius="lg" boxShadow="lg">
@@ -75,7 +81,7 @@ const Lobby = ({ username, roomName, handleSubmit, connecting }) => {
             </Button>
             <Button
               bg="#0078D7"
-              type="submit"
+              onClick={handleNav}
               mt={4}
               colorScheme="blue"
               size="lg"
