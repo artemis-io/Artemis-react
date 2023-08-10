@@ -26,7 +26,7 @@ export default function SelectSpecialty({ handleNextStep }: any) {
     dispatch(setStep3Data({ speciality: e }));
     handleNextStep();
   };
-
+  
   useEffect(() => {
     const fetchSpecialties = async () => {
       try {
@@ -36,6 +36,7 @@ export default function SelectSpecialty({ handleNextStep }: any) {
             (speciality: { speciality: any }) => speciality.speciality
           )
         );
+        
       } catch (error) {
         console.error("Erro ao obter especialidades:", error);
       }

@@ -17,6 +17,7 @@ import PatientRoute from "../components/Main/Private/PatientRoute";
 import AdminRoute from "../components/Main/Private/AdminRoute";
 import VideoChat from "../pages/Video";
 import HomepageAdmin from "../pages/Admin/homepage";
+import FormAppointment from "../pages/Patient/appointment";
 
 const AppRoutes = () => {
   return (
@@ -28,6 +29,7 @@ const AppRoutes = () => {
       <Route path="/register/:category" element={<Register />} />
       <Route path="/forgot-Password" element={<ForgotPassword />} />
       <Route path="/reset-Password/:token" element={<ResetPasswordPage />} />
+      <Route path="patient/appointment" element={<FormAppointment />} />
 
       <Route path="/video/:roomName" element={<VideoChat />} />
 

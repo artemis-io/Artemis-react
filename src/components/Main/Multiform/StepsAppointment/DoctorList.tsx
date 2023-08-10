@@ -34,7 +34,7 @@ const DoctorList = ({ handleNextStep }: DoctorListProps) => {
   const step3Data = useSelector(
     (state: any) => state.appointment.appointmentStep3Data.speciality
   );
-
+    
   const handleSubmit = useCallback(
     (id_doctor: string, doctorName: string) => {
       dispatch(setStep4Data({ id_doctor, doctorName }));
@@ -45,6 +45,7 @@ const DoctorList = ({ handleNextStep }: DoctorListProps) => {
 
   const fetchDoctors = useCallback(async () => {
     try {
+      
       if (doctorsRef.current.length === 0) {
         const response = await apiMed.get(`/doctor/${step3Data}`);
         doctorsRef.current = response.data;
