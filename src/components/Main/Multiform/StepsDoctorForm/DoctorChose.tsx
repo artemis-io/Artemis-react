@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionButton,
@@ -11,35 +12,33 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DoctorStep3Data } from "../../../../shared/types";
-import { apiMed } from "../../../../services/api";
-import {
-  setStep3Data,
-} from "../../../../shared/reducer/DoctorReducer";
+import { setStep3Data } from "../../../../shared/reducer/DoctorReducer";
 import StyledLabel from "../../Forms/StyledLabel";
 import { useNavigate } from "react-router-dom";
+import { apiMed } from "../../../../services/api";
 
-export function DoctorChose() {
+function DoctorChose() {
   const router = useNavigate();
-  const [specialties, setSpecialties] = useState<string[]>([]);
-  const [step3, setStep3] = useState<DoctorStep3Data>({
+  const dispatch = useDispatch();
+
+  const step1Data = useSelector((state: any) => state.doctor.doctorStep1Data);
+  const step2Data = useSelector((state: any) => state.doctor.doctorStep2Data);
+  const step3Data = useSelector((state: any) => state.doctor.doctorStep3Data);
+
+  const [specialties, setSpecialties] = useState([]);
+  const [selectedSpecialities, setSelectedSpecialities] = useState([]);
+  const [step3, setStep3] = useState({
     crm: "",
     pricing: "",
     bio: "",
-    speciality: [],
   });
 
   useEffect(() => {
     const fetchSpecialties = async () => {
       try {
         const response = await apiMed.get("/admin/all/speciality");
-        setSpecialties(
-          response.data.map(
-            (speciality: { speciality: string }) => speciality.speciality
-          )
-        );
+        setSpecialties(response.data.map((item: any) => item.speciality));
       } catch (error) {
         console.error("Erro ao obter especialidades:", error);
       }
@@ -47,76 +46,50 @@ export function DoctorChose() {
 
     fetchSpecialties();
   }, []);
-  const dispatch = useDispatch();
-  const step1Data = useSelector((state: any) => state.doctor.doctorStep1Data);
-  const step2Data = useSelector((state: any) => state.doctor.doctorStep2Data);
-  const step3Data = useSelector((state: any) => state.doctor.doctorStep3Data);
-  console.log("2", step2Data);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
-    setStep3((prevFormData) => ({ ...prevFormData, [name]: value }));
-    dispatch(setStep3Data({ ...step3, [name]: value }));
-  };
-  
 
-  const handleSpecialityChange = (speciality: string) => {
-    if (step3.speciality.includes(speciality)) {
-      setStep3((prevFormData) => ({
-        ...prevFormData,
-        speciality: prevFormData.speciality.filter(
-          (item) => item !== speciality
-        ),
-      }));
-      dispatch(
-        setStep3Data({
-          ...step3Data,
-          speciality: step3Data.speciality.filter((item: string) => item !== speciality),
-        })
-      );
-    } else {
-      setStep3((prevFormData) => ({
-        ...prevFormData,
-        speciality: [...prevFormData.speciality, speciality],
-      }));
-      dispatch(
-        setStep3Data({
-          ...step3Data,
-          speciality: [...step3Data.speciality, speciality],
-        })
-      );
-    }
+    setStep3((prevStep3) => ({
+      ...prevStep3,
+      [name]: value,
+    }));
+
+    dispatch(setStep3Data({ ...step3Data, [name]: value }));
   };
 
-  const handleFinish = async (e: React.FormEvent) => {
+  const handleSpecialityChange = (speciality: any) => {
+    setSelectedSpecialities((prevSelected: any) =>
+      prevSelected.includes(speciality)
+        ? prevSelected.filter((item: any) => item !== speciality)
+        : [...prevSelected, speciality]
+    );
+  };
+
+  const handleFinish = async (e: any) => {
     e.preventDefault();
-  
+
     const formDataDoctor = {
       ...step1Data,
       ...step2Data,
-      ...step3Data,
+      ...step3,
+      speciality: selectedSpecialities,
     };
-  console.log('FormData:', formDataDoctor)
+
+    console.log(JSON.stringify(formDataDoctor));
+
     try {
-      const response = await apiMed.post("/doctor", formDataDoctor, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      console.log(response);
-  
+      await apiMed.post("/doctor", formDataDoctor);
+
       router("/doctor/homepage");
     } catch (error) {
       console.error(error);
     }
   };
-  
-
 
   return (
     <Box>
-      <Stack spacing={6} w={"full"} maxW={"md"} p={2}>
+      <Stack spacing={6} w="full" maxW="md" p={2}>
         <FormControl id="crm">
           <StyledLabel>CRM</StyledLabel>
           <Input
@@ -124,7 +97,7 @@ export function DoctorChose() {
             onChange={handleInputChange}
             value={step3.crm}
             name="crm"
-            type="number"
+            type="text"
           />
         </FormControl>
         <FormControl id="pricing">
@@ -132,12 +105,11 @@ export function DoctorChose() {
           <Input
             variant="flushed"
             onChange={handleInputChange}
-            value={step3?.pricing}
+            value={step3.pricing}
             name="pricing"
-            type="number"
+            type="text"
           />
         </FormControl>
-
         <FormControl id="bio">
           <StyledLabel>Sobre você</StyledLabel>
           <Input
@@ -151,7 +123,6 @@ export function DoctorChose() {
             h="100px"
           />
         </FormControl>
-
         <FormControl id="speciality">
           <Accordion allowMultiple>
             <AccordionItem>
@@ -167,14 +138,13 @@ export function DoctorChose() {
                 </Box>
                 <AccordionIcon />
               </AccordionButton>
-
               <AccordionPanel pb={4}>
                 <Stack>
                   {specialties.map((speciality) => (
                     <Checkbox
                       key={speciality}
                       fontWeight="normal"
-                      isChecked={step3.speciality.includes(speciality)}
+                      isChecked={selectedSpecialities.includes(speciality)}
                       onChange={() => handleSpecialityChange(speciality)}
                     >
                       {speciality}
@@ -187,8 +157,8 @@ export function DoctorChose() {
         </FormControl>
         <Button
           onClick={handleFinish}
-          bg={"blue.400"}
-          color={"white"}
+          bg="blue.400"
+          color="white"
           w="full"
           _hover={{
             bg: "blue.500",
@@ -200,3 +170,5 @@ export function DoctorChose() {
     </Box>
   );
 }
+
+export default DoctorChose;
