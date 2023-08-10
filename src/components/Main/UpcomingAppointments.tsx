@@ -42,9 +42,6 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
 }) => {
   const router = useNavigate();
 
-  console.log(appointments);
-
-
   const handleNav = () => {
     router("/patient/appointment");
   };

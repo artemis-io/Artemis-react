@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Box, Heading, VStack } from "@chakra-ui/react";
 import ControlsBar from "../Controls";
 
-
 interface ParticipantProps {
   participant: any;
   handleLogout: () => void;

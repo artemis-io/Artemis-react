@@ -2,18 +2,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { User } from "../shared/entities/user.entities";
+import jwtDecode from "jwt-decode"; // Import the library for decoding JWT tokens
 
 import {
   AUTH_REFRESH_STORAGE,
   AUTH_TOKEN_STORAGE,
+  USER_STORAGE,
 } from "../shared/storage/config";
 
 import { apiMed } from "../services/api";
 import { loginProps } from "../shared/types";
 import { UserAuth } from "../shared/interface";
-import { signInRequest } from "../services/auth";
+import { refreshAccessTokenRequest, signInRequest } from "../services/auth";
+
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  avatar_url: string;
+  role: string;
+};
 
 type AuthContextType = {
   user: User | null;
@@ -31,7 +39,11 @@ export const AuthContext = createContext<AuthContextType>(
   {} as AuthContextType
 );
 
-const setTokens = (accessToken: string, refreshToken: string) => {
+const setUserStorage = (user: UserAuth) => {
+  localStorage.setItem(USER_STORAGE, JSON.stringify(user));
+};
+
+const setTokensStorage = (accessToken: string, refreshToken: string) => {
   localStorage.setItem(AUTH_TOKEN_STORAGE, accessToken);
   localStorage.setItem(AUTH_REFRESH_STORAGE, refreshToken);
 };
@@ -39,7 +51,10 @@ const setTokens = (accessToken: string, refreshToken: string) => {
 const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const router = useNavigate();
 
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    const storedUser = localStorage.getItem(USER_STORAGE);
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   const isAuthenticated = !!user;
 
@@ -54,7 +69,8 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       const data = await signInRequest({ email, password });
 
       setUser(data.user);
-      setTokens(data.tokens.accessToken, data.tokens.refreshToken);
+      setUserStorage(data.user);
+      setTokensStorage(data.tokens.accessToken, data.tokens.refreshToken);
 
       router(`/${data.user.role}/homepage`);
 
@@ -66,14 +82,13 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   };
 
   const signOut = async (): Promise<void> => {
-    const router = useNavigate();
-
     try {
-      localStorage.removeItem(AUTH_REFRESH_STORAGE);
+      localStorage.removeItem(USER_STORAGE);
       localStorage.removeItem(AUTH_TOKEN_STORAGE);
+      localStorage.removeItem(AUTH_REFRESH_STORAGE);
       setUser(null);
       apiMed.defaults.headers["Authorization"] = "";
-      router("signIn");
+      router("/signIn");
     } catch (error) {
       throw error;
     } finally {
@@ -90,14 +105,30 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   };
 
   useEffect(() => {
-    const subscribe = apiMed.registerInterceptTokenManager({
-      signOut,
-    });
+    const token = localStorage.getItem(AUTH_TOKEN_STORAGE);
+    const refreshToken = localStorage.getItem(AUTH_REFRESH_STORAGE);
+    
+    if (token && refreshToken) {
+      const refreshAccessToken = async () => {
+        const decodedToken: any = jwtDecode(token);
+        const currentTimestamp = Date.now() / 1000;
 
-    return () => {
-      subscribe();
-    };
-  }, [signOut, user]);
+        if (decodedToken.exp < currentTimestamp) {
+          try {
+            const data = await refreshAccessTokenRequest(refreshToken);
+
+            setTokensStorage(data.accessToken, data.refreshToken);
+          } catch (error) {
+            signOut();
+          }
+        }
+      };
+
+      refreshAccessToken();
+    } else {
+      setIsLoadingUserStorageData(false); // No need to continue loading
+    }
+  }, []); // Empty dependency array to run only on component mount
 
   return (
     <AuthContext.Provider value={authContextData}>

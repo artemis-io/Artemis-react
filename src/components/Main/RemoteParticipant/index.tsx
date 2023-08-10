@@ -1,18 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import {
-  Box,
-  Button,
-  Heading,
-  Tooltip,
-  VStack,
-  Icon,
-  HStack,
-  Text,
-  Card,
-  CardBody,
-  IconButton,
-  Flex,
-} from "@chakra-ui/react";
+import { Box, Heading, VStack, Flex } from "@chakra-ui/react";
 
 
 interface RemoteParticipantProps {

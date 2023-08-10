@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, VStack, Text } from "@chakra-ui/react";
-
+import { Room } from "twilio-video";
 import Participant from "../Participant/index";
-import RemoteParticipant from "../../RemoteParticipant";
+import RemoteParticipant from "../RemoteParticipant";
 
 interface RoomProps {
-  room: any;
-  participant: any;
+  roomName: string | undefined;
+  username: string | undefined;
+  room: Room;
   handleLogout: () => void;
 }
 
