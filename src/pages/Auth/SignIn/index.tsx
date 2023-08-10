@@ -76,6 +76,7 @@ const SignIn = () => {
   return (
     <Box
       display="flex"
+      minWidth="90vw"
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
