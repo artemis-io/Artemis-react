@@ -32,9 +32,9 @@ export default function AppointmentType({ handleNextStep }: any) {
       <form>
         <FormControl>
           <Flex flexDirection="column" gap="12px">
-            <PrimaryButton onClick={() => handleSubmit("healthInsurance")} id="type">
+            {/* <PrimaryButton onClick={() => handleSubmit("healthInsurance")} id="type">
               Convênio
-            </PrimaryButton>
+            </PrimaryButton> */}
             <PrimaryButton onClick={() => handleSubmit("particular")} id="type">
               Particular
             </PrimaryButton>

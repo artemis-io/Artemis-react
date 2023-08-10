@@ -18,7 +18,7 @@ export default function Convlist() {
   useEffect(() => {
     const fetchSpecialties = async () => {
       try {
-        const response = await apiMed.get("/api/admin/all/speciality");
+        const response = await apiMed.get("/admin/all/speciality");
         setSpecialties(
           response.data.map(
             (speciality: { speciality: any }) => speciality.speciality

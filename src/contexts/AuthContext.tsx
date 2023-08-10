@@ -1,21 +1,24 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { User } from "../shared/entities/user.entities";
-
+import jwtDecode from "jwt-decode";
 import {
   AUTH_REFRESH_STORAGE,
   AUTH_TOKEN_STORAGE,
+  USER_STORAGE,
 } from "../shared/storage/config";
-
-//import jwtDecode from "jwt-decode";
-
-import { apiMed } from "../services/api";
+import { refreshAccessTokenRequest, signInRequest } from "../services/auth";
 import { loginProps } from "../shared/types";
 import { UserAuth } from "../shared/interface";
-import { signInRequest } from "../services/auth";
+import { apiMed } from "../services/api";
+
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  avatar_url: string;
+  role: string;
+};
 
 type AuthContextType = {
   user: User | null;
@@ -33,7 +36,11 @@ export const AuthContext = createContext<AuthContextType>(
   {} as AuthContextType
 );
 
-const setTokens = (accessToken: string, refreshToken: string) => {
+const setUserStorage = (user: UserAuth) => {
+  localStorage.setItem(USER_STORAGE, JSON.stringify(user));
+};
+
+const setTokensStorage = (accessToken: string, refreshToken: string) => {
   localStorage.setItem(AUTH_TOKEN_STORAGE, accessToken);
   localStorage.setItem(AUTH_REFRESH_STORAGE, refreshToken);
 };
@@ -41,7 +48,10 @@ const setTokens = (accessToken: string, refreshToken: string) => {
 const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const router = useNavigate();
 
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    const storedUser = localStorage.getItem(USER_STORAGE);
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   const isAuthenticated = !!user;
 
@@ -56,7 +66,8 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       const data = await signInRequest({ email, password });
 
       setUser(data.user);
-      setTokens(data.tokens.accessToken, data.tokens.refreshToken);
+      setUserStorage(data.user);
+      setTokensStorage(data.tokens.accessToken, data.tokens.refreshToken);
 
       router(`/${data.user.role}/homepage`);
 
@@ -68,14 +79,13 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   };
 
   const signOut = async (): Promise<void> => {
-    const router = useNavigate();
-
     try {
-      localStorage.removeItem(AUTH_REFRESH_STORAGE);
+      localStorage.removeItem(USER_STORAGE);
       localStorage.removeItem(AUTH_TOKEN_STORAGE);
+      localStorage.removeItem(AUTH_REFRESH_STORAGE);
       setUser(null);
       apiMed.defaults.headers["Authorization"] = "";
-      router("signIn");
+      router("/signIn");
     } catch (error) {
       throw error;
     } finally {
@@ -83,26 +93,49 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     }
   };
 
-  const authContextData: AuthContextType = {
-    user,
-    isLoadingUserStorageData,
-    signIn,
-    signOut,
-    isAuthenticated,
-  };
-
   useEffect(() => {
-    const subscribe = apiMed.registerInterceptTokenManager({
-      signOut,
-    });
+    const token = localStorage.getItem(AUTH_TOKEN_STORAGE);
+    const refreshToken = localStorage.getItem(AUTH_REFRESH_STORAGE);
 
-    return () => {
-      subscribe();
-    };
-  }, [signOut, user]);
+    if (token && refreshToken) {
+      const refreshAccessToken = async () => {
+        const decodedToken: any = jwtDecode(token);
+        const currentTimestamp = Date.now() / 1000;
+
+        if (decodedToken.exp < currentTimestamp) {
+          try {
+            const response = await refreshAccessTokenRequest(refreshToken);
+            const newAccessToken = response.accessToken;
+            const newRefreshToken = response.refreshToken;
+
+            setTokensStorage(newAccessToken, newRefreshToken);
+
+            // Update API instance's Authorization header with the new token
+            apiMed.defaults.headers[
+              "Authorization"
+            ] = `Bearer ${newAccessToken}`;
+          } catch (error) {
+            signOut();
+          }
+        }
+      };
+
+      refreshAccessToken();
+    } else {
+      setIsLoadingUserStorageData(false); // No need to continue loading
+    }
+  }, []);
 
   return (
-    <AuthContext.Provider value={authContextData}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isLoadingUserStorageData,
+        signIn,
+        signOut,
+        isAuthenticated,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

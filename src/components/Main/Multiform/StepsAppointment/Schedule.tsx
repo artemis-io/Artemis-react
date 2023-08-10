@@ -2,20 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { Box } from "@chakra-ui/react";
-import { DoctorInfo } from "../../../../shared/interface";
+import { Doctor } from "../../../../shared/interface";
 import { apiMed } from "../../../../services/api";
 import DoctorCard from "../../../Style/Cards/DoctorCard";
 import CalendarStep from "./CalendarStep";
 
+
 export default function Schedule() {
-  const [doctor, setDoctor] = useState<DoctorInfo | null>(null);
+  const [doctor, setDoctor] = useState<Doctor | null>(null);
 
   const id = useSelector((state: any) => state.appointment.appointmentStep4Data.id_doctor);
 
   useEffect(() => {
     const fetchDoctor = async () => {
       try {
-        const response = await apiMed.get(`api/user/doctor/${id}`);
+        const response = await apiMed.get(`/user/doctor/${id}`);
         console.log(response.data);
 
         setDoctor(response.data);

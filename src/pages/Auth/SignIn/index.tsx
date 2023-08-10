@@ -18,7 +18,7 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 
-const SignIn: React.FC = () => {
+const SignIn = () => {
   const router = useNavigate(); // Inicialize o useHistory
 
   const [email, setEmail] = useState("");
@@ -76,13 +76,14 @@ const SignIn: React.FC = () => {
   return (
     <Box
       display="flex"
+      minWidth="90vw"
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
       padding={4}
       mx={5}
     >
-      <Box>
+
         <Image src="/assets/images/logo.png" alt="logo" maxWidth="400px" />
 
         <form onSubmit={handleSignIn}>
@@ -140,11 +141,12 @@ const SignIn: React.FC = () => {
             </Text>
           </Link>
         </Center>
+        <Center minWidth="max-content" alignItems="center" gap="2">
         <Text mt={4} color="#494949">
           Versão 1.0.00
         </Text>
+        </Center>
       </Box>
-    </Box>
   );
 };
 

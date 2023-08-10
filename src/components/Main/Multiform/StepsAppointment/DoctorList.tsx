@@ -1,4 +1,12 @@
-import { Box, Button, Heading, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  Heading,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import {
   Accordion,
   AccordionButton,
@@ -7,6 +15,7 @@ import {
   AccordionPanel,
   Divider,
   Flex,
+  Image,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,8 +26,10 @@ import { LoadingCircle } from "../../../Style/LoadingCircle";
 type Doctor = {
   id: string;
   name: string;
+  avatar_url: string;
   doctor: {
     speciality: string[];
+    gender: string;
   };
 };
 
@@ -46,7 +57,7 @@ const DoctorList = ({ handleNextStep }: DoctorListProps) => {
   const fetchDoctors = useCallback(async () => {
     try {
       if (doctorsRef.current.length === 0) {
-        const response = await apiMed.get(`api/doctor/${step3Data}`);
+        const response = await apiMed.get(`/doctor/${step3Data}`);
         doctorsRef.current = response.data;
         setTimeout(() => {
           setIsLoading(false);
@@ -86,10 +97,10 @@ const DoctorList = ({ handleNextStep }: DoctorListProps) => {
                 display="flex"
                 height="80px"
                 width="360px"
-                padding="24px 12px"
+                padding="12px"
                 bg="white"
                 alignItems="center"
-                gap="22px"
+                justifyContent="left"
                 flexShrink={0}
                 borderWidth="1px"
                 borderRadius="20px"
@@ -97,14 +108,36 @@ const DoctorList = ({ handleNextStep }: DoctorListProps) => {
                 boxShadow="1px 1px 1px 1px rgba(0, 0, 0, 0.10)"
                 onClick={() => handleSubmit(doctor.id, doctor.name)}
               >
-                <Box>
+                <Grid
+                  templateAreas={`"img name"
+                                  "img spec"`}
+                  gridTemplateRows={"30px 1fr"}
+                  gridTemplateColumns={"50px 260px"}
+                  gap={4}
+                >
+                  <GridItem area={"img"}>
+                    <Image
+                      boxSize="70px"
+                      width="50px"
+                      borderRadius={10}
+                      objectFit="cover"
+                      src={doctor.avatar_url}
+                      alt="Foto de perfil"
+                    />
+                  </GridItem>
+
+                  <GridItem area={"name"} pl="2" width="100%">
                   <Heading color="#494949" fontSize="16px" fontWeight="700">
-                    {doctor.name}
+                    {doctor.doctor.gender === "male" ? "Dr. " : "Dra. "}{doctor.name}
                   </Heading>
-                  <Text color="#494949" fontSize="13px" fontWeight="300">
-                    {doctor.doctor.speciality.join(", ")}
-                  </Text>
-                </Box>
+                </GridItem>
+
+                  <GridItem area={"spec"} width="100%">
+                    <Text color="#494949" fontSize="13px" fontWeight="300">
+                      {doctor.doctor.speciality.join(", ")}
+                    </Text>
+                  </GridItem>
+                </Grid>
               </Button>
             ))
           ) : (

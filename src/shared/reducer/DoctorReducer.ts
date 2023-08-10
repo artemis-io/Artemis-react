@@ -11,6 +11,7 @@ const initialState: DoctorState = {
   doctorStep2Data: {
     cpf: "",
     rg: "",
+    gender: "",
     cep: "",
     address: "",
     number: "",
@@ -20,7 +21,11 @@ const initialState: DoctorState = {
   },
   doctorStep3Data: {
     crm: "",
+<<<<<<< HEAD
     pricing: 0,
+=======
+    pricing: "",
+>>>>>>> main
     bio: "",
     speciality: [],
   },

@@ -7,10 +7,9 @@ import {
   Image,
   Grid,
   GridItem,
-  Button,
 } from "@chakra-ui/react";
 import { AiOutlineVideoCamera } from "react-icons/ai";
-import { Link as RouterLink, useNavigate } from "react-router-dom"; // Importe o Link correto
+import { Link as RouterLink } from "react-router-dom"; // Importe o Link correto
 
 interface Appointment {
   id: string;
@@ -37,11 +36,7 @@ interface UpcomingAppointmentsProps {
 const UpcomingAppointmentsDoctor: React.FC<UpcomingAppointmentsProps> = ({
   appointments,
 }) => {
-  const router = useNavigate();
-
-  const handleNav = () => {
-    router("/patient/appointment");
-  };
+ 
 
   return (
     <VStack spacing={4} alignItems="flex-start" w="95%" mx="auto">
@@ -50,7 +45,7 @@ const UpcomingAppointmentsDoctor: React.FC<UpcomingAppointmentsProps> = ({
       </Text>
       {appointments.map((appointment) => (
         <Box
-          key={appointment.id}
+          key={appointment?.id}
           bg="white"
           p={6}
           borderRadius="lg"
@@ -72,29 +67,29 @@ const UpcomingAppointmentsDoctor: React.FC<UpcomingAppointmentsProps> = ({
                 width="50px"
                 borderRadius={10}
                 objectFit="cover"
-                src={appointment.patient.avatar_url}
+                src={appointment?.patient.avatar_url}
                 alt="Foto de perfil"
               />
             </GridItem>
             <GridItem area={"name"}>
               <Text fontSize="lg" fontWeight="bold" pt="5px ">
-                {appointment.patient.name}
+                {appointment?.patient.name}
               </Text>
             </GridItem>
             <GridItem area={"spec"}>
               <Text fontSize="xm" color="gray.500" pt="5px">
-                {appointment.query === "person" ? "Presencial" : "Teleconsulta"}
+                {appointment?.query === "person" ? "Presencial" : "Teleconsulta"}
               </Text>
             </GridItem>
             <GridItem area={"date"} pl="10px">
               <Text fontSize="sm">
-                {new Date(appointment.date).toLocaleDateString("pt-BR", {
+                {new Date(appointment?.date).toLocaleDateString("pt-BR", {
                   day: "numeric",
                   month: "short",
                 })}
               </Text>
               <Text fontSize="sm" color="gray.500">
-                {new Date(appointment.date).toLocaleTimeString("pt-BR", {
+                {new Date(appointment?.date).toLocaleTimeString("pt-BR", {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}
@@ -102,10 +97,10 @@ const UpcomingAppointmentsDoctor: React.FC<UpcomingAppointmentsProps> = ({
             </GridItem>
 
             <GridItem area={"vid"}>
-              {appointment.query === "teleconsultation" && (
+              {appointment?.query === "teleconsultation" && (
                 <IconButton
                   as={RouterLink}
-                  to={`/video/${appointment.id}`}
+                  to={`/video/${appointment?.id}`}
                   variant="outline"
                   colorScheme="blue"
                   aria-label="Entrar na chamada de vídeo"
@@ -117,25 +112,14 @@ const UpcomingAppointmentsDoctor: React.FC<UpcomingAppointmentsProps> = ({
             <GridItem area={"footer"} pt="5px">
               <Text fontSize="md">
                 Status:{" "}
-                <Badge colorScheme={appointment.payment ? "green" : "red"}>
-                  {appointment.payment ? "Pago" : "Aguardando pagamento"}
+                <Badge colorScheme={appointment?.payment ? "green" : "red"}>
+                  {appointment?.payment ? "Pago" : "Aguardando pagamento"}
                 </Badge>
               </Text>
             </GridItem>
           </Grid>
         </Box>
       ))}
-      <Button
-        bg="#19A588"
-        w="293px"
-        h="50px"
-        color="#fafafa"
-        alignSelf="center"
-        fontSize="16px"
-        onClick={handleNav}
-      >
-        Adicionar novo atendimento
-      </Button>
     </VStack>
   );
 };

@@ -46,27 +46,23 @@ export const refreshAccessTokenRequest = async (refreshToken: string) => {
       },
     });
 
+    console.log(response);
+
     return response.data;
   } catch (error) {
     console.error("RefreshToken Error:", error);
   }
 };
 
-export const getUserInformationRequest = async () => {
+export const getUserInformationRequest = async (accessToken: string) => {
   try {
-    const accessToken = localStorage.getItem(AUTH_TOKEN_STORAGE);
+    const response = await apiMed.get("/auth", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
-    if (accessToken) {
-      const response = await apiMed.get("/api/auth", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      return response.data;
-    } else {
-      console.error("Token de acesso não encontrado.");
-    }
+    return response.data;
   } catch (error) {
     console.error("Erro ao recuperar informações do usuário:", error);
     throw error;

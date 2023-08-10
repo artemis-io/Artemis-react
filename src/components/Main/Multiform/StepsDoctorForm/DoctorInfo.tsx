@@ -19,6 +19,7 @@ export function DoctorInfo({ handleNextStep }: any) {
   const [step2, setStep2] = useState<DoctorStep2Data>({
     cpf: "",
     rg: "",
+    gender: "",
     cep: "",
     address: "",
     number: "",
@@ -27,23 +28,38 @@ export function DoctorInfo({ handleNextStep }: any) {
     city: "",
   });
   const step1Data = useSelector((state: any) => state.doctor.doctorStep1Data);
-  console.log("1", step1Data);
+
   const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setStep2((prevFormData) => ({ ...prevFormData, [name]: value }));
     dispatch(
       setStep2Data({
-        cpf: step2.cpf,
-        rg: step2.rg,
-        cep: step2.cep,
-        address: step2.address,
-        number: step2.number,
-        state: step2.state,
-        district: step2.district,
-        city: step2.city,
+        ...step2,
+        [name]: value,
       })
     );
-    console.log(dispatch);
+  };
+
+  const handleDistrictChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setStep2((prevFormData) => ({ ...prevFormData, district: value }));
+    dispatch(
+      setStep2Data({
+        ...step2,
+        district: value,
+      })
+    );
+  };
+
+  const handleGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    setStep2((prevFormData) => ({ ...prevFormData, gender: value }));
+    dispatch(
+      setStep2Data({
+        ...step2,
+        gender: value,
+      })
+    );
   };
 
   return (
@@ -67,9 +83,21 @@ export function DoctorInfo({ handleNextStep }: any) {
           />
         </FormControl>
         <FormControl>
+<<<<<<< HEAD
           <Select icon={<FiArrowDown />} placeholder="Gênero">
             <option value="option1">Masculino</option>
             <option value="option2">Feminino</option>
+=======
+          <StyledLabel>Gênero</StyledLabel>
+          <Select
+            icon={<FiArrowDown />}
+            placeholder="Gênero"
+            onChange={handleGenderChange}
+            value={step2.gender}
+          >
+            <option value="male">Masculino</option>
+            <option value="female">Feminino</option>
+>>>>>>> main
           </Select>
         </FormControl>
 
@@ -149,7 +177,7 @@ export function DoctorInfo({ handleNextStep }: any) {
         <FormControl id="district">
           <StyledLabel>Bairro</StyledLabel>
           <Input
-            onChange={handleSubmit}
+            onChange={handleDistrictChange}
             value={step2.district}
             name="district"
             variant="flushed"
@@ -157,6 +185,7 @@ export function DoctorInfo({ handleNextStep }: any) {
             type="text"
           />
         </FormControl>
+
         <Button
           onClick={handleNextStep}
           bg={"blue.400"}

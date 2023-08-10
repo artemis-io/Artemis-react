@@ -1,19 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from "react";
 import { connect as ConnectVideo } from "twilio-video";
-
-import { Container } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { useAuth } from "../../hooks/useAuth";
-import { apiMed } from "../../services/api";
-import Room from "../../components/Main/Room";
-import Lobby from "../../components/Main/Lobby";
 import { useParams } from "react-router-dom";
+import { apiMed } from "../../services/api";
+import RoomVideo from "../../components/Main/Room";
+import Lobby from "../../components/Main/Lobby";
 
 const VideoChat = () => {
   const { roomName } = useParams();
-
   const { user } = useAuth();
-
   const [room, setRoom] = useState(null);
   const [connecting, setConnecting] = useState(false);
 
@@ -23,8 +20,8 @@ const VideoChat = () => {
       setConnecting(true);
 
       try {
-        const response = await apiMed.post("api/twilio/video/token", {
-          identity: user?.id,
+        const response = await apiMed.post("/twilio/video/token", {
+          identity: user?.name,
           room: roomName,
         });
 
@@ -82,18 +79,24 @@ const VideoChat = () => {
   }, [room, handleLogout]);
 
   return (
-    <Container maxW="xl" centerContent>
+    <Box>
       {room ? (
-        <Room roomName={roomName} room={room} handleLogout={handleLogout} />
+        <RoomVideo
+          roomName={roomName}
+          username={user?.name}
+          room={room}
+          handleLogout={handleLogout}
+        />
       ) : (
         <Lobby
+          role={user?.role}
           username={user?.name}
           roomName={roomName}
           handleSubmit={handleSubmit}
           connecting={connecting}
         />
       )}
-    </Container>
+    </Box>
   );
 };
 

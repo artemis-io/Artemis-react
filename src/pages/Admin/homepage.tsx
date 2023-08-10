@@ -33,7 +33,7 @@ const fetchData = async (userId: string) => {
   };
 };
 
-const HomepageDoctor = () => {
+const HomepageAdmin = () => {
   const { user } = useAuth();
   const [totalAppointments, setTotalAppointments] = useState(0);
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
@@ -58,4 +58,4 @@ const HomepageDoctor = () => {
   );
 };
 
-export default HomepageDoctor;
+export default HomepageAdmin;
