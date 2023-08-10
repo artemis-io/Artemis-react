@@ -28,6 +28,7 @@ interface Appointment {
     avatar_url: string;
     doctor: {
       speciality: string[];
+      gender: string;
     };
   };
 }
@@ -78,7 +79,7 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
             </GridItem>
             <GridItem area={"name"}>
               <Text fontSize="lg" fontWeight="bold" pt="5px ">
-                {appointment?.doctor?.name}
+              {appointment.doctor.doctor.gender === "male" ? "Dr. " : "Dra. "}{appointment?.doctor?.name}
               </Text>
             </GridItem>
             <GridItem area={"spec"}>
