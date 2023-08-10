@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { apiMed } from "../../../../services/api";
-import { setStep3Data } from "../../../../shared/reducer/DoctorReducer";
+import { setStep3Data } from "../../../../shared/reducer/AppointmentReducer";
 
 export default function SelectSpecialty({ handleNextStep }: any) {
   const [specialties, setSpecialties] = useState<string[]>([]);
