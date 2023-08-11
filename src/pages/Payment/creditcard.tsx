@@ -24,7 +24,7 @@ import {
   formatExpirationDate,
 } from "../../utils/credit-card";
 import PrimaryButton from "../../components/Style/Buttons/Primarybutton";
-import PatientSidebar from "../../components/Main/PatientSideBar";
+import PatientSidebar from "../../components/Main/PatientSideBar/PatientSideBar";
 
 const PaymentPage = () => {
   const [paymentData, setPaymentData] = useState({

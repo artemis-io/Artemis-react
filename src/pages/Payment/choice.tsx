@@ -22,7 +22,7 @@ import {
 import { FaCreditCard, FaBarcode } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import React, { useEffect } from "react";
-import PatientSidebar from "../../components/Main/PatientSideBar";
+import PatientSidebar from "../../components/Main/PatientSideBar/PatientSideBar";
 import { Appointment } from "../../shared/entities/appointments.entities";
 import AppointmentConfirmButton from "../../components/Style/Buttons/AppointmentConfirmButton";
 

@@ -23,9 +23,10 @@ import React from "react";
 import ScheduleResumeCard from "../../components/Style/Cards/ScheduleResumeCard";
 import SecondaryButton from "../../components/Style/Buttons/SecondayButton";
 import AppointmentConfirmButton from "../../components/Style/Buttons/AppointmentConfirmButton";
-import PatientSidebar from "../../components/Main/PatientSideBar";
+
 import { Appointment } from "../../shared/entities/appointments.entities";
 import { FiTrash2 } from "react-icons/fi";
+import PatientSidebar from "../../components/Main/PatientSideBar/PatientSideBar";
 
 interface OrderProps {
   selectedAppointment: Appointment | null; // Receive the selected appointment data
@@ -41,8 +42,6 @@ export default function Order({ selectedAppointment }: OrderProps) {
   return (
     <PatientSidebar>
       <Box>
-       
-
         <Box
           display="flex"
           flexDirection="column"

@@ -18,7 +18,7 @@ import {
 import { format, addDays } from "date-fns";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import PatientSidebar from "../../components/Main/PatientSideBar";
+import PatientSidebar from "../../components/Main/PatientSideBar/PatientSideBar";
 
 const statesList = [
   "AC",
