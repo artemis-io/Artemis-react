@@ -72,7 +72,6 @@ export default function CalendarStep() {
       });
     } catch (error) {
       console.error("Erro ao fazer o POST:", error);
-      console.log(user);
       toast({
         position: "top",
         title: "Erro",
