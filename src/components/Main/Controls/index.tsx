@@ -71,12 +71,12 @@ const ControlsBar = ({
             />
           )}
         </Tooltip>
-        <IconButton
+     {/*    <IconButton
           aria-label=""
           icon={<FiMessageSquare />}
           bg="#494949"
           colorScheme="white"
-        />
+        /> */}
       </HStack>
     </Flex>
   );

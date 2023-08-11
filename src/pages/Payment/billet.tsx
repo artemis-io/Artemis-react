@@ -18,6 +18,7 @@ import {
 import { format, addDays } from "date-fns";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PatientSidebar from "../../components/Main/PatientSideBar/PatientSideBar";
 
 const statesList = [
   "AC",
@@ -152,231 +153,233 @@ const BilletPage: React.FC = () => {
   };
 
   return (
-    <Box p={4} display="flex" flexDir="column" alignItems="center">
-      <Heading mb={4} color="#747B7D">
-        Boleto
-      </Heading>
-      {showComponent ? (
-        <CardComponent {...formData} />
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <Grid
-            gridTemplateColumns="repeat(3, 1fr)"
-            alignItems="center"
-            columnGap={2}
-          >
-            <GridItem></GridItem>
-            <GridItem>
+    <PatientSidebar>
+      <Box p={4} display="flex" flexDir="column" alignItems="center">
+        <Heading mb={4} color="#747B7D">
+          Boleto
+        </Heading>
+        {showComponent ? (
+          <CardComponent {...formData} />
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <Grid
+              gridTemplateColumns="repeat(3, 1fr)"
+              alignItems="center"
+              columnGap={2}
+            >
+              <GridItem></GridItem>
+              <GridItem>
+                <FormControl mb={4}>
+                  <FormLabel fontWeight="bold">Vencimento</FormLabel>
+                  <Text>
+                    {format(formData.Boleto_DataVencimento, "dd/MM/yyyy")}
+                  </Text>
+                </FormControl>
+              </GridItem>
+              <GridItem>
+                <FormControl mb={4} isDisabled>
+                  <FormLabel fontWeight="bold ">Parcelas</FormLabel>
+                  <Input
+                    type="number"
+                    name="NumeroParcela"
+                    value={formData.NumeroParcela}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </FormControl>
+              </GridItem>
+            </Grid>
+            <Grid
+              gridTemplateColumns="repeat(3, 1fr)"
+              alignItems="center"
+              columnGap={2}
+            >
+              <GridItem colSpan={2}>
+                <FormControl mb={4}>
+                  <FormLabel fontWeight="bold" color="#494949">
+                    Nome
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    name="Nome"
+                    value={formData.Nome}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </FormControl>
+              </GridItem>
               <FormControl mb={4}>
-                <FormLabel fontWeight="bold">Vencimento</FormLabel>
-                <Text>
-                  {format(formData.Boleto_DataVencimento, "dd/MM/yyyy")}
-                </Text>
-              </FormControl>
-            </GridItem>
-            <GridItem>
-              <FormControl mb={4} isDisabled>
-                <FormLabel fontWeight="bold ">Parcelas</FormLabel>
+                <FormLabel fontWeight="bold" color="#494949">
+                  Valor
+                </FormLabel>
                 <Input
                   type="number"
-                  name="NumeroParcela"
-                  value={formData.NumeroParcela}
+                  name="Valor"
+                  value={formData.Valor}
                   onChange={handleInputChange}
                   required
                 />
               </FormControl>
-            </GridItem>
-          </Grid>
-          <Grid
-            gridTemplateColumns="repeat(3, 1fr)"
-            alignItems="center"
-            columnGap={2}
-          >
-            <GridItem colSpan={2}>
-              <FormControl mb={4}>
-                <FormLabel fontWeight="bold" color="#494949">
-                  Nome
-                </FormLabel>
-                <Input
-                  type="text"
-                  name="Nome"
-                  value={formData.Nome}
-                  onChange={handleInputChange}
-                  required
-                />
-              </FormControl>
-            </GridItem>
-            <FormControl mb={4}>
-              <FormLabel fontWeight="bold" color="#494949">
-                Valor
-              </FormLabel>
-              <Input
-                type="number"
-                name="Valor"
-                value={formData.Valor}
-                onChange={handleInputChange}
-                required
-              />
-            </FormControl>
-          </Grid>
-          <Grid
-            gridTemplateColumns="repeat(2, 1fr)"
-            alignItems="center"
-            columnGap={2}
-          >
-            <FormControl mb={4}>
-              <FormLabel fontWeight="bold" color="#494949">
-                CPF ou CNPJ
-              </FormLabel>
-              <Input
-                type="text"
-                name="Identificador"
-                value={formData.Identificador}
-                onChange={handleInputChange}
-                required
-              />
-            </FormControl>
-
-            <FormControl mb={4}>
-              <FormLabel fontWeight="bold" color="#494949">
-                E-mail
-              </FormLabel>
-              <Input
-                type="email"
-                name="Email"
-                value={formData.Email}
-                onChange={handleInputChange}
-                required
-              />
-            </FormControl>
-          </Grid>
-          <Grid
-            gridTemplateColumns="repeat(3, 1fr)"
-            alignItems="center"
-            columnGap={2}
-          >
-            <GridItem colSpan={2}>
-              <FormControl mb={4}>
-                <FormLabel fontWeight="bold" color="#494949">
-                  Cidade
-                </FormLabel>
-                <Input
-                  type="text"
-                  name="Cidade"
-                  value={formData.Cidade}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-            </GridItem>
-            <FormControl mb={4}>
-              <FormLabel fontWeight="bold" color="#494949">
-                Estado
-              </FormLabel>
-              <Select
-                name="UF"
-                value={formData.UF}
-                onChange={handleStateChange}
-                required
-              >
-                {statesList.map((state) => (
-                  <option key={state} value={state}>
-                    {state}
-                  </option>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid
-            gridTemplateColumns="repeat(3, 1fr)"
-            alignItems="center"
-            columnGap={2}
-          >
-            <GridItem colSpan={2}>
-              <FormControl mb={4}>
-                <FormLabel fontWeight="bold" color="#494949">
-                  Logradouro
-                </FormLabel>
-                <Input
-                  type="text"
-                  name="Logradouro"
-                  value={formData.Logradouro}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-            </GridItem>
-            <FormControl mb={4}>
-              <FormLabel fontWeight="bold" color="#494949">
-                Bairro
-              </FormLabel>
-              <Input
-                type="text"
-                name="Bairro"
-                value={formData.Bairro}
-                onChange={handleInputChange}
-              />
-            </FormControl>
-          </Grid>
-          <Grid
-            gridTemplateColumns="repeat(3, 1fr)"
-            alignItems="center"
-            columnGap={2}
-          >
-            <FormControl mb={4}>
-              <FormLabel fontWeight="bold" color="#494949">
-                Número
-              </FormLabel>
-              <Input
-                type="text"
-                name="Numero"
-                value={formData.Numero}
-                onChange={handleInputChange}
-              />
-            </FormControl>
-
-            <FormControl mb={4}>
-              <FormLabel fontWeight="bold" color="#494949">
-                Complemento
-              </FormLabel>
-              <Input
-                type="text"
-                name="Complemento"
-                value={formData.Complemento}
-                onChange={handleInputChange}
-              />
-            </FormControl>
-
-            <FormControl mb={4}>
-              <FormLabel fontWeight="bold" color="#494949">
-                CEP
-              </FormLabel>
-              <Input
-                type="text"
-                name="Cep"
-                value={formData.Cep}
-                onChange={handleInputChange}
-              />
-            </FormControl>
-          </Grid>
-          <Stack spacing={6} direction={["column", "row"]}>
-            <Button
-              isLoading={loading}
-              type="submit"
-              bg={"#0078D7"}
-              color={"white"}
-              w="full"
-              _hover={{
-                bg: "blue.500",
-              }}
+            </Grid>
+            <Grid
+              gridTemplateColumns="repeat(2, 1fr)"
+              alignItems="center"
+              columnGap={2}
             >
-              Emitir Boleto
-            </Button>
-          </Stack>
-        </form>
-      )}
+              <FormControl mb={4}>
+                <FormLabel fontWeight="bold" color="#494949">
+                  CPF ou CNPJ
+                </FormLabel>
+                <Input
+                  type="text"
+                  name="Identificador"
+                  value={formData.Identificador}
+                  onChange={handleInputChange}
+                  required
+                />
+              </FormControl>
 
-      <ToastContainer position="top-center" />
-    </Box>
+              <FormControl mb={4}>
+                <FormLabel fontWeight="bold" color="#494949">
+                  E-mail
+                </FormLabel>
+                <Input
+                  type="email"
+                  name="Email"
+                  value={formData.Email}
+                  onChange={handleInputChange}
+                  required
+                />
+              </FormControl>
+            </Grid>
+            <Grid
+              gridTemplateColumns="repeat(3, 1fr)"
+              alignItems="center"
+              columnGap={2}
+            >
+              <GridItem colSpan={2}>
+                <FormControl mb={4}>
+                  <FormLabel fontWeight="bold" color="#494949">
+                    Cidade
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    name="Cidade"
+                    value={formData.Cidade}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+              </GridItem>
+              <FormControl mb={4}>
+                <FormLabel fontWeight="bold" color="#494949">
+                  Estado
+                </FormLabel>
+                <Select
+                  name="UF"
+                  value={formData.UF}
+                  onChange={handleStateChange}
+                  required
+                >
+                  {statesList.map((state) => (
+                    <option key={state} value={state}>
+                      {state}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid
+              gridTemplateColumns="repeat(3, 1fr)"
+              alignItems="center"
+              columnGap={2}
+            >
+              <GridItem colSpan={2}>
+                <FormControl mb={4}>
+                  <FormLabel fontWeight="bold" color="#494949">
+                    Logradouro
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    name="Logradouro"
+                    value={formData.Logradouro}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+              </GridItem>
+              <FormControl mb={4}>
+                <FormLabel fontWeight="bold" color="#494949">
+                  Bairro
+                </FormLabel>
+                <Input
+                  type="text"
+                  name="Bairro"
+                  value={formData.Bairro}
+                  onChange={handleInputChange}
+                />
+              </FormControl>
+            </Grid>
+            <Grid
+              gridTemplateColumns="repeat(3, 1fr)"
+              alignItems="center"
+              columnGap={2}
+            >
+              <FormControl mb={4}>
+                <FormLabel fontWeight="bold" color="#494949">
+                  Número
+                </FormLabel>
+                <Input
+                  type="text"
+                  name="Numero"
+                  value={formData.Numero}
+                  onChange={handleInputChange}
+                />
+              </FormControl>
+
+              <FormControl mb={4}>
+                <FormLabel fontWeight="bold" color="#494949">
+                  Complemento
+                </FormLabel>
+                <Input
+                  type="text"
+                  name="Complemento"
+                  value={formData.Complemento}
+                  onChange={handleInputChange}
+                />
+              </FormControl>
+
+              <FormControl mb={4}>
+                <FormLabel fontWeight="bold" color="#494949">
+                  CEP
+                </FormLabel>
+                <Input
+                  type="text"
+                  name="Cep"
+                  value={formData.Cep}
+                  onChange={handleInputChange}
+                />
+              </FormControl>
+            </Grid>
+            <Stack spacing={6} direction={["column", "row"]}>
+              <Button
+                isLoading={loading}
+                type="submit"
+                bg={"#0078D7"}
+                color={"white"}
+                w="full"
+                _hover={{
+                  bg: "blue.500",
+                }}
+              >
+                Emitir Boleto
+              </Button>
+            </Stack>
+          </form>
+        )}
+
+        <ToastContainer position="top-center" />
+      </Box>
+    </PatientSidebar>
   );
 };
 

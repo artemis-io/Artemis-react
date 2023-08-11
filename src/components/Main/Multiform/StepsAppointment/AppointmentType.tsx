@@ -18,7 +18,7 @@ export default function AppointmentType({ handleNextStep }: any) {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      minH="85vh"
+      minH="75vh"
     >
       <Text
         fontSize="3xl"

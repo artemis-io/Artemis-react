@@ -1,16 +1,14 @@
 import { IconButton, Flex, useColorModeValue, Image } from "@chakra-ui/react";
-
 import { MobileProps } from "../../../shared/interface";
-
-import { FiMenu } from "react-icons/fi";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { FiHome, FiMenu } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-  const navigate = useNavigate(); // Use o hook useNavigate
-
-  const handlePreviousPage = () => {
-    navigate(-1); // Navegue para a página anterior
+  const router = useNavigate();
+  const { user } = useAuth();
+  const handleNav = () => {
+    router(`../../${user?.role}/homepage`);
   };
 
   return (
@@ -26,11 +24,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       {...rest}
     >
       <IconButton
-        onClick={handlePreviousPage}
+        onClick={handleNav}
         display={{ base: "flex", md: "none" }}
         variant="unstyled"
         aria-label="open menu"
-        icon={<ArrowBackIcon />}
+        icon={<FiHome />}
       />
 
       <Image src="/assets/images/logo.png" alt="logo" maxWidth="150px" mt={4} />

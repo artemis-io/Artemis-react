@@ -14,8 +14,12 @@ import {
   ModalCloseButton,
   ModalBody,
   Link,
+  Card,
+  Button,
+  Heading,
 } from "@chakra-ui/react";
 import { AiOutlineVideoCamera } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 interface Appointment {
   id: string;
@@ -34,6 +38,7 @@ interface Appointment {
     avatar_url: string;
     doctor: {
       speciality: string[];
+      pricing: number;
     };
     profile: {
       gender: string;
@@ -51,10 +56,16 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
   const [selectedAppointment, setSelectedAppointment] =
     useState<Appointment | null>(null);
   const isOpen = !!selectedAppointment;
+  const router = useNavigate();
 
   const handleCloseModal = () => {
     setSelectedAppointment(null);
   };
+
+  const handleNav = () => {
+    router("/payment/choice", { state: { selectedAppointment } });
+  };
+
 
   return (
     <VStack spacing={4} alignItems="flex-start" w="95%" mx="auto">
@@ -149,60 +160,82 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
       {selectedAppointment && (
         <Modal isOpen={isOpen} onClose={handleCloseModal}>
           <ModalOverlay />
-          <ModalContent>
-            <ModalCloseButton />
-            <ModalBody>
-              <VStack>
-                <Image
-                  boxSize="150px"
-                  width="100px"
-                  borderRadius={10}
-                  objectFit="cover"
-                  src={selectedAppointment.doctor.avatar_url}
-                  alt="Foto de perfil"
-                />
-                <Text fontSize="lg" fontWeight="bold" pt="5px" color="gray.500">
-                  {selectedAppointment.doctor.name}
-                </Text>
-                <Text fontSize="md" color="gray.500" pt="5px">
-                  {selectedAppointment.doctor.doctor.speciality.join(", ")}
-                </Text>
-                <Text
-                  fontSize="lg"
-                  fontWeight="bold"
-                  color="gray.500"
-                  pt="20px"
-                >
-                  Atendimento Particular
-                </Text>
-                <Text fontSize="md" color="gray.500" pt="5px">
-                  Data:<>&nbsp;</>
-                  {new Date(selectedAppointment.date).toLocaleDateString(
-                    "pt-BR",
-                    {
-                      day: "numeric",
-                      month: "long",
-                    }
-                  )}
-                </Text>
-                <Text fontSize="md" color="gray.500">
-                  Horário:<>&nbsp;</>
-                  {new Date(selectedAppointment.date).toLocaleTimeString(
-                    "pt-BR",
-                    {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    }
-                  )}
-                </Text>
-                <Text fontSize="md" color="gray.500" pt="5px">
-                  {selectedAppointment.query === "person"
-                    ? "Presencial"
-                    : "Teleconsulta"}
-                </Text>
-              </VStack>
-            </ModalBody>
-          </ModalContent>
+          <Card>
+            <ModalContent>
+              <ModalCloseButton />
+              <ModalBody>
+                <VStack>
+                  <Image
+                    boxSize="150px"
+                    width="100px"
+                    borderRadius={10}
+                    objectFit="cover"
+                    src={selectedAppointment.doctor.avatar_url}
+                    alt="Foto de perfil"
+                  />
+                  <Text
+                    fontSize="lg"
+                    fontWeight="bold"
+                    pt="5px"
+                    color="gray.500"
+                  >
+                    {selectedAppointment.doctor.name}
+                  </Text>
+                  <Text fontSize="md" color="gray.500" pt="5px">
+                    {selectedAppointment.doctor.doctor.speciality.join(", ")}
+                  </Text>
+                  <Text
+                    fontSize="lg"
+                    fontWeight="bold"
+                    color="gray.500"
+                    pt="20px"
+                  >
+                    Atendimento Particular
+                  </Text>
+                  <Text fontSize="md" color="gray.500" pt="5px">
+                    Data:<>&nbsp;</>
+                    {new Date(selectedAppointment.date).toLocaleDateString(
+                      "pt-BR",
+                      {
+                        day: "numeric",
+                        month: "long",
+                      }
+                    )}
+                  </Text>
+                  <Text fontSize="md" color="gray.500">
+                    Horário:<>&nbsp;</>
+                    {new Date(selectedAppointment.date).toLocaleTimeString(
+                      "pt-BR",
+                      {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }
+                    )}
+                  </Text>
+                  <Text fontSize="md" color="gray.500" pt="5px">
+                    {selectedAppointment.query === "person"
+                      ? "Presencial"
+                      : "Teleconsulta"}
+                  </Text>
+                  <Text fontSize="md" color="gray.500" pt="5px">
+                    R${selectedAppointment.doctor.doctor.pricing},00
+                  </Text>
+
+                  <Button
+                    mt={4}
+                    mb={4}
+                    bg="#19A588"
+                    w="full"
+                    color="#fafafa"
+                    fontSize="16px"
+                    onClick={handleNav}
+                  >
+                    Seguir para Pagamento
+                  </Button>
+                </VStack>
+              </ModalBody>
+            </ModalContent>
+          </Card>
         </Modal>
       )}
     </VStack>

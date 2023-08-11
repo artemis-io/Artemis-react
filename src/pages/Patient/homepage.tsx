@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { Box, Text, Button, VStack } from "@chakra-ui/react";
+import { Box, Text, Button, VStack, Flex } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { apiMed } from "../../services/api";
@@ -57,16 +57,18 @@ export default function HomepagePatient() {
       {totalAppointments > 0 ? (
         <VStack spacing={5}>
           <UpcomingAppointments appointments={upcomingAppointments} />
-          <Button
-            bg="#0078D7"
-            w="300px"
-            h="50px"
-            color="#fafafa"
-            fontSize="16px"
-            onClick={handleNav}
-          >
-            Adicionar Novo Atendimento
-          </Button>
+          <Flex justify="center" position="fixed" bottom="0" mb={4}>
+            <Button
+              bg="#0078D7"
+              w="300px"
+              h="50px"
+              color="#fafafa"
+              fontSize="16px"
+              onClick={handleNav}
+            >
+              Adicionar Novo Atendimento
+            </Button>
+          </Flex>
         </VStack>
       ) : (
         <Box

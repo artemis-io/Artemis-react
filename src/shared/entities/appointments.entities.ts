@@ -1,4 +1,5 @@
 export type Appointment = {
+  doctor: any;
   id: number;
   name: string;
   spec: string;
