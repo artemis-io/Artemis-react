@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import PrivateRoute from "../components/Main/Private/PrivateRoute";
 import Home from "../pages/Home";
 import NotFound from "../pages/404";
@@ -16,8 +16,15 @@ import AdminRoute from "../components/Main/Private/AdminRoute";
 import VideoChat from "../pages/Video";
 import HomepageAdmin from "../pages/Admin/homepage";
 import FormAppointment from "../pages/Patient/appointment";
+import ChoicePage from "../pages/Payment/choice";
+import CreditCard from '../pages/Payment/creditcard'
+import BilletPage from "../pages/Payment/billet";
 
 const AppRoutes = () => {
+  const location = useLocation();
+  const state = location.state || {};
+  const selectedAppointment = state.selectedAppointment || null;
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -28,8 +35,11 @@ const AppRoutes = () => {
       <Route path="/forgot-Password" element={<ForgotPassword />} />
       <Route path="/reset-Password/:token" element={<ResetPasswordPage />} />
       <Route path="patient/appointment" element={<FormAppointment />} />
-
       <Route path="/video/:roomName" element={<VideoChat />} />
+      <Route path="/payment/choice" element={<ChoicePage  selectedAppointment={selectedAppointment}/>} />
+   {/*    <Route path="/payment/creditcard" element={<CreditCard />} /> */}
+      <Route path="/payment/billet" element={<BilletPage/>} />
+
 
       <Route
         path="/profile"
