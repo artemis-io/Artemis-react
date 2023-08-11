@@ -16,6 +16,7 @@ import { apiMed } from "../../../../services/api";
 import AppointmentConfirmButton from "../../../Style/Buttons/AppointmentConfirmButton";
 import Calendar from "../../Calendar/Calendar";
 import { useAuth } from "../../../../hooks/useAuth";
+import { AUTH_TOKEN_STORAGE } from "../../../../shared/storage/config";
 
 export default function CalendarStep() {
   const { user } = useAuth();
@@ -24,9 +25,6 @@ export default function CalendarStep() {
   const [availableHours, setAvailableHours] = useState([]);
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const toast = useToast();
-
-
-  
 
   const id_doctor = useSelector(
     (state: any) => state.appointment.appointmentStep4Data.id_doctor
@@ -43,7 +41,7 @@ export default function CalendarStep() {
   console.log(type);
   console.log(query);
 
-  const accessToken = localStorage.getItem("@virtumed-accessToken");
+  const accessToken = localStorage.getItem(AUTH_TOKEN_STORAGE);
 
   const config: AxiosRequestConfig = {
     headers: {
@@ -61,6 +59,8 @@ export default function CalendarStep() {
         multiple_users: false,
         query,
       };
+      console.log(`ola`, JSON.stringify(data));
+
       await apiMed.post(`/appointment`, data, config);
       toast({
         position: "top",

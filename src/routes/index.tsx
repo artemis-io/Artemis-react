@@ -8,7 +8,6 @@ import Register from "../pages/Auth/SignUp/category";
 import HomepageDoctor from "../pages/Doctor/homepage";
 import ForgotPassword from "../pages/Auth/Forgot-Password";
 import ResetPasswordPage from "../pages/Auth/Recover-Password";
-import Profile from "../pages/Profile";
 import HomepagePatient from "../pages/Patient/homepage";
 import DoctorRoute from "../components/Main/Private/DoctorRoutes";
 import PatientRoute from "../components/Main/Private/PatientRoute";
@@ -19,6 +18,9 @@ import FormAppointment from "../pages/Patient/appointment";
 import ChoicePage from "../pages/Payment/choice";
 import CreditCard from '../pages/Payment/creditcard'
 import BilletPage from "../pages/Payment/billet";
+import AlphabeticalListPage from "../pages/Doctor/patients";
+import SettingsDoctor from "../pages/Doctor/profile";
+import SettingsPatient from "../pages/Patient/profile";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -35,20 +37,15 @@ const AppRoutes = () => {
       <Route path="/forgot-Password" element={<ForgotPassword />} />
       <Route path="/reset-Password/:token" element={<ResetPasswordPage />} />
       <Route path="patient/appointment" element={<FormAppointment />} />
+      <Route path="doctor/patients" element={<AlphabeticalListPage />} />
+      <Route path="doctor/profile" element={<SettingsDoctor />} />
+      <Route path="patient/profile" element={<SettingsPatient />} />
+
       <Route path="/video/:roomName" element={<VideoChat />} />
       <Route path="/payment/choice" element={<ChoicePage  selectedAppointment={selectedAppointment}/>} />
    {/*    <Route path="/payment/creditcard" element={<CreditCard />} /> */}
       <Route path="/payment/billet" element={<BilletPage/>} />
 
-
-      <Route
-        path="/profile"
-        element={
-          <PrivateRoute>
-            <Profile />
-          </PrivateRoute>
-        }
-      />
 
       <Route
         path="/doctor/homepage"

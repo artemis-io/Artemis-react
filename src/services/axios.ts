@@ -18,7 +18,8 @@ interface APIInstanceProps extends AxiosInstance {
 
 const api = axios.create({
   // Configure your default baseURL, headers, and other settings here
-  baseURL: "https://artemis-api-production.up.railway.app/api",
+  //baseURL: "https://artemis-api-production.up.railway.app/api",
+  baseURL: "https//localhost:3333/api",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",

@@ -2,7 +2,7 @@ import { Box, Heading, VStack, Image, Button } from "@chakra-ui/react";
 import { useState } from "react";
 import { DoctorData } from "../Multiform/StepsDoctorForm/DoctorData";
 import { DoctorInfo } from "../Multiform/StepsDoctorForm/DoctorInfo";
-import { DoctorChose } from "../Multiform/StepsDoctorForm/DoctorChose";
+import DoctorChose from "../Multiform/StepsDoctorForm/DoctorChose";
 
 export function DoctorForm() {
   const [step, setStep] = useState(1);

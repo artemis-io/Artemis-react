@@ -1,15 +1,12 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Heading, VStack, Flex } from "@chakra-ui/react";
-
 
 interface RemoteParticipantProps {
   participant: any;
-  handleLogout: () => void;
 }
 
 const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   participant,
-  handleLogout,
 }) => {
   const [videoTracks, setVideoTracks] = useState<any[]>([]);
   const [audioTracks, setAudioTracks] = useState<any[]>([]);
@@ -21,7 +18,7 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
     Array.from(trackMap.values())
       .map((publication) => publication.track)
       .filter((track) => track !== null);
-      
+
   useEffect(() => {
     setVideoTracks(trackpubsToTracks(participant.videoTracks));
     setAudioTracks(trackpubsToTracks(participant.audioTracks));

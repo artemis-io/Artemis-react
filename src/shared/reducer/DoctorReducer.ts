@@ -18,7 +18,7 @@ const initialState: DoctorState = {
     state: "",
     district: "",
     city: "",
-    dateOfBirth: new Date(),
+    dateOfBirth: "",
   },
   doctorStep3Data: {
     crm: "",
