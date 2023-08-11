@@ -16,7 +16,7 @@ import VideoChat from "../pages/Video";
 import HomepageAdmin from "../pages/Admin/homepage";
 import FormAppointment from "../pages/Patient/appointment";
 import ChoicePage from "../pages/Payment/choice";
-import CreditCard from '../pages/Payment/creditcard'
+import CreditCard from "../pages/Payment/creditcard";
 import BilletPage from "../pages/Payment/billet";
 import AlphabeticalListPage from "../pages/Doctor/patients";
 import SettingsDoctor from "../pages/Doctor/profile";
@@ -42,10 +42,12 @@ const AppRoutes = () => {
       <Route path="patient/profile" element={<SettingsPatient />} />
 
       <Route path="/video/:roomName" element={<VideoChat />} />
-      <Route path="/payment/choice" element={<ChoicePage  selectedAppointment={selectedAppointment}/>} />
-   {/*    <Route path="/payment/creditcard" element={<CreditCard />} /> */}
-      <Route path="/payment/billet" element={<BilletPage/>} />
-
+      <Route
+        path="/payment/choice"
+        element={<ChoicePage selectedAppointment={selectedAppointment} />}
+      />
+      <Route path="/payment/creditcard" element={<CreditCard />} />
+      <Route path="/payment/billet" element={<BilletPage />} />
 
       <Route
         path="/doctor/homepage"
