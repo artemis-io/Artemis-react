@@ -6,7 +6,10 @@ import SelectSpecialty from "../../components/Main/Multiform/StepsAppointment/Se
 import DoctorList from "../../components/Main/Multiform/StepsAppointment/DoctorList";
 import MedBio from "../../components/Main/Multiform/StepsAppointment/MedBio";
 import Schedule from "../../components/Main/Multiform/StepsAppointment/Schedule";
+import {  Button, Flex, Spacer, Box, IconButton } from "@chakra-ui/react";
 import PatientSidebar from "../../components/Main/PatientSideBar/PatientSideBar";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+
 
 const FormAppointment = () => {
   const [step, setStep] = useState(1);
@@ -14,10 +17,25 @@ const FormAppointment = () => {
   const handleNextStep = () => {
     setStep((prevStep) => prevStep + 1);
   };
+  const handlePrevStep = () => {
+    setStep((prevStep) => prevStep - 1);
+  };
 
   /* duplicar type: particular segue x type particular segue a outra sequência */
   return (
     <PatientSidebar>
+      {step > 2 && (
+        <Flex 
+        >
+          <IconButton
+            icon={<ArrowBackIcon />}
+            onClick={handlePrevStep} aria-label={""}     
+            variant="ghost" 
+            size='lg'    />
+             <Spacer/>
+            <Box></Box>
+        </Flex>
+      )}
       {step === 1 && <AppointmentType handleNextStep={handleNextStep} />}
       {step === 2 && <AppointmentQuery handleNextStep={handleNextStep} />}
       {step === 3 && <SelectSpecialty handleNextStep={handleNextStep} />}

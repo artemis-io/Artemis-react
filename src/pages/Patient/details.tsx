@@ -16,7 +16,7 @@ const AppointmentList = () => {
 
   return (
     <VStack spacing={5}>
-      <CardDetails appointments={upcomingAppointments} />
+    {/*   <CardDetails appointments={upcomingAppointments} /> */}
     </VStack>
   );
 };
