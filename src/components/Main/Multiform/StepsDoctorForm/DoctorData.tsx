@@ -30,18 +30,11 @@ export function DoctorData({ handleNextStep }: any) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setStep1((prevFormData) => ({ ...prevFormData, [name]: value }));
-  
-    // Update the state in the action dispatch using the new value
-    dispatch(
-      setStep1Data({
-        name: name === 'name' ? value : step1.name,
-        email: name === 'email' ? value : step1.email,
-        password: name === 'password' ? value : step1.password,
-        confirmPassword: name === 'confirmPassword' ? value : step1.confirmPassword,
-      })
-    );
   };
-  
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const isPasswordValid = () => {
     const { password } = step1;
@@ -49,9 +42,7 @@ export function DoctorData({ handleNextStep }: any) {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return passwordRegex.test(password);
   };
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isPasswordValid()) {
@@ -60,12 +51,12 @@ export function DoctorData({ handleNextStep }: any) {
       );
       return;
     }
+    dispatch(setStep1Data(step1));
     handleNextStep();
   };
 
-  
-  const handleGoBack = () => {
-    router("/signIn"); 
+  const goBackToLogin = () => {
+    router("/signIn");
   };
 
   return (
@@ -109,11 +100,7 @@ export function DoctorData({ handleNextStep }: any) {
               onChange={handleInputChange}
             />
             <InputRightElement width="4.5rem">
-              <Button
-                h="1.75rem"
-                size="sm"
-                onClick={handleTogglePasswordVisibility}
-              >
+              <Button h="1.75rem" size="sm" onClick={togglePasswordVisibility}>
                 {showPassword ? (
                   <ViewOffIcon color="gray.500" />
                 ) : (
@@ -128,14 +115,12 @@ export function DoctorData({ handleNextStep }: any) {
           <StyledLabel>Confirme sua Senha</StyledLabel>
           <InputGroup>
             <Input
-            variant="flushed"
+              variant="flushed"
               type={showPassword ? "text" : "password"}
               name="confirmPassword"
               value={step1.confirmPassword}
               onChange={handleInputChange}
-           
             />
-   
           </InputGroup>
         </FormControl>
         <Button
@@ -146,11 +131,12 @@ export function DoctorData({ handleNextStep }: any) {
           _hover={{
             bg: "blue.500",
           }}
+          // ... add other button styles here
         >
           Próximo
         </Button>
         <Center mt={4}>
-          <Button onClick={handleGoBack} variant="link" color="#747B7D">
+          <Button onClick={goBackToLogin} variant="link" color="#747B7D">
             Voltar para login
           </Button>
         </Center>

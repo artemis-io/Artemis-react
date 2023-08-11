@@ -47,6 +47,7 @@ export type DoctorStep1Data = {
   password: string;
   confirmPassword: string;
 };
+
 export type DoctorStep2Data = {
   cpf: string;
   gender: string;
@@ -57,12 +58,12 @@ export type DoctorStep2Data = {
   state: string;
   district: string;
   city: string;
-  dateOfBirth: Date;
+  dateOfBirth: string;
 };
 
 export type DoctorStep3Data = {
   crm: string;
-  pricing: number | undefined | readonly string[] | string;
+  pricing: string;
   bio: string;
   speciality: string[];
 };
