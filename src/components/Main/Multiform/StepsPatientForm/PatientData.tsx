@@ -138,7 +138,7 @@ export function PatientData({ handleNextStep }: any) {
             bg: "blue.500",
           }}
         >
-          Proximo
+          Próximo
         </Button>
         <Center mt={4}>
           <Button onClick={handleGoBack} variant="link" color="#747B7D">

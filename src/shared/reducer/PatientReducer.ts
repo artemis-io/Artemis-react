@@ -20,6 +20,7 @@ const initialState: PatientState = {
     state: "",
     district: "",
     city: "",
+    dateOfBirth: "",
   },
 };
 

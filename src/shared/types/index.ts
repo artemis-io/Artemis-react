@@ -85,6 +85,7 @@ export type PatientStep2Data = {
   state: string;
   district: string;
   city: string;
+  dateOfBirth: string;
 };
 
 export type CardProps = {

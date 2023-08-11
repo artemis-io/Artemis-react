@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   AvatarBadge,
@@ -11,27 +11,36 @@ import {
   IconButton,
   Input,
   Stack,
-  Text,
+  useToast,
 } from "@chakra-ui/react";
-import { AiOutlineClose } from "react-icons/ai";
 import { apiMed } from "../../../services/api";
 import { SmallCloseIcon } from "@chakra-ui/icons";
+import { AUTH_TOKEN_STORAGE } from "../../../shared/storage/config";
 
 const AvatarUploader = () => {
+  const toast = useToast();
+  const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
-  const [imagePreview, setImagePreview] = useState(
-    "/assets/images/profile.png"
-  );
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
+        const response = await apiMed.get("/auth/patient", {
+          headers: {
+            Authorization: `Bearer ${item}`,
+          },
+        });
 
-  // const handleRemoveImage = () => {
-  //   setImagePreview("/assets/images/profile.png");
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     avatar_url: "",
-  //   }));
-  // };
+        setAvatarUrl(response.data.avatar_url);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -47,22 +56,32 @@ const AvatarUploader = () => {
 
   const handleUpload = async () => {
     if (selectedFile) {
+      setLoading(true);
+      console.log(selectedFile);
       const formData = new FormData();
       formData.append("file", selectedFile);
 
       try {
-        await apiMed.post("/user/upload", formData);
+        const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
+        await apiMed.post("/user/upload", formData, {
+          headers: {
+            Authorization: `Bearer ${item}`,
+          },
+        });
 
-        // Exemplo simulado de atualização
-        // Simulando uma pausa de 2 segundos para dar a sensação de envio
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
-        // Limpando o estado após o envio
-        setSelectedFile(null);
-        setAvatarUrl(null);
+        toast({
+          title: "Alterações salvas",
+          description: "Suas alterações foram salvas com sucesso.",
+          position: "top",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
       } catch (error) {
-        console.error("Erro ao fazer upload:", error);
+        console.error("Erro no upload:", error);
       }
+
+      setLoading(false);
     }
   };
 
@@ -70,77 +89,48 @@ const AvatarUploader = () => {
     <Flex direction="column" align="center">
       <FormControl marginTop={10}>
         <Center>
-          <FormLabel fontWeight="bold">Imagem de Perfil</FormLabel>
+          <FormLabel fontWeight="bold">Profile Image</FormLabel>
         </Center>
 
         <Stack direction={["column", "row"]} spacing={6}>
-          {imagePreview && (
+          {avatarUrl && (
             <Center>
               <Box mt={4}>
-                <Avatar size="xl" src={imagePreview}>
+                <Avatar size="xl" src={avatarUrl}>
                   <AvatarBadge
                     as={IconButton}
                     size="sm"
                     rounded="full"
                     top="-10px"
                     colorScheme="red"
-                    aria-label="remove Image"
-                    // icon={<SmallCloseIcon onClick={} />}
+                    aria-label="Remove Image"
+                    onClick={handleRemoveAvatar}
+                    icon={<SmallCloseIcon />}
                   />
                 </Avatar>
               </Box>
             </Center>
           )}
           <Center>
-            {/* <Input
-                    variant="filled"
-                    type="file"
-                    accept="image/*"
-                    name="avatar_url"
-                    onChange={}
-                  /> */}
+            <Input
+              variant="flushed"
+              type="file"
+              accept="image/*"
+              name="avatar_url"
+              onChange={handleFileChange}
+            />
           </Center>
         </Stack>
       </FormControl>
-      <Box
-        width="120px"
-        height="120px"
-        borderRadius="50%"
-        overflow="hidden"
-        position="relative"
-      >
-        {avatarUrl ? (
-          <>
-            <img
-              src={avatarUrl}
-              alt="Avatar"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-            <IconButton
-              icon={<AiOutlineClose />}
-              aria-label="Remover avatar"
-              colorScheme="red"
-              size="sm"
-              position="absolute"
-              top="5px"
-              right="5px"
-              onClick={handleRemoveAvatar}
-            />
-          </>
-        ) : (
-          <Text textAlign="center" mt="45%">
-            Nenhum avatar
-          </Text>
-        )}
-      </Box>
-      <Input type="file" accept="image/*" onChange={handleFileChange} mt={3} />
+
       <Button
         onClick={handleUpload}
         colorScheme="blue"
+        isLoading={loading}
         mt={3}
         isDisabled={!selectedFile}
       >
-        Upload
+        Atualizar Foto
       </Button>
     </Flex>
   );

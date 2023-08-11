@@ -61,9 +61,9 @@ const SidebarContent = ({
                 href={link.to}
                 onClick={() => {
                   if (link.name === "Desconectar") {
-                    toggleLogoutModal(); // Show the logout modal instead of directly calling logout()
+                    toggleLogoutModal();
                   } else {
-                    onClose(); // Close the sidebar for other links
+                    onClose();
                   }
                 }}
               >

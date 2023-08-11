@@ -109,7 +109,7 @@ export function DoctorInfo({ handleNextStep }: any) {
           <Input
             type="date"
             name="dateOfBirth"
-            value={new Date(step2.dateOfBirth).toLocaleDateString("en-CA")} // Format to YYYY-MM-DD
+            value={new Date(step2.dateOfBirth).toLocaleDateString("en-CA")}
             onChange={handleInputChange}
             variant="flushed"
             _placeholder={{ color: "gray.500" }}

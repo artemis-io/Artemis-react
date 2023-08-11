@@ -9,6 +9,8 @@ import {
 } from "@chakra-ui/react";
 import { apiMed } from "../../../services/api";
 import { AUTH_TOKEN_STORAGE } from "../../../shared/storage/config";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@chakra-ui/react";
 
 interface UserData {
   name: string;
@@ -23,6 +25,9 @@ interface UserData {
 }
 
 const UpdateUser = () => {
+  const router = useNavigate();
+  const toast = useToast();
+  const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState<UserData>({
     name: "",
     profile: {
@@ -44,8 +49,6 @@ const UpdateUser = () => {
             Authorization: `Bearer ${item}`,
           },
         });
-        console.log("Response:", response.data);
-        console.log("Item:", item);
         const userData: UserData = response.data;
         setUserData(userData);
       } catch (error) {
@@ -79,9 +82,9 @@ const UpdateUser = () => {
 
   const handleUpdateUser = async () => {
     try {
-      const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
+      setLoading(true);
 
-      // Create a new object with only the required properties
+      const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
       const updatedUserData = {
         name: userData.name,
         cep: userData.profile.cep,
@@ -92,15 +95,22 @@ const UpdateUser = () => {
         city: userData.profile.city,
       };
 
-      console.log("Updated User Data:", JSON.stringify(updatedUserData));
-
-      const response = await apiMed.put(`/user/update`, updatedUserData, {
+      await apiMed.put(`/user/update`, updatedUserData, {
         headers: {
           Authorization: `Bearer ${item}`,
         },
       });
 
-      console.log("User updated successfully:", response.data);
+      setLoading(false);
+      toast({
+        title: "Alterações salvas",
+        description: "Suas alterações foram salvas com sucesso.",
+        position: "top",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      router("/patient/homepage");
     } catch (error) {
       console.error("Error updating user:", error);
     }
@@ -108,7 +118,7 @@ const UpdateUser = () => {
 
   return (
     <Box p={4}>
-      <VStack spacing={4} align="start">
+      <VStack spacing={4} align="center">
         <FormControl id="name">
           <FormLabel fontWeight="bold">Nome</FormLabel>
           <Input
@@ -186,7 +196,13 @@ const UpdateUser = () => {
             onChange={(e) => handleInputChange("city", e.target.value)}
           />
         </FormControl>
-        <Button onClick={handleUpdateUser}>Update User</Button>
+        <Button
+          colorScheme="blue"
+          isLoading={loading}
+          onClick={handleUpdateUser}
+        >
+          Salvar
+        </Button>
       </VStack>
     </Box>
   );

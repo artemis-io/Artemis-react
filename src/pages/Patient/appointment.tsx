@@ -7,7 +7,7 @@ import DoctorList from "../../components/Main/Multiform/StepsAppointment/DoctorL
 import MedBio from "../../components/Main/Multiform/StepsAppointment/MedBio";
 import Schedule from "../../components/Main/Multiform/StepsAppointment/Schedule";
 import {  Button, Flex, Spacer, Box, IconButton } from "@chakra-ui/react";
-import PatientSidebar from "../../components/Main/PatientSideBar";
+import PatientSidebar from "../../components/Main/PatientSideBar/PatientSideBar";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 
 
@@ -34,8 +34,6 @@ const FormAppointment = () => {
             size='lg'    />
              <Spacer/>
             <Box></Box>
-         
-   
         </Flex>
       )}
       {step === 1 && <AppointmentType handleNextStep={handleNextStep} />}

@@ -28,7 +28,9 @@ type Doctor = {
   name: string;
   avatar_url: string;
   doctor: {
-    speciality: string[];
+    speciality: string[];    
+  };
+  profile: {
     gender: string;
   };
 };
@@ -87,6 +89,7 @@ const DoctorList = ({ handleNextStep }: DoctorListProps) => {
       const filteredDoctors = doctorsRef.current.filter((doctor) =>
         doctor.name.startsWith(letter)
       );
+      
 
       return (
         <VStack align="start" w="100%" spacing={4} mt={5}>
@@ -128,7 +131,7 @@ const DoctorList = ({ handleNextStep }: DoctorListProps) => {
 
                   <GridItem area={"name"} pl="2" width="100%">
                   <Heading color="#494949" fontSize="16px" fontWeight="700">
-                    {doctor.doctor.gender === "male" ? "Dr. " : "Dra. "}{doctor.name}
+                    {doctor.profile.gender === "male" ? "Dr. " : "Dra. "}{doctor.name}
                   </Heading>
                 </GridItem>
 

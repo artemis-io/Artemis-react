@@ -6,7 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { apiMed } from "../../services/api";
 import { AUTH_TOKEN_STORAGE } from "../../shared/storage/config";
 import UpcomingAppointments from "../../components/Main/UpcomingAppointments";
-import PatientSidebar from "../../components/Main/PatientSideBar";
+import PatientSidebar from "../../components/Main/PatientSideBar/PatientSideBar";
 
 // Separate the fetchData function
 const fetchData = async (
