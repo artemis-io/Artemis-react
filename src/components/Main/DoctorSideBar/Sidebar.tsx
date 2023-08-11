@@ -10,16 +10,16 @@ import { useAuth } from "../../../hooks/useAuth";
 export default function Sidebar({ children }: { children: ReactNode }) {  
   const { signOut } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false); // Add this state
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
 
   const toggleLogoutModal = () => {
-    setIsLogoutModalOpen((prev: any) => !prev); // Function to toggle the logout modal state
+    setIsLogoutModalOpen((prev: any) => !prev); 
   };
 
   const handleLogout = async () => {
-    signOut(); // Limpar a autenticação e o usuário corretamente
-    toggleLogoutModal(); // Fechar o modal de logout
+    signOut(); 
+    toggleLogoutModal(); 
   };
 
   return (

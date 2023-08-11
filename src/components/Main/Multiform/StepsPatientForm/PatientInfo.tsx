@@ -1,8 +1,15 @@
-import { Box, Button, FormControl, Input, Select, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  FormControl,
+  Input,
+  Select,
+  Stack,
+} from "@chakra-ui/react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PatientStep2Data } from "../../../../shared/types";
-import { submitPatientData } from "../../../../shared/reducer/PatientReducer";
+import { setStep2Data, submitPatientData } from "../../../../shared/reducer/PatientReducer";
 import { apiMed } from "../../../../services/api";
 import StyledLabel from "../../Forms/StyledLabel";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +18,9 @@ import { FiArrowDown } from "react-icons/fi";
 export function PatientInfo() {
   const router = useNavigate();
   const dispatch = useDispatch();
+
+  const step1Data = useSelector((state: any) => state.patient.patientStep1Data);
+  const step2Data = useSelector((state: any) => state.patient.patientStep2Data);
   const [step2, setStep2] = useState<PatientStep2Data>({
     cpf: "",
     rg: "",
@@ -22,19 +32,22 @@ export function PatientInfo() {
     district: "",
     city: "",
   });
-  const step1Data = useSelector((state: any) => state.patient.patientStep1Data);
-  const step2Data = useSelector((state: any) => state.patient.patientStep2Data);
   console.log("1", step1Data);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
-    setStep2((prevFormData) => ({ ...prevFormData, [name]: value }));
+    setStep2((prevStep2) => 
+    ({ ...prevStep2,
+       [name]: value,
+       }));
+       dispatch(setStep2Data({ ...step2Data, [name]: value }));
   };
 
-  const handleFinish = async (e: React.FormEvent) => {
+  const handleFinish = async (e: any) => {
+    e.preventDefault();
     const formDataPatient = {
-      step1Data,
-      step2Data,
+      ...step1Data,
+      step2,
     };
     console.log("2", formDataPatient);
     dispatch(submitPatientData(formDataPatient));
@@ -89,8 +102,8 @@ export function PatientInfo() {
           <Input
             type="date"
             name="birthDate"
-          /*   value={step2.birthDate} */
-         /*    onChange={handleInputChange} */
+            /*   value={step2.birthDate} */
+            /*    onChange={handleInputChange} */
             variant="flushed"
             _placeholder={{ color: "gray.500" }}
           />
@@ -100,7 +113,7 @@ export function PatientInfo() {
           <Select
             icon={<FiArrowDown />}
             placeholder="Gênero"
-         /*    onChange={handleGenderChange}
+            /*    onChange={handleGenderChange}
             value={step2.gender} */
             defaultValue="Gênero"
           >
@@ -108,19 +121,7 @@ export function PatientInfo() {
             <option value="female">Feminino</option>
           </Select>
         </FormControl>
-      
-        <FormControl id="gender">
-          <StyledLabel>Gênero</StyledLabel>
-          <Input
-            onChange={handleInputChange}
-            value={step2.gender}
-            name="gender"
-            variant="flushed"
-            placeholder="Feminino/Masculino"
-            _placeholder={{ color: "gray.500" }}
-            type="text"
-          />
-        </FormControl>
+
         <FormControl id="cep" isRequired>
           <StyledLabel>CEP</StyledLabel>
           <Input
