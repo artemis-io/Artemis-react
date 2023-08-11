@@ -1,6 +1,6 @@
 import { Box, Heading, Stack } from "@chakra-ui/react";
 
-import ImageProfile from "../../components/Main/FormProfile/ImageProfile";
+import ImageProfilePatient from "../../components/Main/FormProfile/ImageProfilePatient";
 import FormPatientProfile from "../../components/Main/FormProfile/FormPatientProfile";
 import PatientSidebar from "../../components/Main/PatientSideBar/PatientSideBar";
 
@@ -13,7 +13,7 @@ export default function SettingsPatient() {
             <Heading fontSize="3xl" textAlign="center">
               Configurações de conta
             </Heading>
-            <ImageProfile />
+            <ImageProfilePatient />
             <FormPatientProfile />
           </Stack>
         </Box>
