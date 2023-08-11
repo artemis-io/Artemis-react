@@ -33,7 +33,6 @@ const AvatarUploader = () => {
           },
         });
 
-        // Assuming the response data has an 'avatar_url' property
         setAvatarUrl(response.data.avatar_url);
       } catch (error) {
         console.log(error);
@@ -57,16 +56,18 @@ const AvatarUploader = () => {
 
   const handleUpload = async () => {
     if (selectedFile) {
+      setLoading(true);
+      console.log(selectedFile);
       const formData = new FormData();
       formData.append("file", selectedFile);
 
       try {
-        setLoading(true);
-        await apiMed.post("/user/upload", formData);
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
-        setSelectedFile(null);
-        setAvatarUrl(null);
+        const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
+        await apiMed.post("/user/upload", formData, {
+          headers: {
+            Authorization: `Bearer ${item}`,
+          },
+        });
 
         toast({
           title: "Alterações salvas",
@@ -76,10 +77,11 @@ const AvatarUploader = () => {
           duration: 5000,
           isClosable: true,
         });
-        setLoading(false);
       } catch (error) {
-        console.error("Error uploading:", error);
+        console.error("Erro no upload:", error);
       }
+
+      setLoading(false);
     }
   };
 

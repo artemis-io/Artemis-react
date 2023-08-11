@@ -8,12 +8,12 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { PatientStep2Data } from "../../../../shared/types";
-import { setStep2Data, submitPatientData } from "../../../../shared/reducer/PatientReducer";
+import { setStep2Data } from "../../../../shared/reducer/PatientReducer";
 import { apiMed } from "../../../../services/api";
 import StyledLabel from "../../Forms/StyledLabel";
 import { useNavigate } from "react-router-dom";
 import { FiArrowDown } from "react-icons/fi";
+import { PatientStep2Data } from "../../../../shared/types";
 
 export function PatientInfo() {
   const router = useNavigate();
@@ -21,7 +21,7 @@ export function PatientInfo() {
 
   const step1Data = useSelector((state: any) => state.patient.patientStep1Data);
   const step2Data = useSelector((state: any) => state.patient.patientStep2Data);
-  const [step2, setStep2] = useState<PatientStep2Data>({
+  const [step2, setStep2] = useState({
     cpf: "",
     rg: "",
     gender: "",
@@ -31,35 +31,52 @@ export function PatientInfo() {
     state: "",
     district: "",
     city: "",
+    dateOfBirth: new Date().toISOString(),
   });
   console.log("1", step1Data);
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
-    setStep2((prevStep2) => 
-    ({ ...prevStep2,
-       [name]: value,
-       }));
-       dispatch(setStep2Data({ ...step2Data, [name]: value }));
+    let updatedData;
+  
+    if (name === "dateOfBirth") {
+      const selectedDate = new Date(value);
+      updatedData = { ...step2, [name]: selectedDate.toISOString() };
+    } else {
+      updatedData = { ...step2, [name]: value };
+    }
+  
+    setStep2(updatedData);
+    dispatch(setStep2Data(updatedData));
+  };
+  
+
+  const handleGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    updateStep2AndDispatch({ gender: value });
+  };
+  
+  const updateStep2AndDispatch = (updatedFields: Partial<PatientStep2Data>) => {
+    const updatedData = { ...step2, ...updatedFields };
+    setStep2(updatedData);
+    dispatch(setStep2Data(updatedData));
   };
 
   const handleFinish = async (e: any) => {
     e.preventDefault();
+    
     const formDataPatient = {
       ...step1Data,
-      step2,
+      ...step2,
     };
-    console.log("2", formDataPatient);
-    dispatch(submitPatientData(formDataPatient));
-    console.log(formDataPatient, "42");
-    e.preventDefault();
+    console.log("2", JSON.stringify(formDataPatient));
+    console.log("step2:", formDataPatient);
+    
 
     try {
-      const response = await apiMed.post("/user", formDataPatient);
-      console.log(formDataPatient, "43");
+      await apiMed.post("/user", formDataPatient);
+
       router("/patient/homepage");
-      console.log(response);
-      console.log("Dados do form:", formDataPatient);
     } catch (error) {
       console.log(error);
     }
@@ -97,13 +114,13 @@ export function PatientInfo() {
             type="text"
           />
         </FormControl>
-        <FormControl id="birthDate">
+        <FormControl id="dateOfBirth">
           <StyledLabel>Data de Nascimento</StyledLabel>
           <Input
             type="date"
-            name="birthDate"
-            /*   value={step2.birthDate} */
-            /*    onChange={handleInputChange} */
+            name="dateOfBirth"
+            value={new Date(step2.dateOfBirth).toLocaleDateString("en-CA")}
+            onChange={handleInputChange}
             variant="flushed"
             _placeholder={{ color: "gray.500" }}
           />
@@ -113,9 +130,9 @@ export function PatientInfo() {
           <Select
             icon={<FiArrowDown />}
             placeholder="Gênero"
-            /*    onChange={handleGenderChange}
-            value={step2.gender} */
-            defaultValue="Gênero"
+            onChange={handleGenderChange}
+            value={step2.gender}
+           
           >
             <option value="male">Masculino</option>
             <option value="female">Feminino</option>

@@ -16,7 +16,7 @@ import LogoutModal from "../LogoutModal";
 import { useAuth } from "../../../hooks/useAuth";
 import { NavItemProps, SidebarProps } from "../../../shared/interface";
 import { LinkItemsPatient } from "../../../shared/constant";
-import MobileNav from "../DoctorSideBar/MobileNav";
+import MobileNav from "../SideBar/MobileNav";
 
 export default function PatientSidebar({ children }: { children: ReactNode }) {
   const { signOut } = useAuth();

@@ -84,6 +84,9 @@ export interface Doctor {
     pricing: string;
     bio: string;
     speciality: string[];
-    gender: string;
+    
   };
+  profile: {
+    gender: string;
+  }
 };

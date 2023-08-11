@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { VStack } from "@chakra-ui/react";
 import { useAuth } from "../../hooks/useAuth";
 import { apiMed } from "../../services/api";
-import Sidebar from "../../components/Main/DoctorSideBar/Sidebar";
+import Sidebar from "../../components/Main/SideBar/Sidebar";
 import SearchBar from "../../components/Main/SearchBar";
 import AppointmentCard from "../../components/Style/Cards/AppointmentCard";
 import { AUTH_TOKEN_STORAGE } from "../../shared/storage/config";
