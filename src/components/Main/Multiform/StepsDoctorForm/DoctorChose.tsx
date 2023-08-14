@@ -18,6 +18,8 @@ import { setStep3Data } from "../../../../shared/reducer/DoctorReducer";
 import StyledLabel from "../../Forms/StyledLabel";
 import { useNavigate } from "react-router-dom";
 import { apiMed } from "../../../../services/api";
+import { useToast } from "@chakra-ui/react";
+
 
 function DoctorChose() {
   const router = useNavigate();
@@ -34,6 +36,8 @@ function DoctorChose() {
     pricing: "",
     bio: "",
   });
+  const toast = useToast();
+
 
   useEffect(() => {
     const fetchSpecialties = async () => {
@@ -85,6 +89,14 @@ function DoctorChose() {
       router("/doctor/homepage");
     } catch (error) {
       console.error(error);
+      toast({
+        title: "Error",
+        position: "top",
+        description: "Algo deu errado, tente novamente.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
