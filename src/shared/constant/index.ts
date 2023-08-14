@@ -1,8 +1,6 @@
 import {
-  FiMessageSquare,
   FiUsers,
   FiHome,
-  FiCompass,
   FiCalendar,
   FiSettings,
   FiLogOut,
@@ -31,8 +29,39 @@ export const LinkItems: Array<LinkItemProps> = [
 export const LinkItemsPatient: Array<LinkItemProps> = [
   { name: "Dashboard", icon: FiHome, to: "/patient/homepage" },
   // { name: "Médicos", icon: FiUsers, to: "/patient/doctorlist" },
-  { name: "Agendar", icon: FiCalendar, to: "/patient/appointment"},
+  { name: "Agendar", icon: FiCalendar, to: "/patient/appointment" },
   // { name: "Chat", icon: FiMessageSquare, to: "/homepage" },
   { name: "Configurações", icon: FiSettings, to: "/patient/profile" },
   { name: "Desconectar", icon: FiLogOut, to: undefined },
+];
+
+export const maskInputCpf = [
+  /\d/,
+  /\d/,
+  /\d/,
+  ".",
+  /\d/,
+  /\d/,
+  /\d/,
+  ".",
+  /\d/,
+  /\d/,
+  /\d/,
+  "-",
+  /\d/,
+  /\d/,
+];
+
+export const maskInputRG = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
+
+export const maskInputCep = [
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+  "-",
+  /\d/,
+  /\d/,
+  /\d/,
 ];
