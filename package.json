@@ -19,6 +19,7 @@
     "chakra-ui": "^0.3.9",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.8",
+    "env-cmd": "^10.1.0",
     "framer-motion": "^10.15.0",
     "jwt-decode": "^3.1.2",
     "payment": "^2.4.6",
@@ -43,8 +44,8 @@
     "@types/react-toastify": "^4.1.0"
   },
   "scripts": {
-    "dev": "react-scripts start",
-    "build": "react-scripts build",
+    "dev": "env-cmd -f ./.env  react-scripts start",
+    "build": "env-cmd -f ./.env.production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

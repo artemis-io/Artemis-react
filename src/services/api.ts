@@ -17,9 +17,10 @@ interface APIInstanceProps extends AxiosInstance {
 }
 
 export const apiMed = axios.create({
-  baseURL: "http://localhost:3333/api",
-  //baseURL: "https://artemis-api-production.up.railway.app/api",
+  //baseURL: "http://localhost:3333/api",
+  baseURL: process.env.REACT_APP_BASE_URL,
   timeout: 10000,
+
   headers: {
     "Content-Type": "application/json",
   },
