@@ -21,6 +21,9 @@ import AlphabeticalListPage from "../pages/Doctor/patients";
 import SettingsDoctor from "../pages/Doctor/profile";
 import SettingsPatient from "../pages/Patient/profile";
 import PrivateRoute from "../components/Main/Private/PrivateRoute";
+import DoctorHistory from "../pages/Doctor/history";
+import PatientInfo from "../pages/Doctor/patientinfo";
+import MedicalRecordPage from "../pages/Doctor/record";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -75,6 +78,33 @@ const AppRoutes = () => {
         element={
           <DoctorRoute>
             <SettingsDoctor />
+          </DoctorRoute>
+        }
+      />
+
+      <Route
+        path="/doctor/history"
+        element={
+          <DoctorRoute>
+            <DoctorHistory />
+          </DoctorRoute>
+        }
+      />
+
+      <Route
+        path="/doctor/patientinfo"
+        element={
+          <DoctorRoute>
+            <PatientInfo />
+          </DoctorRoute>
+        }
+      />
+
+      <Route
+        path="/doctor/record"
+        element={
+          <DoctorRoute>
+            <MedicalRecordPage />
           </DoctorRoute>
         }
       />
