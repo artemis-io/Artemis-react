@@ -9,6 +9,12 @@ import {
   Checkbox,
   CheckboxGroup,
   Stack,
+  Textarea,
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
 } from "@chakra-ui/react";
 import { apiMed } from "../../../services/api";
 import { AUTH_TOKEN_STORAGE } from "../../../shared/storage/config";
@@ -265,29 +271,49 @@ const UpdateUser = () => {
         </FormControl>
         <FormControl id="bio">
           <FormLabel fontWeight="bold">Bio</FormLabel>
-          <Input
+          <Textarea
             variant="flushed"
             _placeholder={{ color: "gray.500" }}
-            type="textArea"
             name="doctor.bio"
             value={formData.doctor.bio}
             onChange={handleChange}
           />
         </FormControl>
         <FormControl id="speciality">
-          <FormLabel fontWeight="bold">Especialidade</FormLabel>
-          <CheckboxGroup
-            value={formData.doctor.speciality}
-            onChange={handleSpecialityChange}
-          >
-            <Stack>
+          
+          <Accordion allowMultiple>
+          <AccordionItem>
+            <h2>
+              <AccordionButton>
+                <Box fontWeight="bold" flex="1" textAlign="left">
+                  Especialidades
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+            </h2>
+            <AccordionPanel pb={4}>
+              <Stack>
               {availableSpecialities.map((speciality) => (
-                <Checkbox key={speciality} value={speciality}>
+                <Checkbox
+                  key={speciality}
+                  value={speciality}
+                  isChecked={formData.doctor.speciality.includes(speciality)}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    handleSpecialityChange(
+                      checked
+                        ? [...formData.doctor.speciality, speciality]
+                        : formData.doctor.speciality.filter((s) => s !== speciality)
+                    );
+                  }}
+                >
                   {speciality}
                 </Checkbox>
-              ))}
-            </Stack>
-          </CheckboxGroup>
+              ))};
+              </Stack>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
         </FormControl>
         <Button
           colorScheme="blue"
