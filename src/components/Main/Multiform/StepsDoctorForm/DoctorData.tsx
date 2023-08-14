@@ -59,6 +59,10 @@ export function DoctorData({ handleNextStep }: any) {
     router("/signIn");
   };
 
+  const goBackToRegister = () => {
+    router("/signUp");
+  };
+
   return (
     <Box
       display="flex"
@@ -136,9 +140,24 @@ export function DoctorData({ handleNextStep }: any) {
           Próximo
         </Button>
         <Center mt={4}>
-          <Button onClick={goBackToLogin} variant="link" color="#747B7D">
-            Voltar para login
-          </Button>
+          <Box display={"flex"} flexDirection={"column"}>
+            <Button
+              onClick={goBackToRegister}
+              variant="link"
+              color="#747B7D"
+              padding={3}
+            >
+              Voltar para Register
+            </Button>
+            <Button
+              onClick={goBackToLogin}
+              variant="link"
+              color="#747B7D"
+              padding={3}
+            >
+              Voltar para login
+            </Button>
+          </Box>
         </Center>
       </Stack>
     </Box>

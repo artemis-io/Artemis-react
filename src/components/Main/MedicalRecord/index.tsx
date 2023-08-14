@@ -14,14 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { FiShare2 } from "react-icons/fi";
 
-const History = () => {
-  const paciente = {
-    nome: "Fulano de Tal",
-    idade: 30,
-    convenio: "XYZ",
-    sexo: "Masculino",
-  };
-
+const MedicalRecord = () => {
   const [activeAccordionIndex, setActiveAccordionIndex] = useState(0);
 
   const handleAccordionClick = (index: number) => {
@@ -55,21 +48,21 @@ const History = () => {
           <GridItem colSpan={2}>
             {" "}
             <Text fontWeight="bold">Paciente</Text>
-            <Text mb={2}>{paciente.nome}</Text>
+            <Text mb={2}>{"paciente"}</Text>
           </GridItem>
           <GridItem colStart={4} colEnd={6}>
             {" "}
             <Text fontWeight="bold">Idade</Text>
-            <Text mb={2}>{paciente.idade}</Text>{" "}
+            <Text mb={2}>{"paciente"}</Text>{" "}
           </GridItem>
         </Grid>
         <Flex flexDirection="column" alignItems="flex-start">
           <Text fontWeight="bold">Convênio</Text>
-          <Text mb={2}>{paciente.convenio}</Text>
+          <Text mb={2}>{"paciente"}</Text>
         </Flex>
         <Flex flexDirection="column" alignItems="flex-start">
           <Text fontWeight="bold">Sexo</Text>
-          <Text mb={2}>{paciente.sexo}</Text>
+          <Text mb={2}>{"paciente"}</Text>
         </Flex>
       </Box>
 
@@ -143,28 +136,6 @@ const History = () => {
         <AccordionItem>
           <h2>
             <AccordionButton
-              bg={activeAccordionIndex === 3 ? "blue.500" : "blue.400"}
-              color="white"
-              borderRadius={10}
-              py={3}
-              mb={2}
-              _hover={{ bg: "blue.600" }}
-              onClick={() => handleAccordionClick(3)}
-            >
-              <Box flex="1" textAlign="left">
-                Consultas
-              </Box>
-              <AccordionIcon
-                transform={activeAccordionIndex === 3 ? "rotate(180deg)" : ""}
-              />
-            </AccordionButton>
-          </h2>
-          <AccordionPanel p={4}>Conteúdo das consultas</AccordionPanel>
-        </AccordionItem>
-
-        <AccordionItem>
-          <h2>
-            <AccordionButton
               bg={activeAccordionIndex === 4 ? "blue.500" : "blue.400"}
               color="white"
               borderRadius={10}
@@ -201,4 +172,4 @@ const History = () => {
   );
 };
 
-export default History;
+export default MedicalRecord;

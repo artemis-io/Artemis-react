@@ -11,12 +11,15 @@ import {
   FormControl,
   Input,
   Stack,
+  Textarea,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { setStep3Data } from "../../../../shared/reducer/DoctorReducer";
 import StyledLabel from "../../Forms/StyledLabel";
 import { useNavigate } from "react-router-dom";
 import { apiMed } from "../../../../services/api";
+import { useToast } from "@chakra-ui/react";
+
 
 function DoctorChose() {
   const router = useNavigate();
@@ -33,6 +36,8 @@ function DoctorChose() {
     pricing: "",
     bio: "",
   });
+  const toast = useToast();
+
 
   useEffect(() => {
     const fetchSpecialties = async () => {
@@ -84,6 +89,14 @@ function DoctorChose() {
       router("/doctor/homepage");
     } catch (error) {
       console.error(error);
+      toast({
+        title: "Error",
+        position: "top",
+        description: "Algo deu errado, tente novamente.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
@@ -112,13 +125,12 @@ function DoctorChose() {
         </FormControl>
         <FormControl id="bio">
           <StyledLabel>Sobre você</StyledLabel>
-          <Input
+          <Textarea
             variant="flushed"
             placeholder="Breve descrição sobre suas atividades"
             onChange={handleInputChange}
             value={step3.bio}
             name="bio"
-            type="textarea"
             boxShadow="md"
             h="100px"
           />

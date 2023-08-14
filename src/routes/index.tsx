@@ -1,5 +1,4 @@
 import { Routes, Route, useLocation } from "react-router-dom";
-import PrivateRoute from "../components/Main/Private/PrivateRoute";
 import Home from "../pages/Home";
 import NotFound from "../pages/404";
 import SignIn from "../pages/Auth/SignIn";
@@ -21,6 +20,10 @@ import BilletPage from "../pages/Payment/billet";
 import AlphabeticalListPage from "../pages/Doctor/patients";
 import SettingsDoctor from "../pages/Doctor/profile";
 import SettingsPatient from "../pages/Patient/profile";
+import PrivateRoute from "../components/Main/Private/PrivateRoute";
+import PatientInfo from "../pages/Doctor/patientinfo";
+import MedicalRecordPage from "../pages/Doctor/record";
+import MedicalRecord from "../pages/Doctor/medicalRecord";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -29,25 +32,118 @@ const AppRoutes = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
       <Route path="*" element={<NotFound />} />
-      <Route path="/signIn" element={<SignIn />} />
-      <Route path="/signUp" element={<SignUp />} />
-      <Route path="/register/:category" element={<Register />} />
-      <Route path="/forgot-Password" element={<ForgotPassword />} />
-      <Route path="/reset-Password/:token" element={<ResetPasswordPage />} />
-      <Route path="patient/appointment" element={<FormAppointment />} />
-      <Route path="doctor/patients" element={<AlphabeticalListPage />} />
-      <Route path="doctor/profile" element={<SettingsDoctor />} />
-      <Route path="patient/profile" element={<SettingsPatient />} />
 
-      <Route path="/video/:roomName" element={<VideoChat />} />
+      <Route path="/" element={<Home />} />
+
+      <Route path="/signIn" element={<SignIn />} />
+
+      <Route path="/signUp" element={<SignUp />} />
+
+      <Route path="/signUp/:category" element={<Register />} />
+
+      <Route path="/forgot-Password" element={<ForgotPassword />} />
+
+      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+
+      <Route
+        path="/medical-record"
+        element={
+          <DoctorRoute>
+            <MedicalRecord />
+          </DoctorRoute>
+        }
+      />
+
+      <Route
+        path="/payment/billet"
+        element={
+          <PrivateRoute>
+            <BilletPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/video/:roomName"
+        element={
+          <PrivateRoute>
+            <VideoChat />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/payment/creditcard"
+        element={
+          <PrivateRoute>
+            <CreditCard />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/doctor/profile"
+        element={
+          <DoctorRoute>
+            <SettingsDoctor />
+          </DoctorRoute>
+        }
+      />
+
+      <Route
+        path="/doctor/patientinfo"
+        element={
+          <DoctorRoute>
+            <PatientInfo />
+          </DoctorRoute>
+        }
+      />
+
+      <Route
+        path="/doctor/record"
+        element={
+          <DoctorRoute>
+            <MedicalRecordPage />
+          </DoctorRoute>
+        }
+      />
+
+      <Route
+        path="/patient/appointment"
+        element={
+          <PatientRoute>
+            <FormAppointment />
+          </PatientRoute>
+        }
+      />
+
+      <Route
+        path="/doctor/patients"
+        element={
+          <DoctorRoute>
+            <AlphabeticalListPage />
+          </DoctorRoute>
+        }
+      />
+
       <Route
         path="/payment/choice"
-        element={<ChoicePage selectedAppointment={selectedAppointment} />}
+        element={
+          <PatientRoute>
+            <ChoicePage selectedAppointment={selectedAppointment} />
+          </PatientRoute>
+        }
       />
-      <Route path="/payment/creditcard" element={<CreditCard />} />
-      <Route path="/payment/billet" element={<BilletPage />} />
+
+      <Route
+        path="/patient/profile"
+        element={
+          <PatientRoute>
+            <SettingsPatient />
+          </PatientRoute>
+        }
+      />
 
       <Route
         path="/doctor/homepage"

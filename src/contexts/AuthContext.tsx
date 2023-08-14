@@ -18,6 +18,7 @@ export type User = {
   email: string;
   avatar_url: string;
   role: string;
+  first_time: boolean;
 };
 
 type AuthContextType = {
@@ -69,7 +70,16 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       setUserStorage(data.user);
       setTokensStorage(data.tokens.accessToken, data.tokens.refreshToken);
 
-      router(`/${data.user.role}/homepage`);
+      if (data.user.first_time) {        
+        router(`/${data.user.role}/profile`);
+        await apiMed.post(`/user/first_time`, {
+          headers: {
+            Authorization: `Bearer ${data.tokens.accessToken}`,
+          },
+        });
+      } else {
+        router(`/${data.user.role}/homepage`);
+      }
 
       return data.user;
     } catch (error) {

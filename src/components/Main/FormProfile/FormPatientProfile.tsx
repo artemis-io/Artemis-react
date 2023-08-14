@@ -60,16 +60,14 @@ const UpdateUser = () => {
   }, []);
 
   const handleInputChange = (
-    field: keyof UserData | keyof UserData["profile"],
-    value: string
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
-    if (field in userData) {
-      setUserData((prevData) => ({
-        ...prevData,
-        [field]: value,
-      }));
-    } else if (field.startsWith("profile.")) {
-      const profileField = field.split(".")[1];
+    const { name, value } = event.target;
+  
+    if (name.includes("profile.")) {
+      const profileField = name.split(".")[1];
       setUserData((prevData) => ({
         ...prevData,
         profile: {
@@ -77,8 +75,17 @@ const UpdateUser = () => {
           [profileField]: value,
         },
       }));
+    } else {
+      setUserData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
     }
+
   };
+  
+  
+  
 
   const handleUpdateUser = async () => {
     try {
@@ -127,7 +134,7 @@ const UpdateUser = () => {
             type="text"
             name="name"
             value={userData.name}
-            onChange={(e) => handleInputChange("name", e.target.value)}
+            onChange={handleInputChange}
           />
         </FormControl>
         <FormControl id="cep">
@@ -138,7 +145,7 @@ const UpdateUser = () => {
             type="text"
             name="profile.cep"
             value={userData.profile.cep}
-            onChange={(e) => handleInputChange("cep", e.target.value)}
+            onChange={handleInputChange}
           />
         </FormControl>
         <FormControl id="address">
@@ -149,7 +156,7 @@ const UpdateUser = () => {
             type="text"
             name="profile.address"
             value={userData.profile.address}
-            onChange={(e) => handleInputChange("address", e.target.value)}
+            onChange={handleInputChange}
           />
         </FormControl>
         <FormControl id="number">
@@ -160,7 +167,7 @@ const UpdateUser = () => {
             type="text"
             name="profile.number"
             value={userData.profile.number}
-            onChange={(e) => handleInputChange("number", e.target.value)}
+            onChange={handleInputChange}
           />
         </FormControl>
         <FormControl id="state">
@@ -171,7 +178,7 @@ const UpdateUser = () => {
             type="text"
             name="profile.state"
             value={userData.profile.state}
-            onChange={(e) => handleInputChange("state", e.target.value)}
+            onChange={handleInputChange}
           />
         </FormControl>
         <FormControl id="district">
@@ -182,7 +189,7 @@ const UpdateUser = () => {
             type="text"
             name="profile.district"
             value={userData.profile.district}
-            onChange={(e) => handleInputChange("district", e.target.value)}
+            onChange={handleInputChange}
           />
         </FormControl>
         <FormControl id="city">
@@ -193,7 +200,7 @@ const UpdateUser = () => {
             type="text"
             name="profile.city"
             value={userData.profile.city}
-            onChange={(e) => handleInputChange("city", e.target.value)}
+            onChange={handleInputChange}
           />
         </FormControl>
         <Button
