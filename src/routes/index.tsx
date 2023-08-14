@@ -21,9 +21,9 @@ import AlphabeticalListPage from "../pages/Doctor/patients";
 import SettingsDoctor from "../pages/Doctor/profile";
 import SettingsPatient from "../pages/Patient/profile";
 import PrivateRoute from "../components/Main/Private/PrivateRoute";
-import DoctorHistory from "../pages/Doctor/history";
 import PatientInfo from "../pages/Doctor/patientinfo";
 import MedicalRecordPage from "../pages/Doctor/record";
+import MedicalRecord from "../pages/Doctor/medicalRecord";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -45,6 +45,15 @@ const AppRoutes = () => {
       <Route path="/forgot-Password" element={<ForgotPassword />} />
 
       <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+
+      <Route
+        path="/medical-record"
+        element={
+          <DoctorRoute>
+            <MedicalRecord />
+          </DoctorRoute>
+        }
+      />
 
       <Route
         path="/payment/billet"
@@ -83,15 +92,6 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/doctor/history"
-        element={
-          <DoctorRoute>
-            <DoctorHistory />
-          </DoctorRoute>
-        }
-      />
-
-      <Route
         path="/doctor/patientinfo"
         element={
           <DoctorRoute>
@@ -121,9 +121,9 @@ const AppRoutes = () => {
       <Route
         path="/doctor/patients"
         element={
-          <PrivateRoute>
+          <DoctorRoute>
             <AlphabeticalListPage />
-          </PrivateRoute>
+          </DoctorRoute>
         }
       />
 
