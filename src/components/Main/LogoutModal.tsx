@@ -17,18 +17,18 @@ const LogoutModal: React.FC<LogoutModalProps> = ({
   onLogout,
 }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Confirmation</ModalHeader>
+        <ModalHeader>Desconectar</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>Are you sure you want to log out?</ModalBody>
+        <ModalBody fontWeight='bold' color='#747B7D'>Deseja sair da sua conta?</ModalBody>
         <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={onLogout}>
-            Logout
+            Desconectar
           </Button>
           <Button variant="ghost" onClick={onClose}>
-            Cancel
+            Cancelar
           </Button>
         </ModalFooter>
       </ModalContent>
