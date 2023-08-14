@@ -66,6 +66,7 @@ const AvatarUploader = () => {
         console.log("Data:",formData)
         await apiMed.post("/user/upload", formData, {
           headers: {
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${item}`,
           },
         });
@@ -90,7 +91,7 @@ const AvatarUploader = () => {
     <Flex direction="column" align="center">
       <FormControl marginTop={10}>
         <Center>
-          <FormLabel fontWeight="bold">Profile Image</FormLabel>
+          <FormLabel fontWeight="bold">Imagem de perfil</FormLabel>
         </Center>
 
         <Stack direction={["column", "row"]} spacing={6}>

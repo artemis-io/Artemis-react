@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { FiShare2 } from "react-icons/fi";
 
-const History = () => {
+const DoctorHistory = () => {
   const paciente = {
     nome: "Fulano de Tal",
     idade: 30,
@@ -201,4 +201,4 @@ const History = () => {
   );
 };
 
-export default History;
+export default DoctorHistory;

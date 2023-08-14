@@ -12,6 +12,7 @@ import {
   maskInputRG,
 } from "../../../../shared/constant";
 import { GenderSelect } from "../../Gender";
+import { useToast } from "@chakra-ui/react";
 
 export function PatientInfo() {
   const router = useNavigate();
@@ -33,6 +34,7 @@ export function PatientInfo() {
     city: "",
     dateOfBirth: new Date().toISOString(),
   });
+  const toast = useToast();
 
   const updateStep2 = (updatedFields: any) => {
     const updatedData = { ...step2, ...updatedFields };
@@ -109,6 +111,15 @@ export function PatientInfo() {
       router("/patient/homepage");
     } catch (error) {
       console.log(error);
+
+      toast({
+        title: "Error",
+        position: "top",
+        description: "Algo deu errado, tente novamente.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 

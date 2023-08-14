@@ -24,6 +24,7 @@ const MedicalRecordPage = () => {
     glasgow: "",
     tipoSanguineo: "",
     medicamentos: "",
+    anotacoes: "",
   });
 
   const handlePrevious = () => {
