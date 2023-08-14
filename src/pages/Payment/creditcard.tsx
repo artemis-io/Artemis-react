@@ -30,7 +30,7 @@ const PaymentPage = () => {
   const [paymentData, setPaymentData] = useState({
     urlretorno: "",
     chaveerp: "",
-    valor: "",
+    valor: "", //appointmentprice
     numeroparcela: 1,
     nome: "",
     identificador: "",
@@ -67,18 +67,14 @@ const PaymentPage = () => {
     setPaymentData((prevState) => ({ ...prevState, [name]: formattedValue }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setLoading(true);
-    e.preventDefault();
-    const form = e.currentTarget;
-    form.reset();
+  const handleSubmit = async () => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
       setLoading(false);
-      toast.success("Pagamento aprovado!");
+      const data = {
+        
+      }
     } catch (error) {
       setLoading(false);
-      toast.error("Ocorreu um erro no pagamento");
     }
   };
 

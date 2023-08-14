@@ -96,3 +96,11 @@ export type CardProps = {
 export type CardCompleteProps = {
   appointments: Appointment[];
 };
+
+export type PaymentCardStep1Data = {
+
+}
+
+export type PaymentCardStep2Data = {
+
+}
