@@ -1,31 +1,31 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  Input,
-  Select,
-  Stack,
-} from "@chakra-ui/react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { Box, Button, FormControl, Input, Stack } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { setStep2Data } from "../../../../shared/reducer/PatientReducer";
 import { apiMed } from "../../../../services/api";
 import StyledLabel from "../../Forms/StyledLabel";
 import { useNavigate } from "react-router-dom";
-import { FiArrowDown } from "react-icons/fi";
-import { PatientStep2Data } from "../../../../shared/types";
+import { InputMasked } from "../../React/Mask/Inputs";
+import {
+  maskInputCep,
+  maskInputCpf,
+  maskInputRG,
+} from "../../../../shared/constant";
+import { GenderSelect } from "../../Gender";
 
 export function PatientInfo() {
   const router = useNavigate();
   const dispatch = useDispatch();
 
-  const step1Data = useSelector((state: any) => state.patient.patientStep1Data);
-  const step2Data = useSelector((state: any) => state.patient.patientStep2Data);
+  const step1Data = useSelector((state: any) => state.patient.patientStep1Data.step1);
+
+  const [cepValue, setCepValue] = useState("");
+
   const [step2, setStep2] = useState({
     cpf: "",
     rg: "",
     gender: "",
-    cep: "",
+    cep: cepValue,
     address: "",
     number: "",
     state: "",
@@ -33,45 +33,75 @@ export function PatientInfo() {
     city: "",
     dateOfBirth: new Date().toISOString(),
   });
-  console.log("1", step1Data);
 
-  const handleInputChange = (e: any) => {
-    const { name, value } = e.target;
-    let updatedData;
-  
-    if (name === "dateOfBirth") {
-      const selectedDate = new Date(value);
-      updatedData = { ...step2, [name]: selectedDate.toISOString() };
-    } else {
-      updatedData = { ...step2, [name]: value };
-    }
-  
-    setStep2(updatedData);
-    dispatch(setStep2Data(updatedData));
-  };
-  
-
-  const handleGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.target;
-    updateStep2AndDispatch({ gender: value });
-  };
-  
-  const updateStep2AndDispatch = (updatedFields: Partial<PatientStep2Data>) => {
+  const updateStep2 = (updatedFields: any) => {
     const updatedData = { ...step2, ...updatedFields };
     setStep2(updatedData);
     dispatch(setStep2Data(updatedData));
   };
 
+  const fetchAddressFromCorreios = async (cep: any) => {
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await response.json();
+
+      if (!data.erro) {
+        updateStep2({
+          cep,
+          address: data.logradouro,
+          district: data.bairro,
+          city: data.localidade,
+          state: data.uf,
+        });
+      } else {
+        // Clear the address fields in case of no results
+        updateStep2({
+          cep: "",
+          address: "",
+          district: "",
+          city: "",
+          state: "",
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao buscar endereço:", error);
+    }
+  };
+
+  const handleCepChange = async (e: any) => {
+    const { value } = e.target;
+    const sanitizedValue = value.replace(/\D/g, ""); // Remove non-numeric characters from value
+
+    if (sanitizedValue.length === 8) {
+      await fetchAddressFromCorreios(sanitizedValue);
+    }
+
+    setCepValue(sanitizedValue); // Update the CEP value
+  };
+
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target;
+
+    setStep2((prevStep2) => ({
+      ...prevStep2,
+      [name]: value,
+    }));
+  };
+
+  const handleGenderChange = (e: any) => {
+    const { value } = e.target;
+    updateStep2({ gender: value });
+  };
+
   const handleFinish = async (e: any) => {
     e.preventDefault();
-    
+
     const formDataPatient = {
       ...step1Data,
       ...step2,
     };
-    console.log("2", JSON.stringify(formDataPatient));
-    console.log("step2:", formDataPatient);
-    
+
+    console.log(JSON.stringify(formDataPatient));
 
     try {
       await apiMed.post("/user", formDataPatient);
@@ -92,65 +122,54 @@ export function PatientInfo() {
       <Stack spacing={6} w={"full"} maxW={"md"} p={2}>
         <FormControl id="cpf">
           <StyledLabel>CPF</StyledLabel>
-          <Input
+          <InputMasked
+            mask={maskInputCpf}
             onChange={handleInputChange}
             value={step2.cpf}
             name="cpf"
-            variant="flushed"
             placeholder="000.000.000-00"
-            _placeholder={{ color: "gray.500" }}
-            type="text"
           />
         </FormControl>
+
         <FormControl id="rg">
           <StyledLabel>RG</StyledLabel>
-          <Input
+          <InputMasked
+            mask={maskInputRG}
             onChange={handleInputChange}
             value={step2.rg}
             name="rg"
-            variant="flushed"
             placeholder="00000000"
-            _placeholder={{ color: "gray.500" }}
-            type="text"
           />
         </FormControl>
+
         <FormControl id="dateOfBirth">
           <StyledLabel>Data de Nascimento</StyledLabel>
           <Input
             type="date"
             name="dateOfBirth"
-            value={new Date(step2.dateOfBirth).toLocaleDateString("en-CA")}
+            value={step2.dateOfBirth}
             onChange={handleInputChange}
             variant="flushed"
             _placeholder={{ color: "gray.500" }}
           />
         </FormControl>
+
         <FormControl>
           <StyledLabel>Gênero</StyledLabel>
-          <Select
-            icon={<FiArrowDown />}
-            placeholder="Gênero"
-            onChange={handleGenderChange}
-            value={step2.gender}
-           
-          >
-            <option value="male">Masculino</option>
-            <option value="female">Feminino</option>
-          </Select>
+          <GenderSelect value={step2.gender} onChange={handleGenderChange} />
         </FormControl>
 
         <FormControl id="cep" isRequired>
           <StyledLabel>CEP</StyledLabel>
-          <Input
-            onChange={handleInputChange}
-            value={step2.cep}
+          <InputMasked
+            mask={maskInputCep}
+            onChange={handleCepChange}
+            value={cepValue}
             name="cep"
-            variant="flushed"
             placeholder="00000-000"
-            _placeholder={{ color: "gray.500" }}
-            type="text"
           />
         </FormControl>
+
         <FormControl id="address" isRequired>
           <StyledLabel>Endereço</StyledLabel>
           <Input
@@ -211,6 +230,7 @@ export function PatientInfo() {
             type="text"
           />
         </FormControl>
+
         <Button
           onClick={handleFinish}
           bg={"blue.400"}

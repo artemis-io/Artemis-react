@@ -21,14 +21,14 @@ const SignUp = () => {
 
   const handleConfirmation = () => {
     if (selectedRole === "doctor") {
-      router(`../register/${selectedRole}`);
+      router(`../signUp/${selectedRole}`);
     } else if (selectedRole === "patient") {
-      router(`../register/${selectedRole}`);
+      router(`../signUp/${selectedRole}`);
     }
   };
 
   const handleGoBack = () => {
-    router("/signIn"); 
+    router("/signIn");
   };
 
   return (
