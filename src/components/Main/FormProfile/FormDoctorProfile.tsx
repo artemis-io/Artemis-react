@@ -6,6 +6,7 @@ import {
   FormControl,
   FormLabel,
   VStack,
+  Textarea,
 } from "@chakra-ui/react";
 import { apiMed } from "../../../services/api";
 import { AUTH_TOKEN_STORAGE } from "../../../shared/storage/config";
@@ -238,10 +239,9 @@ const UpdateUser = () => {
         </FormControl>
         <FormControl id="bio">
           <FormLabel fontWeight="bold">Bio</FormLabel>
-          <Input
+          <Textarea
             variant="flushed"
-            _placeholder={{ color: "gray.500" }}
-            type="textArea"
+            _placeholder={{ color: "gray.500" }}            
             name="doctor.bio"
             value={formData.doctor.bio}
             onChange={handleChange}

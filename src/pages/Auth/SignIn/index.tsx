@@ -17,10 +17,9 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
-import PrimaryButton from "../../../components/Style/Buttons/Primarybutton";
 
 const SignIn = () => {
-  const router = useNavigate(); // Inicialize o useHistory
+  const router = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
