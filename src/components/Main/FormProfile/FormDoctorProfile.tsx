@@ -6,7 +6,15 @@ import {
   FormControl,
   FormLabel,
   VStack,
+  Checkbox,
+  CheckboxGroup,
+  Stack,
   Textarea,
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
 } from "@chakra-ui/react";
 import { apiMed } from "../../../services/api";
 import { AUTH_TOKEN_STORAGE } from "../../../shared/storage/config";
@@ -50,6 +58,20 @@ const UpdateUser = () => {
       speciality: [],
     },
   });
+  const [availableSpecialities, setAvailableSpecialities] = useState<string[]>(
+    []
+  );
+
+  const fetchSpecialties = async () => {
+    try {
+      const response = await apiMed.get("/admin/all/speciality");
+      setAvailableSpecialities(
+        response.data.map((item: any) => item.speciality)
+      );
+    } catch (error) {
+      console.error("Erro ao obter especialidades:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -64,6 +86,7 @@ const UpdateUser = () => {
         console.log("Item:", item);
         const userData: UserData = response.data;
         setFormData(userData);
+        fetchSpecialties();
       } catch (error) {
         console.log(error);
       }
@@ -72,13 +95,23 @@ const UpdateUser = () => {
     fetchUserData();
   }, []);
 
+  const handleSpecialityChange = (selectedSpecialities: string[]) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      doctor: {
+        ...prevData.doctor,
+        speciality: selectedSpecialities,
+      },
+    }));
+  };
+
   const handleChange = (
     event: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
     const { name, value } = event.target;
-  
+
     if (name.includes("profile.")) {
       const profileField = name.split(".")[1];
       setFormData((prevData) => ({
@@ -104,7 +137,6 @@ const UpdateUser = () => {
       }));
     }
   };
-  
 
   const handleUpdateUser = async () => {
     try {
@@ -241,22 +273,47 @@ const UpdateUser = () => {
           <FormLabel fontWeight="bold">Bio</FormLabel>
           <Textarea
             variant="flushed"
-            _placeholder={{ color: "gray.500" }}            
+            _placeholder={{ color: "gray.500" }}
             name="doctor.bio"
             value={formData.doctor.bio}
             onChange={handleChange}
           />
         </FormControl>
         <FormControl id="speciality">
-          <FormLabel fontWeight="bold">Especialidade</FormLabel>
-          <Input
-            variant="flushed"
-            _placeholder={{ color: "gray.500" }}
-            type="text"
-            name="doctor.speciality"
-            value={formData.doctor.speciality.join(", ")}
-            onChange={handleChange}
-          />
+          
+          <Accordion allowMultiple>
+          <AccordionItem>
+            <h2>
+              <AccordionButton>
+                <Box fontWeight="bold" flex="1" textAlign="left">
+                  Especialidades
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+            </h2>
+            <AccordionPanel pb={4}>
+              <Stack>
+              {availableSpecialities.map((speciality) => (
+                <Checkbox
+                  key={speciality}
+                  value={speciality}
+                  isChecked={formData.doctor.speciality.includes(speciality)}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    handleSpecialityChange(
+                      checked
+                        ? [...formData.doctor.speciality, speciality]
+                        : formData.doctor.speciality.filter((s) => s !== speciality)
+                    );
+                  }}
+                >
+                  {speciality}
+                </Checkbox>
+              ))};
+              </Stack>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
         </FormControl>
         <Button
           colorScheme="blue"

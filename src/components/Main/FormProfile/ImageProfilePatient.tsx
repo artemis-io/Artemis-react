@@ -63,6 +63,7 @@ const AvatarUploader = () => {
 
       try {
         const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
+        console.log("Data:",formData)
         await apiMed.post("/user/upload", formData, {
           headers: {
             Authorization: `Bearer ${item}`,

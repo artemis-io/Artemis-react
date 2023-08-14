@@ -21,6 +21,7 @@ export interface UserAuth {
   role: string;
   email: string;
   avatar_url: string;
+  first_time: boolean;
   tokens?: {
     accessToken?: string;
     refreshToken?: string;

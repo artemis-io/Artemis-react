@@ -18,6 +18,7 @@ export type User = {
   email: string;
   avatar_url: string;
   role: string;
+  first_time: boolean;
 };
 
 type AuthContextType = {
@@ -69,10 +70,13 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       setUserStorage(data.user);
       setTokensStorage(data.tokens.accessToken, data.tokens.refreshToken);
 
-      if (!localStorage.getItem(`${data.user.id}_firstTimeLogin`)) {
-        // User is logging in for the first time, redirect to profile edit page
-        localStorage.setItem(`${data.user.id}_firstTimeLogin`, "true");
+      if (data.user.first_time) {        
         router(`/${data.user.role}/profile`);
+        await apiMed.post(`/user/first_time`, {
+          headers: {
+            Authorization: `Bearer ${data.tokens.accessToken}`,
+          },
+        });
       } else {
         router(`/${data.user.role}/homepage`);
       }
