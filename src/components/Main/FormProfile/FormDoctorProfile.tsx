@@ -6,7 +6,9 @@ import {
   FormControl,
   FormLabel,
   VStack,
-  Textarea,
+  Checkbox,
+  CheckboxGroup,
+  Stack,
 } from "@chakra-ui/react";
 import { apiMed } from "../../../services/api";
 import { AUTH_TOKEN_STORAGE } from "../../../shared/storage/config";
@@ -50,6 +52,20 @@ const UpdateUser = () => {
       speciality: [],
     },
   });
+  const [availableSpecialities, setAvailableSpecialities] = useState<string[]>(
+    []
+  );
+
+  const fetchSpecialties = async () => {
+    try {
+      const response = await apiMed.get("/admin/all/speciality");
+      setAvailableSpecialities(
+        response.data.map((item: any) => item.speciality)
+      );
+    } catch (error) {
+      console.error("Erro ao obter especialidades:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -64,6 +80,7 @@ const UpdateUser = () => {
         console.log("Item:", item);
         const userData: UserData = response.data;
         setFormData(userData);
+        fetchSpecialties();
       } catch (error) {
         console.log(error);
       }
@@ -72,13 +89,23 @@ const UpdateUser = () => {
     fetchUserData();
   }, []);
 
+  const handleSpecialityChange = (selectedSpecialities: string[]) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      doctor: {
+        ...prevData.doctor,
+        speciality: selectedSpecialities,
+      },
+    }));
+  };
+
   const handleChange = (
     event: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
     const { name, value } = event.target;
-  
+
     if (name.includes("profile.")) {
       const profileField = name.split(".")[1];
       setFormData((prevData) => ({
@@ -104,7 +131,6 @@ const UpdateUser = () => {
       }));
     }
   };
-  
 
   const handleUpdateUser = async () => {
     try {
@@ -239,9 +265,10 @@ const UpdateUser = () => {
         </FormControl>
         <FormControl id="bio">
           <FormLabel fontWeight="bold">Bio</FormLabel>
-          <Textarea
+          <Input
             variant="flushed"
-            _placeholder={{ color: "gray.500" }}            
+            _placeholder={{ color: "gray.500" }}
+            type="textArea"
             name="doctor.bio"
             value={formData.doctor.bio}
             onChange={handleChange}
@@ -249,14 +276,18 @@ const UpdateUser = () => {
         </FormControl>
         <FormControl id="speciality">
           <FormLabel fontWeight="bold">Especialidade</FormLabel>
-          <Input
-            variant="flushed"
-            _placeholder={{ color: "gray.500" }}
-            type="text"
-            name="doctor.speciality"
-            value={formData.doctor.speciality.join(", ")}
-            onChange={handleChange}
-          />
+          <CheckboxGroup
+            value={formData.doctor.speciality}
+            onChange={handleSpecialityChange}
+          >
+            <Stack>
+              {availableSpecialities.map((speciality) => (
+                <Checkbox key={speciality} value={speciality}>
+                  {speciality}
+                </Checkbox>
+              ))}
+            </Stack>
+          </CheckboxGroup>
         </FormControl>
         <Button
           colorScheme="blue"
