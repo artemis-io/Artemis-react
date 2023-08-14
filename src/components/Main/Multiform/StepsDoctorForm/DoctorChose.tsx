@@ -11,6 +11,7 @@ import {
   FormControl,
   Input,
   Stack,
+  Textarea,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { setStep3Data } from "../../../../shared/reducer/DoctorReducer";
@@ -112,13 +113,12 @@ function DoctorChose() {
         </FormControl>
         <FormControl id="bio">
           <StyledLabel>Sobre você</StyledLabel>
-          <Input
+          <Textarea
             variant="flushed"
             placeholder="Breve descrição sobre suas atividades"
             onChange={handleInputChange}
             value={step3.bio}
             name="bio"
-            type="textarea"
             boxShadow="md"
             h="100px"
           />

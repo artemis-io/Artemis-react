@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 
 const SignIn = () => {
-  const router = useNavigate(); // Inicialize o useHistory
+  const router = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
