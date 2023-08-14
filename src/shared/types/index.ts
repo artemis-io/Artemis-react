@@ -88,6 +88,14 @@ export type PatientStep2Data = {
   dateOfBirth: string;
 };
 
+export type PaymentCardStep1Data = {
+
+}
+
+export type PaymentCardStep2Data = {
+  
+}
+
 export type CardProps = {
   text: string;
   imageUrl: string;

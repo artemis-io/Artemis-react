@@ -1,5 +1,3 @@
-// ./store/Patient.ts
-
 import { createSlice } from "@reduxjs/toolkit";
 import { PatientState } from "../interface";
 

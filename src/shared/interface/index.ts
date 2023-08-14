@@ -7,11 +7,13 @@ import {
   AppointmentStep4Data,
   AppointmentStep5Data,
   AppointmentStep6Data,
+  PaymentCardStep1Data,
   DoctorStep1Data,
   DoctorStep2Data,
   DoctorStep3Data,
   PatientStep1Data,
   PatientStep2Data,
+  PaymentCardStep2Data,
 } from "../types";
 import { IconType } from "react-icons";
 
@@ -76,6 +78,12 @@ export interface PatientState {
   patientStep1Data: PatientStep1Data;
   patientStep2Data: PatientStep2Data;
 }
+
+export interface PaymentCardState {
+  paymentCardStep1Data: PaymentCardStep1Data;
+  paymentCardStep2Data: PaymentCardStep2Data;
+}
+
 
 export interface Doctor {  
   id: string;
