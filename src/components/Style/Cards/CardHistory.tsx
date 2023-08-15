@@ -11,9 +11,11 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import MedicalRecord from "../../Main/MedicalRecord";
+import ModalRecord from "../../Main/ModalRecord";
+import { MedicalRecordData } from "../../../pages/Doctor/medicalRecord";
 
 interface CardProps {
+  id: string;
   type: string;
   query: string;
   patientName: string;
@@ -23,19 +25,18 @@ interface CardProps {
   state: string;
   district: string;
   city: string;
+  history: MedicalRecordData["history"];
   number: string;
 }
 
 const CardHistory: React.FC<CardProps> = ({
+  id,
   type,
   query,
   patientName,
   patientAvatar,
   date,
-  state,
-  city,
-  number,
-  address,
+  history,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -86,7 +87,7 @@ const CardHistory: React.FC<CardProps> = ({
           <ModalHeader>{query}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <MedicalRecord />
+            <ModalRecord key={id} historyData={history} />
           </ModalBody>
         </ModalContent>
       </Modal>

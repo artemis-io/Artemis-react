@@ -4,12 +4,30 @@ import Sidebar from "../../components/Main/SideBar/Sidebar";
 import CardHistory from "../../components/Style/Cards/CardHistory";
 import { apiMed } from "../../services/api";
 import { AUTH_TOKEN_STORAGE } from "../../shared/storage/config";
+import { useParams } from "react-router-dom";
 
-interface MedicalRecordData {
+export interface MedicalRecordData {
   id: string;
   type: string;
   query: string;
   date: string;
+  history: {
+    altura: string;
+    anotacoes: string;
+    freqcardiaca: string;
+    glasgow: string;
+    historiapatologica: string;
+    tiposanguineo: string;
+    medicamentos: string;
+    historiadoenca: string;
+    tax: string;
+    imc: string;
+    pressaoarterial: string;
+    queixaprincipal: string;
+    freqrespiratoria: string;
+    peso: string;
+    alergias: string;
+  };
   patient: {
     name: string;
     avatar_url: string;
@@ -21,10 +39,10 @@ interface MedicalRecordData {
       number: string;
     };
   };
-  // Add other properties if needed
 }
 
 const MedicalRecord: React.FC = () => {
+  const { id } = useParams();
   const [medicalRecords, setMedicalRecords] = useState<MedicalRecordData[]>([]);
 
   useEffect(() => {
@@ -33,11 +51,14 @@ const MedicalRecord: React.FC = () => {
       try {
         const auth = localStorage.getItem(AUTH_TOKEN_STORAGE);
 
-        const response = await apiMed.get("/appointment/history-doctor", {
-          headers: {
-            Authorization: `Bearer ${auth}`,
-          },
-        });
+        const response = await apiMed.get(
+          `/appointment/history-infoPatient/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${auth}`,
+            },
+          }
+        );
 
         const data = response.data;
         setMedicalRecords(data);
@@ -46,7 +67,7 @@ const MedicalRecord: React.FC = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [id]);
 
   const itemsByDate: { [date: string]: MedicalRecordData[] } = {};
 
@@ -69,6 +90,8 @@ const MedicalRecord: React.FC = () => {
             {recordList.map((record) => (
               <CardHistory
                 key={record.id}
+                id={record.id}
+                history={record.history}
                 city={record.patient.profile.city}
                 district={record.patient.profile.district}
                 number={record.patient.profile.number}

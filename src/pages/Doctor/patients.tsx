@@ -27,8 +27,8 @@ import { LoadingCircle } from "../../components/Style/LoadingCircle";
 const AlphabeticalListPage: React.FC = () => {
   const history = useNavigate();
 
-  const handleNav = () => {
-    history(`/medical-record`);
+  const handleNav = (id: string) => {
+    history(`/doctor/medical-record/${id}`);
   };
 
   const [isLoading, setIsLoading] = useState(true);
@@ -46,6 +46,8 @@ const AlphabeticalListPage: React.FC = () => {
           Authorization: `Bearer ${auth}`,
         },
       });
+
+      console.log(response.data);
 
       setAppointment(response.data);
       setIsLoading(false); // Defina o estado de loading como false após receber os dados
@@ -76,7 +78,7 @@ const AlphabeticalListPage: React.FC = () => {
         {filteredPatients.map((appointment) => (
           <div
             key={appointment.id}
-            onClick={() => handleNav()} // Chama a função handleNav
+            onClick={() => handleNav(appointment.id_patient)} // Chama a função handleNav
           >
             <PatientCard appointment={appointment} />
           </div>

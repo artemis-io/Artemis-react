@@ -47,7 +47,7 @@ const AppRoutes = () => {
       <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 
       <Route
-        path="/medical-record"
+        path="/doctor/medical-record/:id"
         element={
           <DoctorRoute>
             <MedicalRecord />
