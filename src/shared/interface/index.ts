@@ -99,3 +99,15 @@ export interface Doctor {
     gender: string;
   }
 };
+
+export interface Patient {
+  id: string;
+  name: string;
+  email: string;
+  profile: {
+  state: string;
+  dateOfBirth: string;
+  city: string;
+  gender: string;
+  }
+}

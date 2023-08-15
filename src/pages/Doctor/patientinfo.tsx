@@ -1,156 +1,118 @@
-import { ChangeEvent, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
   FormControl,
   FormLabel,
+  Grid,
+  GridItem,
   Input,
-  Select,
+  Heading,
+  Center,
 } from "@chakra-ui/react";
+import Sidebar from "../../components/Main/SideBar/Sidebar";
+import { Patient } from "../../shared/interface/index";
+import { id } from "date-fns/locale";
+import { apiMed } from "../../services/api";
+import { differenceInYears, format } from "date-fns";
 
 const PatientInfo = () => {
-  const [patientData, setPatientData] = useState({
-    nomeCompleto: "",
-    sexo: "",
-    dataNascimento: "",
-    idade: "",
-    cpf: "",
-    email: "",
-    numeroTelefone: "",
-    corRaca: "",
-    estadoCivil: "",
-    naturalidade: "",
-    residencia: "",
-    escolaridade: "",
-    profissao: "",
-  });
+  const [patient, setPatient] = useState<Patient | null>(null);
+  const birthDate = patient?.profile?.dateOfBirth || "";
+  const age = differenceInYears(new Date(), new Date(birthDate));
 
-  // useEffect(() => {
-  //   // Simulação da busca dos dados do paciente no banco de dados
-  //   fetchPatientData()
-  //     .then((data) => {
-  //       if (data) {
-  //         setPatientData(data);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    const fetchPatient = async () => {
+      try {
+        const response = await apiMed.get(`/user/${id}`);
+        setPatient(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Erro ao obter médicos:", error);
+      }
+    };
 
-  // const fetchPatientData = () => {
-  //   // Simulação da chamada ao banco de dados para buscar os dados do paciente
-  //   return new Promise<{ name: string; age: string; color: string }>((resolve, reject) => {
-  //     // Aqui você deve fazer a chamada real ao banco de dados para buscar os dados do paciente
-  //     // Neste exemplo, estamos retornando dados fictícios
-  //     setTimeout(() => {
-  //       // Se os dados do paciente estiverem disponíveis no banco de dados, retorne-os
-  //       resolve({
-  //         name: "Nome do Paciente",
-  //         age: "30",
-  //         color: "Cor do Paciente"
-  //       });
-
-  //       // Caso contrário, retorne null ou um objeto vazio para permitir que o médico preencha os campos
-  //       // resolve(null);
-  //     }, 1000);
-  //   });
-  // };
-
+    fetchPatient();
+  }, []);
   const handleNext = () => {
     // Lógica para continuar para a próxima etapa ou página
     console.log("Continuar para a próxima etapa");
   };
 
-  const handleChange = (
-    event: ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    const { name, value } = event.target;
-    setPatientData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
   return (
-    <Box p={4}>
-      <FormControl>
-        <FormLabel>Nome</FormLabel>
-        <Input
-          type="text"
-          name="nomeCompleto"
-          value={patientData.nomeCompleto}
-          onChange={handleChange}
-        />
-      </FormControl>
+    <Sidebar>
+      <Box p={4}>
+        <FormControl mb={2}>
+          <Center>
+            <Heading fontSize="2xl" mb={6}>
+              Identificação
+            </Heading>
+          </Center>
+          <FormLabel>Nome</FormLabel>
+          <Input type="text" name="nome" value={patient?.name} />
+        </FormControl>
+        <Grid
+          templateAreas={`"age sex"
+                          "birth res"`}
+          gridTemplateRows={"1fr 1fr"}
+          gridTemplateColumns={"1fr 1fr"}
+          gap="2"
+        >
+          <GridItem area={"age"}>
+            <FormControl mb={2}>
+              <FormLabel>Idade</FormLabel>
+              <Input type="text" name="age" value={age} />
+            </FormControl>
+          </GridItem>
+          <GridItem area={"sex"}>
+            <FormControl>
+              <FormLabel>Sexo</FormLabel>
+              <Input
+                type="text"
+                name="gender"
+                value={
+                  patient?.profile.gender === "male" ? "Masculino" : "Feminino"
+                }
+              />
+            </FormControl>
+          </GridItem>
+          <GridItem area={"birth"}>
+            <FormControl>
+              <FormLabel>Data de Nascimento</FormLabel>
+              <Input
+                type="text"
+                name="age"
+                value={
+                  patient?.profile.dateOfBirth
+                    ? format(
+                        new Date(patient?.profile.dateOfBirth),
+                        "dd/MM/yyyy"
+                      )
+                    : ""
+                }
+              />
+            </FormControl>
+          </GridItem>
 
-      <FormControl>
-        <FormLabel>Idade</FormLabel>
-        <Input
-          type="text"
-          name="idade"
-          value={patientData.idade}
-          onChange={handleChange}
-        />
-      </FormControl>
+          <GridItem area={"res"}>
+            <FormControl>
+              <FormLabel>Residência</FormLabel>
+              <Input
+                type="text"
+                name="residencia"
+                value={patient?.profile.city}
+              />
+            </FormControl>
+          </GridItem>
+        </Grid>
 
-      <FormControl>
-        <FormLabel>Cor</FormLabel>
-        <Input
-          type="text"
-          name="corRaca"
-          value={patientData.corRaca}
-          onChange={handleChange}
-        />
-      </FormControl>
-
-      <FormControl>
-        <FormLabel>Sexo</FormLabel>
-        <Select name="sexo" onChange={handleChange}>
-          <option value="">Selecione</option>
-          <option value="masculino">Masculino</option>
-          <option value="feminino">Feminino</option>
-        </Select>
-      </FormControl>
-
-      <FormControl>
-        <FormLabel>Data de Nascimento</FormLabel>
-        <Input type="date" name="dataNascimento" onChange={handleChange} />
-      </FormControl>
-
-      <FormControl>
-        <FormLabel>Estado Civil</FormLabel>
-        <Input type="text" name="estadoCivil" onChange={handleChange} />
-      </FormControl>
-
-      <FormControl>
-        <FormLabel>Naturalidade</FormLabel>
-        <Input type="text" name="naturalidade" onChange={handleChange} />
-      </FormControl>
-
-      <FormControl>
-        <FormLabel>Residência</FormLabel>
-        <Input type="text" name="residencia" onChange={handleChange} />
-      </FormControl>
-
-      <FormControl>
-        <FormLabel>Escolaridade</FormLabel>
-        <Input type="text" name="escolaridade" onChange={handleChange} />
-      </FormControl>
-
-      <FormControl>
-        <FormLabel>Profissão</FormLabel>
-        <Input type="text" name="profissao" onChange={handleChange} />
-      </FormControl>
-
-      {/* Outros campos do prontuário aqui */}
-
-      <Button mt={4} onClick={handleNext}>
-        Próximo
-      </Button>
-    </Box>
+        <Center>
+          <Button colorScheme="blue" mt={4} onClick={handleNext}>
+            Próximo
+          </Button>
+        </Center>
+      </Box>
+    </Sidebar>
   );
 };
 

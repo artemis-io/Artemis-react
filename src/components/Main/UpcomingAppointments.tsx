@@ -16,7 +16,6 @@ import {
   Link,
   Card,
   Button,
-  Heading,
 } from "@chakra-ui/react";
 import { AiOutlineVideoCamera } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
@@ -103,9 +102,7 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
             </GridItem>
             <GridItem area={"name"}>
               <Text fontSize="lg" fontWeight="bold" pt="5px ">
-                {appointment.doctor.profile.gender === "male"
-                  ? "Dr. "
-                  : "Dra. "}
+                
                 {appointment.doctor.name}
               </Text>
             </GridItem>
