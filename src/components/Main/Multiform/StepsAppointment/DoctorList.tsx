@@ -131,7 +131,7 @@ const DoctorList = ({ handleNextStep }: DoctorListProps) => {
 
                   <GridItem area={"name"} pl="2" width="100%">
                   <Heading color="#494949" fontSize="16px" fontWeight="700">
-                    {doctor.profile.gender === "male" ? "Dr. " : "Dra. "}{doctor.name}
+                    {doctor.name}
                   </Heading>
                 </GridItem>
 

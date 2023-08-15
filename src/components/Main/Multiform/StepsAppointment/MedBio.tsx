@@ -77,7 +77,7 @@ export default function MedBio({ handleNextStep }: any) {
                 src={doctor.avatar_url}
                 alt="Foto de perfil"
               />
-            <Heading fontSize="2xl" pb="5px">{doctor.profile.gender === "male" ? "Dr. " : "Dra. "}{doctor.name}</Heading>
+            <Heading fontSize="2xl" pb="5px">{doctor.name}</Heading>
             <Text color="#494949">{doctor.doctor.speciality.join(", ")}</Text>
           </CardHeader>
           <CardBody>

@@ -41,7 +41,7 @@ export default function HomepagePatient() {
   const [totalAppointments, setTotalAppointments] = useState(0);
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
 
-  // Fetch data when component mounts and when user changes
+
   useEffect(() => {
     if (user?.id) {
       fetchData(user.id, setTotalAppointments, setUpcomingAppointments);
