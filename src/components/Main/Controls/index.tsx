@@ -4,6 +4,7 @@ import {
   IconButton,
   Tooltip,
   Flex,
+  Box,
   Button,
   Popover,
   PopoverArrow,
@@ -11,11 +12,21 @@ import {
   PopoverContent,
   PopoverTrigger,
   VStack,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { MdMic, MdMicOff, MdVideocam, MdVideocamOff } from "react-icons/md";
 import { FiMessageSquare, FiPhone } from "react-icons/fi";
 import { BsThreeDotsVertical, BsChatSquareQuote } from "react-icons/bs";
-import MedicalRecord from "../MedicalRecord";
+import MedicalRecord, { MedicalRecordContent } from "../MedicalRecord";
+
+interface ControlsBarProps {
+  handleLogout: () => void;
+  openMedicalRecord: () => void;
+  isAudioEnabled: boolean;
+  toggleVideoEnabled: () => void;
+  toggleAudioEnabled: () => void;
+  isVideoEnabled: boolean;
+}
 
 const ControlsBar = ({
   handleLogout,
@@ -23,18 +34,9 @@ const ControlsBar = ({
   isVideoEnabled,
   toggleAudioEnabled,
   toggleVideoEnabled,
-}: any) => {
-  const [openMedRecord, setOpenMedRecord] = useState(false);
-
-  const abrirComponente = () => {
-    setOpenMedRecord(true);
-  };
-
-  const fecharComponente = () => {
-    setOpenMedRecord(false);
-  };
-
-
+  openMedicalRecord,
+}: ControlsBarProps) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Flex
       justify="center"
@@ -117,8 +119,8 @@ const ControlsBar = ({
             w="fit-content"
             _focus={{ boxShadow: "none" }}
             bg="#494949"
+            border="transparent"
           >
-            <PopoverArrow />
             <PopoverBody>
               <VStack>
                 <Button
@@ -126,30 +128,36 @@ const ControlsBar = ({
                   variant="ghost"
                   rightIcon={<BsChatSquareQuote />}
                   justifyContent="space-between"
-                  fontWeight="normal"
-                  fontSize="sm"
+                  fontWeight="bold"
+                  fontSize="lg"
                   color="#fafafa"
-                  onClick={abrirComponente}
                 >
                   Chat
                 </Button>
-                <Button
+                {/*    <Button
                   w="194px"
                   variant="ghost"
                   rightIcon={<BsChatSquareQuote />}
                   justifyContent="space-between"
-                  fontWeight="normal"
-                  fontSize="sm"
+                  fontWeight="bold"
+                  fontSize="lg"
                   color="#fafafa"
+                  onClick={onOpen}
                 >
-                  Prontuário
-                </Button>
+               Teste
+                </Button> */}
+
+                <MedicalRecord
+                  onClick={onOpen}
+                  children={
+                    <MedicalRecordContent closeMedicalRecord={onClose} />
+                  }
+                />
               </VStack>
             </PopoverBody>
           </PopoverContent>
         </Popover>
       </HStack>
-
     </Flex>
   );
 };

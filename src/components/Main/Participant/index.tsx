@@ -5,11 +5,15 @@ import ControlsBar from "../Controls";
 interface ParticipantProps {
   participant: any;
   handleLogout: () => void;
+  openMedicalRecord: () => void;
+  onOpen: () => void;
 }
 
 const Participant: React.FC<ParticipantProps> = ({
   participant,
   handleLogout,
+  openMedicalRecord,
+  onOpen,
 }) => {
   const [videoTracks, setVideoTracks] = useState<any[]>([]);
   const [audioTracks, setAudioTracks] = useState<any[]>([]);
@@ -114,6 +118,8 @@ const Participant: React.FC<ParticipantProps> = ({
         </Box>
 
         <ControlsBar
+            
+          openMedicalRecord={openMedicalRecord}
           handleLogout={handleLogout}
           isAudioEnabled={isAudioEnabled}
           isVideoEnabled={isVideoEnabled}
