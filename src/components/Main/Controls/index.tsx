@@ -1,7 +1,21 @@
-import React from "react";
-import { HStack, IconButton, Tooltip, Flex } from "@chakra-ui/react";
+import React, { useState } from "react";
+import {
+  HStack,
+  IconButton,
+  Tooltip,
+  Flex,
+  Button,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+  VStack,
+} from "@chakra-ui/react";
 import { MdMic, MdMicOff, MdVideocam, MdVideocamOff } from "react-icons/md";
 import { FiMessageSquare, FiPhone } from "react-icons/fi";
+import { BsThreeDotsVertical, BsChatSquareQuote } from "react-icons/bs";
+import MedicalRecord from "../MedicalRecord";
 
 const ControlsBar = ({
   handleLogout,
@@ -10,6 +24,17 @@ const ControlsBar = ({
   toggleAudioEnabled,
   toggleVideoEnabled,
 }: any) => {
+  const [openMedRecord, setOpenMedRecord] = useState(false);
+
+  const abrirComponente = () => {
+    setOpenMedRecord(true);
+  };
+
+  const fecharComponente = () => {
+    setOpenMedRecord(false);
+  };
+
+
   return (
     <Flex
       justify="center"
@@ -71,13 +96,60 @@ const ControlsBar = ({
             />
           )}
         </Tooltip>
-     {/*    <IconButton
+        {/*    <IconButton
           aria-label=""
           icon={<FiMessageSquare />}
           bg="#494949"
           colorScheme="white"
         /> */}
+        <Popover placement="top" isLazy>
+          <PopoverTrigger>
+            <IconButton
+              aria-label="More server options"
+              icon={<BsThreeDotsVertical />}
+              variant="solid"
+              w="fit-content"
+              bg="#494949"
+              colorScheme="white"
+            />
+          </PopoverTrigger>
+          <PopoverContent
+            w="fit-content"
+            _focus={{ boxShadow: "none" }}
+            bg="#494949"
+          >
+            <PopoverArrow />
+            <PopoverBody>
+              <VStack>
+                <Button
+                  w="194px"
+                  variant="ghost"
+                  rightIcon={<BsChatSquareQuote />}
+                  justifyContent="space-between"
+                  fontWeight="normal"
+                  fontSize="sm"
+                  color="#fafafa"
+                  onClick={abrirComponente}
+                >
+                  Chat
+                </Button>
+                <Button
+                  w="194px"
+                  variant="ghost"
+                  rightIcon={<BsChatSquareQuote />}
+                  justifyContent="space-between"
+                  fontWeight="normal"
+                  fontSize="sm"
+                  color="#fafafa"
+                >
+                  Prontuário
+                </Button>
+              </VStack>
+            </PopoverBody>
+          </PopoverContent>
+        </Popover>
       </HStack>
+
     </Flex>
   );
 };

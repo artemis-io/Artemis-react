@@ -13,6 +13,15 @@ interface RoomProps {
 
 const RoomVideo = ({ room, handleLogout }: RoomProps) => {
   const [participants, setParticipants] = useState<any[]>([]);
+  const [openMedRecord, setOpenMedRecord] = useState(false);
+  
+  const abrirComponente = () => {
+    setOpenMedRecord(true);
+  };
+
+  const fecharComponente = () => {
+    setOpenMedRecord(false);
+  };
 
   const participantConnected = (participant: any) => {
     setParticipants((prevParticipants) => [...prevParticipants, participant]);
@@ -50,7 +59,6 @@ const RoomVideo = ({ room, handleLogout }: RoomProps) => {
         <Text fontSize="lg" fontWeight="bold">
           Remote Participants
         </Text>
-
         {remoteParticipants}
       </VStack>
 
