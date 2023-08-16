@@ -13,8 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { MdMic, MdMicOff, MdVideocam, MdVideocamOff } from "react-icons/md";
 import { FiPhone } from "react-icons/fi";
-import { BsThreeDotsVertical, BsChatSquareQuote } from "react-icons/bs";
 import MedicalRecord, { MedicalRecordContent } from "../MedicalRecord";
+import { FaNotesMedical } from "react-icons/fa";
 
 interface ControlsBarProps {
   handleLogout: () => void;
@@ -105,45 +105,50 @@ const ControlsBar = ({
           <PopoverTrigger>
             <IconButton
               aria-label="More server options"
-              icon={<BsThreeDotsVertical />}
+              icon={<FaNotesMedical />}
               variant="solid"
               w="fit-content"
               bg="#494949"
               colorScheme="white"
+              onClick={handleToggleMedicalRecord}
             />
           </PopoverTrigger>
-          <PopoverContent
-            w="fit-content"
-            _focus={{ boxShadow: "none" }}
-            bg="#494949"
-          >
-            
-            <PopoverBody>
-              <VStack>
-                <Button
+          <PopoverContent css={{ all: 'unset' }} >
+         {showMedicalRecord && (
+              <MedicalRecord >
+                <MedicalRecordContent  />
+              </MedicalRecord>
+            )}
+            {/*             <PopoverBody> */}
+
+            {/*    <Button
                   w="194px"
                   variant="ghost"
-                  rightIcon={<BsChatSquareQuote />}
+                  rightIcon={<BiSolidChat />}
                   justifyContent="space-between"
-                  fontWeight="normal"
-                  fontSize="sm"
+                  fontWeight="bold"
+                  fontSize="lg"
                   color="#fafafa"
-                  onClick={handleToggleMedicalRecord} // Altera o estado para mostrar/ocultar o prontuário
                 >
                   Chat
                 </Button>
+                <Button
+                  w="194px"
+                  variant="ghost"
+                  rightIcon={<FaNotesMedical />}
+                  justifyContent="space-between"
+                  fontWeight="bold"
+                  fontSize="lg"
+                  color="#fafafa"
+                  onClick={handleToggleMedicalRecord}
+                >
+                  Prontuário
+                </Button> */}
 
-                {showMedicalRecord && ( // Renderiza o prontuário somente se showMedicalRecord for verdadeiro
-                  <MedicalRecord>
-                    <MedicalRecordContent />
-                  </MedicalRecord>
-                )}
-              </VStack>
-            </PopoverBody>
+            {/*     </PopoverBody> */}
           </PopoverContent>
         </Popover>
       </HStack>
-
     </Flex>
   );
 };
