@@ -6,16 +6,23 @@ import {
   Flex,
   Button,
   Popover,
-  PopoverArrow,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
   VStack,
 } from "@chakra-ui/react";
 import { MdMic, MdMicOff, MdVideocam, MdVideocamOff } from "react-icons/md";
-import { FiMessageSquare, FiPhone } from "react-icons/fi";
+import { FiPhone } from "react-icons/fi";
 import { BsThreeDotsVertical, BsChatSquareQuote } from "react-icons/bs";
-import MedicalRecord from "../MedicalRecord";
+import MedicalRecord, { MedicalRecordContent } from "../MedicalRecord";
+
+interface ControlsBarProps {
+  handleLogout: () => void;
+  isAudioEnabled: boolean;
+  isVideoEnabled: boolean;
+  toggleVideoEnabled: () => void;
+  toggleAudioEnabled: () => void;
+}
 
 const ControlsBar = ({
   handleLogout,
@@ -23,33 +30,31 @@ const ControlsBar = ({
   isVideoEnabled,
   toggleAudioEnabled,
   toggleVideoEnabled,
-}: any) => {
-  const [openMedRecord, setOpenMedRecord] = useState(false);
+}: ControlsBarProps) => {
+  const [showMedicalRecord, setShowMedicalRecord] = useState(false); // Estado para controlar a visibilidade do prontuário
 
-  const abrirComponente = () => {
-    setOpenMedRecord(true);
+  const handleToggleMedicalRecord = () => {
+    setShowMedicalRecord(!showMedicalRecord);
   };
-
-  const fecharComponente = () => {
-    setOpenMedRecord(false);
-  };
-
 
   return (
     <Flex
-      justify="center"
+      direction="column" // Alinhar os elementos verticalmente
+      justify="flex-end" // Alinhar o conteúdo no final do container
+      align="center" // Centralizar horizontalmente
       position="fixed"
       bottom="0"
-      left="50%"
-      transform="translateX(-50%)"
+      left="0"
+      right="0"
       width="100%"
-      padding="12px 36px"
+      height="100%" // Ocupar a altura total da tela
     >
       <HStack
         borderRadius="20px"
         bg="rgba(0, 0, 0, 0.5)"
         p="12px 36px"
         gap="24px"
+        marginBottom="20px" //
       >
         <IconButton
           aria-label=""
@@ -96,12 +101,6 @@ const ControlsBar = ({
             />
           )}
         </Tooltip>
-        {/*    <IconButton
-          aria-label=""
-          icon={<FiMessageSquare />}
-          bg="#494949"
-          colorScheme="white"
-        /> */}
         <Popover placement="top" isLazy>
           <PopoverTrigger>
             <IconButton
@@ -118,7 +117,7 @@ const ControlsBar = ({
             _focus={{ boxShadow: "none" }}
             bg="#494949"
           >
-            <PopoverArrow />
+            
             <PopoverBody>
               <VStack>
                 <Button
@@ -129,21 +128,16 @@ const ControlsBar = ({
                   fontWeight="normal"
                   fontSize="sm"
                   color="#fafafa"
-                  onClick={abrirComponente}
+                  onClick={handleToggleMedicalRecord} // Altera o estado para mostrar/ocultar o prontuário
                 >
                   Chat
                 </Button>
-                <Button
-                  w="194px"
-                  variant="ghost"
-                  rightIcon={<BsChatSquareQuote />}
-                  justifyContent="space-between"
-                  fontWeight="normal"
-                  fontSize="sm"
-                  color="#fafafa"
-                >
-                  Prontuário
-                </Button>
+
+                {showMedicalRecord && ( // Renderiza o prontuário somente se showMedicalRecord for verdadeiro
+                  <MedicalRecord>
+                    <MedicalRecordContent />
+                  </MedicalRecord>
+                )}
               </VStack>
             </PopoverBody>
           </PopoverContent>
