@@ -3,7 +3,6 @@ import { Box, Flex, VStack, Text, useDisclosure } from "@chakra-ui/react";
 import { Room } from "twilio-video";
 import Participant from "../Participant/index";
 import RemoteParticipant from "../RemoteParticipant";
-import MedicalRecord from "../MedicalRecord";
 
 interface RoomProps {
   roomName: string | undefined;
@@ -14,8 +13,6 @@ interface RoomProps {
 
 const RoomVideo = ({ room, handleLogout }: RoomProps) => {
   const [participants, setParticipants] = useState<any[]>([]);
-  const [openMedRecord, setOpenMedRecord] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const participantConnected = (participant: any) => {
     setParticipants((prevParticipants) => [...prevParticipants, participant]);
@@ -41,15 +38,6 @@ const RoomVideo = ({ room, handleLogout }: RoomProps) => {
     <RemoteParticipant key={participant.sid} participant={participant} />
   ));
 
-  const openMedicalRecord = () => {
-    console.log("clicou");
-    onOpen();
-  };
-
-  const closeMedicalRecord = () => {
-    console.log("clicou em fechar");
-    onClose();
-  };
   return (
     <Box
       bg="#202124"
@@ -75,11 +63,9 @@ const RoomVideo = ({ room, handleLogout }: RoomProps) => {
       >
         {room && (
           <Participant
-            onOpen={onOpen}
             key={room.localParticipant.sid}
             participant={room.localParticipant}
             handleLogout={handleLogout}
-            openMedicalRecord={openMedicalRecord}
           />
         )}
       </Flex>

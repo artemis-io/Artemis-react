@@ -1,83 +1,82 @@
-"use client";
-
-import React, { ReactNode } from "react";
+import React from "react";
 import {
-  IconButton,
   Box,
-  CloseButton,
-  Flex,
-  Icon,
-  useColorModeValue,
-  Text,
-  Drawer,
-  DrawerContent,
-  useDisclosure,
-  BoxProps,
-  FlexProps,
   Button,
+  CloseButton,
+  Divider,
+  Flex,
+  Textarea,
+  Input,
+  Text,
+  useDisclosure,
 } from "@chakra-ui/react";
-
-import { IconType } from "react-icons";
-import { ReactText } from "react";
-import { BsChatSquareQuote } from "react-icons/bs";
 
 interface MedicalRecordProps {
   children: React.ReactNode;
-  onClick: () => void;
 }
-export default function MedicalRecord({
-  onClick,
-  children,
-}: MedicalRecordProps) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+
+export default function MedicalRecord({ children }: MedicalRecordProps) {
+  return <Box>{children}</Box>;
+}
+
+export const MedicalRecordContent = () => {
+  const { onClose } = useDisclosure();
+
   return (
-    <Box
-      w="194px"
-      justifyContent="space-between"
-      fontWeight="bold"
-      fontSize="lg"
-      color="#fafafa"
-      onClick={onClick}
+    <Flex
+      bg="rgba(0, 0, 0, 0.8)"
+      pos="relative"
+      top="0"
+      left="0"
+      right="0"
+      bottom="0"
+      alignItems="center"
+      justifyContent="center"
+      zIndex="999"
     >
-      {children}
-  {/*     <Button onClick={onOpen}>teste</Button> */}
-      <Drawer
-        isOpen={isOpen}
-        placement="bottom"
-        onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-        size="full"
+      <Box
+        bg="white"
+        h="100vh" // Ocupa a altura total da tela
+        w="100vw" // Ocupa a largura total da tela
+        p="4"
+        boxShadow="lg"
+        borderRadius="md"
+        overflowY="scroll" // Adicione scroll caso o conteúdo seja muito longo
       >
-        <DrawerContent>{children}</DrawerContent>
-      </Drawer>
-    </Box>
-  );
-}
+        <Flex h="20" alignItems="center" justifyContent="space-between">
+          <Text fontSize="xl" fontWeight="bold">
+            Prontuário Médico
+          </Text>
+          <CloseButton
+            display={{ base: "flex", md: "none" }}
+            onClick={onClose}
+          />
+        </Flex>
 
-interface SidebarProps extends BoxProps {
-  closeMedicalRecord: () => void;
-}
+        <Divider my="4" />
 
-export const MedicalRecordContent = ({ closeMedicalRecord, ...rest }: SidebarProps) => {
-  return (
-    <Box
-      display={{ base: "none", md: "block" }}
-      bg="transparent"
-      borderRight="1px"
-      borderRightColor={useColorModeValue("gray.200", "gray.700")}
-      w={{ base: "full", md: 60 }}
-      pos="fixed"
-      h="full"
-      {...rest}
-    >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text> LOCAL DO PRONTUÁRIO</Text>
-        <CloseButton
-          display={{ base: "flex", md: "none" }}
-          onClick={closeMedicalRecord}
-        />
-      </Flex>
-    </Box>
+        {/* Informações do paciente */}
+        <Text fontSize="md" fontWeight="semibold">
+          Informações do Paciente
+        </Text>
+        <Input placeholder="Nome completo" mt="2" />
+        <Input placeholder="Data de Nascimento" mt="2" />
+        <Textarea placeholder="Diagnóstico" mt="2" />
+
+        <Divider my="4" />
+
+        {/* Tratamento */}
+        <Text fontSize="md" fontWeight="semibold">
+          Tratamento
+        </Text>
+        <Textarea placeholder="Prescrição Médica" mt="2" />
+
+        <Divider my="4" />
+
+        <Button colorScheme="blue" onClick={onClose}>
+          Salvar
+        </Button>
+      </Box>
+    </Flex>
   );
 };
