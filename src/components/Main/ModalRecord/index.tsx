@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { FiShare2 } from "react-icons/fi";
-import { MedicalRecordData } from "../../../pages/Doctor/medicalRecord";
+import { MedicalRecordData } from '../../../pages/Doctor/medicalRecord';
 
 interface ModalRecordProps {
   historyData: MedicalRecordData["history"]; // Defina o tipo apropriado para os dados de histórico

@@ -4,12 +4,9 @@ import {
   IconButton,
   Tooltip,
   Flex,
-  Button,
   Popover,
-  PopoverBody,
   PopoverContent,
   PopoverTrigger,
-  VStack,
 } from "@chakra-ui/react";
 import { MdMic, MdMicOff, MdVideocam, MdVideocamOff } from "react-icons/md";
 import { FiPhone } from "react-icons/fi";
@@ -24,6 +21,28 @@ interface ControlsBarProps {
   toggleAudioEnabled: () => void;
 }
 
+export interface PatientInfoData {
+  patientName: string;
+  birthDate: string;
+  diagnosis: string;
+  prescription: string;
+  queixaprincipal: string;
+  historiadoenca: string;
+  historiapatologica: string;
+  alergias: string;
+  peso: string;
+  altura: string;
+  imc: string;
+  freqcardiaca: string;
+  freqrespiratoria: string;
+  pressaoarterial: string;
+  tax: string;
+  glasgow: string;
+  tiposanguineo: string;
+  medicamentos: string;
+  anotacoes: string;
+}
+
 const ControlsBar = ({
   handleLogout,
   isAudioEnabled,
@@ -31,7 +50,28 @@ const ControlsBar = ({
   toggleAudioEnabled,
   toggleVideoEnabled,
 }: ControlsBarProps) => {
-  const [showMedicalRecord, setShowMedicalRecord] = useState(false); // Estado para controlar a visibilidade do prontuário
+  const [showMedicalRecord, setShowMedicalRecord] = useState(false);
+  const [medicalRecord, setMedicalRecord] = useState<PatientInfoData>({
+    patientName: "",
+    birthDate: "",
+    diagnosis: "",
+    prescription: "",
+    queixaprincipal: "",
+    historiadoenca: "",
+    historiapatologica: "",
+    alergias: "",
+    peso: "",
+    altura: "",
+    imc: "",
+    freqcardiaca: "",
+    freqrespiratoria: "",
+    pressaoarterial: "",
+    tax: "",
+    glasgow: "",
+    tiposanguineo: "",
+    medicamentos: "",
+    anotacoes: "",
+  });
 
   const handleToggleMedicalRecord = () => {
     setShowMedicalRecord(!showMedicalRecord);
@@ -39,15 +79,15 @@ const ControlsBar = ({
 
   return (
     <Flex
-      direction="column" // Alinhar os elementos verticalmente
-      justify="flex-end" // Alinhar o conteúdo no final do container
-      align="center" // Centralizar horizontalmente
+      direction="column"
+      justify="flex-end"
+      align="center"
       position="fixed"
       bottom="0"
       left="0"
       right="0"
       width="100%"
-      height="100%" // Ocupar a altura total da tela
+      height="100%"
     >
       <HStack
         borderRadius="20px"
@@ -113,39 +153,16 @@ const ControlsBar = ({
               onClick={handleToggleMedicalRecord}
             />
           </PopoverTrigger>
-          <PopoverContent css={{ all: 'unset' }} >
-         {showMedicalRecord && (
-              <MedicalRecord >
-                <MedicalRecordContent  />
+          <PopoverContent css={{ all: "unset" }}>
+            {showMedicalRecord && (
+              <MedicalRecord>
+                <MedicalRecordContent
+                
+                  medicalRecord={medicalRecord}
+                  setMedicalRecord={setMedicalRecord}
+                />
               </MedicalRecord>
             )}
-            {/*             <PopoverBody> */}
-
-            {/*    <Button
-                  w="194px"
-                  variant="ghost"
-                  rightIcon={<BiSolidChat />}
-                  justifyContent="space-between"
-                  fontWeight="bold"
-                  fontSize="lg"
-                  color="#fafafa"
-                >
-                  Chat
-                </Button>
-                <Button
-                  w="194px"
-                  variant="ghost"
-                  rightIcon={<FaNotesMedical />}
-                  justifyContent="space-between"
-                  fontWeight="bold"
-                  fontSize="lg"
-                  color="#fafafa"
-                  onClick={handleToggleMedicalRecord}
-                >
-                  Prontuário
-                </Button> */}
-
-            {/*     </PopoverBody> */}
           </PopoverContent>
         </Popover>
       </HStack>
