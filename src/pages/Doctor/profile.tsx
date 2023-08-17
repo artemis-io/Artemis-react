@@ -2,7 +2,7 @@ import { Box, Heading, Stack } from "@chakra-ui/react";
 
 import ImageProfileDoctor from "../../components/Main/FormProfile/ImageProfileDoctor";
 import FormDoctorProfile from "../../components/Main/FormProfile/FormDoctorProfile";
-import Sidebar from "../../components/Main/SideBar/Sidebar";
+import Sidebar from "../../components/Main/DoctorSideBar/Sidebar";
 
 export default function SettingsDoctor() {
   return (

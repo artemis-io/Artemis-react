@@ -111,3 +111,73 @@ export interface Patient {
   gender: string;
   }
 }
+
+export interface MedicalRecordDataDoctor {
+  id: string;
+  type: string;
+  query: string;
+  date: string;
+  history: {
+    altura: string;
+    anotacoes: string;
+    freqcardiaca: string;
+    glasgow: string;
+    historiapatologica: string;
+    tiposanguineo: string;
+    medicamentos: string;
+    historiadoenca: string;
+    tax: string;
+    imc: string;
+    pressaoarterial: string;
+    queixaprincipal: string;
+    freqrespiratoria: string;
+    peso: string;
+    alergias: string;
+  };
+  doctor: {
+    name: string;
+    avatar_url: string;
+    profile: {
+      address: string;
+      state: string;
+      district: string;
+      city: string;
+      number: string;
+    };
+  };
+}
+
+export interface MedicalRecordDataPatient {
+  id: string;
+  type: string;
+  query: string;
+  date: string;
+  history: {
+    altura: string;
+    anotacoes: string;
+    freqcardiaca: string;
+    glasgow: string;
+    historiapatologica: string;
+    tiposanguineo: string;
+    medicamentos: string;
+    historiadoenca: string;
+    tax: string;
+    imc: string;
+    pressaoarterial: string;
+    queixaprincipal: string;
+    freqrespiratoria: string;
+    peso: string;
+    alergias: string;
+  };
+  patient: {
+    name: string;
+    avatar_url: string;
+    profile: {
+      address: string;
+      state: string;
+      district: string;
+      city: string;
+      number: string;
+    };
+  };
+}

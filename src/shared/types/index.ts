@@ -88,6 +88,22 @@ export type PatientStep2Data = {
   dateOfBirth: string;
 };
 
+export type AppointmentRecordList = {
+  id: string;
+  id_patient: string;
+  id_doctor: string;
+  type: string;
+  query: string;
+  date: string;
+  doctor: {
+    name: string;
+    avatar_url: string;
+    profile: {
+      dateOfBirth: Date;
+    };
+  };
+};
+
 export type AppointmentList = {
   id: string;
   id_patient: string;

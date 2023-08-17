@@ -137,7 +137,7 @@ const Home = () => {
         <Text>© 2023 Minha Clínica Médica. Todos os direitos reservados.</Text>
       </Center>
     </Box>
-  );
-};
+  )
+}
 
 export default Home;

@@ -10,7 +10,7 @@ import {
   Heading,
   Center,
 } from "@chakra-ui/react";
-import Sidebar from "../../components/Main/SideBar/Sidebar";
+import Sidebar from "../../components/Main/DoctorSideBar/Sidebar";
 import { Patient } from "../../shared/interface/index";
 import { id } from "date-fns/locale";
 import { apiMed } from "../../services/api";

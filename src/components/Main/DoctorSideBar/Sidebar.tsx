@@ -1,25 +1,24 @@
 import { ReactNode, useState } from "react";
 import { Box, Drawer, DrawerContent, useDisclosure } from "@chakra-ui/react";
 
-import MobileNav from "./MobileNav";
 import LogoutModal from "../LogoutModal";
 import SidebarContent from "./SidebarContent";
 
 import { useAuth } from "../../../hooks/useAuth";
+import MobileNav from "../Mobile/MobileNav";
 
-export default function Sidebar({ children }: { children: ReactNode }) {  
+export default function Sidebar({ children }: { children: ReactNode }) {
   const { signOut } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-
   const toggleLogoutModal = () => {
-    setIsLogoutModalOpen((prev: any) => !prev); 
+    setIsLogoutModalOpen((prev: any) => !prev);
   };
 
   const handleLogout = async () => {
-    signOut(); 
-    toggleLogoutModal(); 
+    signOut();
+    toggleLogoutModal();
   };
 
   return (
