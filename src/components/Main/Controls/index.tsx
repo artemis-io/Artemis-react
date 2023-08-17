@@ -7,6 +7,9 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Drawer,
+  DrawerContent,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { MdMic, MdMicOff, MdVideocam, MdVideocamOff } from "react-icons/md";
 import { FiPhone } from "react-icons/fi";
@@ -50,6 +53,7 @@ const ControlsBar = ({
   toggleAudioEnabled,
   toggleVideoEnabled,
 }: ControlsBarProps) => {
+
   const [showMedicalRecord, setShowMedicalRecord] = useState(false);
   const [medicalRecord, setMedicalRecord] = useState<PatientInfoData>({
     patientName: "",
@@ -155,13 +159,14 @@ const ControlsBar = ({
           </PopoverTrigger>
           <PopoverContent css={{ all: "unset" }}>
             {showMedicalRecord && (
-              <MedicalRecord>
-                <MedicalRecordContent
-                
-                  medicalRecord={medicalRecord}
-                  setMedicalRecord={setMedicalRecord}
-                />
-              </MedicalRecord>
+             
+                  <MedicalRecord>
+                    <MedicalRecordContent
+                      medicalRecord={medicalRecord}
+                      setMedicalRecord={setMedicalRecord}
+                    />
+                  </MedicalRecord>
+             
             )}
           </PopoverContent>
         </Popover>
