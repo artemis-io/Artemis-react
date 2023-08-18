@@ -1,22 +1,11 @@
 import React, { ReactNode, useState } from "react";
-import {
-  Box,
-  CloseButton,
-  Flex,
-  useColorModeValue,
-  Link,
-  Drawer,
-  DrawerContent,
-  useDisclosure,
-  Image,
-  Icon,
-} from "@chakra-ui/react";
+import { Box, Drawer, DrawerContent, useDisclosure } from "@chakra-ui/react";
 
 import LogoutModal from "../LogoutModal";
 import { useAuth } from "../../../hooks/useAuth";
-import { NavItemProps, SidebarProps } from "../../../shared/interface";
-import { LinkItemsPatient } from "../../../shared/constant";
-import MobileNav from "../SideBar/MobileNav";
+
+import SidebarContent from "./PatientSidebarContent";
+import MobileNav from "../Mobile/MobileNav";
 
 export default function PatientSidebar({ children }: { children: ReactNode }) {
   const { signOut } = useAuth();
@@ -70,93 +59,3 @@ export default function PatientSidebar({ children }: { children: ReactNode }) {
     </Box>
   );
 }
-
-const SidebarContent = ({
-  onClose,
-  toggleLogoutModal,
-  ...rest
-}: SidebarProps) => {
-  return (
-    <Box
-      transition="3s ease"
-      borderBottom="1px"
-      borderRight="1px"
-      borderRightColor={useColorModeValue("gray.200", "gray.700")}
-      borderBottomColor={useColorModeValue("gray.200", "gray.700")}
-      bg={useColorModeValue("white", "gray.900")}
-      w={{ base: "full", md: 60 }}
-      pos="fixed"
-      h="full"
-      {...rest}
-    >
-      <Flex
-        h="20"
-        alignItems="center"
-        mx="8"
-        justifyContent="space-between"
-        mb={4}
-      >
-        <Image
-          src="/assets/images/logo.png"
-          alt="logo"
-          maxWidth="150px"
-          mt={4}
-        />
-
-        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
-      </Flex>
-      <ul>
-        {LinkItemsPatient.map((link) => (
-          <li key={link.name}>
-            <Link
-              href={link.to}
-              style={{ textDecoration: "none" }}
-              onClick={() => {
-                if (link.name === "Desconectar") {
-                  toggleLogoutModal(); 
-                } else {
-                  onClose(); 
-                }
-              }}
-            >
-              <NavItem icon={link.icon}>{link.name}</NavItem>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </Box>
-  );
-};
-
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
-  return (
-    <Flex
-      fontWeight="semibold"
-      _focus={{ boxShadow: "none" }}
-      color="#747B7D"
-      align="center"
-      p="4"
-      mx="4"
-      borderRadius="lg"
-      role="group"
-      cursor="pointer"
-      _hover={{
-        bg: "#0078D7",
-        color: "white",
-      }}
-      {...rest}
-    >
-      {icon && (
-        <Icon
-          mr="4"
-          fontSize="16"
-          _groupHover={{
-            color: "white",
-          }}
-          as={icon}
-        />
-      )}
-      {children}
-    </Flex>
-  );
-};

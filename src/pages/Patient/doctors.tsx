@@ -19,21 +19,21 @@ import { differenceInYears } from "date-fns";
 import SearchBar from "../../components/Main/SearchBar";
 import { apiMed } from "../../services/api";
 import { AUTH_TOKEN_STORAGE } from "../../shared/storage/config";
-import { AppointmentList } from "../../shared/types";
+import { AppointmentRecordList } from "../../shared/types";
 import Sidebar from "../../components/Main/DoctorSideBar/Sidebar";
 import { useNavigate } from "react-router-dom";
 import { LoadingCircle } from "../../components/Style/LoadingCircle";
 
-const AlphabeticalListPage: React.FC = () => {
+const AlphabeticalListPageDoctors: React.FC = () => {
   const history = useNavigate();
 
   const handleNav = (id: string) => {
-    history(`/doctor/medical-record/${id}`);
+    history(`/patient/medical-record/${id}`);
   };
 
   const [isLoading, setIsLoading] = useState(true);
   const [activeLetters, setActiveLetters] = useState<string[]>([]);
-  const [appointments, setAppointment] = useState<AppointmentList[]>([]);
+  const [appointments, setAppointment] = useState<AppointmentRecordList[]>([]);
 
   const fetchPatients = useCallback(async () => {
     try {
@@ -41,7 +41,7 @@ const AlphabeticalListPage: React.FC = () => {
 
       const auth = localStorage.getItem(AUTH_TOKEN_STORAGE);
 
-      const response = await apiMed.get("/appointment/history-doctor", {
+      const response = await apiMed.get("/appointment/history-patient", {
         headers: {
           Authorization: `Bearer ${auth}`,
         },
@@ -71,16 +71,16 @@ const AlphabeticalListPage: React.FC = () => {
 
   const renderPatientsByLetter = (letter: string) => {
     const filteredPatients = appointments.filter((appointment) =>
-      appointment?.patient.name.startsWith(letter)
+      appointment?.doctor.name.startsWith(letter)
     );
     return (
       <VStack align="start" spacing={2} minW="100%">
         {filteredPatients.map((appointment) => (
           <div
             key={appointment.id}
-            onClick={() => handleNav(appointment.id_patient)} // Chama a função handleNav
+            onClick={() => handleNav(appointment.id_doctor)} // Chama a função handleNav
           >
-            <PatientCard appointment={appointment} />
+            <DoctorCard appointment={appointment} />
           </div>
         ))}
       </VStack>
@@ -89,7 +89,7 @@ const AlphabeticalListPage: React.FC = () => {
 
   const getPatientCountByLetter = (letter: string) => {
     const filteredPatients = appointments.filter((appointment) =>
-      appointment?.patient?.name.startsWith(letter)
+      appointment?.doctor?.name.startsWith(letter)
     );
     return filteredPatients.length;
   };
@@ -98,7 +98,7 @@ const AlphabeticalListPage: React.FC = () => {
     <Sidebar>
       <Flex direction="column" align="center" justify="center" px={4}>
         <Heading size="lg" color="#747B7D" alignSelf="flex-start">
-          Meus Pacientes
+          Meus Doutores
         </Heading>
         <SearchBar />
         <VStack align="start" w="100%" spacing={4} mt={5}>
@@ -162,7 +162,7 @@ const AccordionComponent: React.FC<AccordionProps> = ({
                 {patientCount}
               </Text>
               <Text fontSize="sm" color="gray.500">
-                &nbsp;pacientes
+                &nbsp;Doutores
               </Text>
               <AccordionIcon />
             </Flex>
@@ -174,18 +174,18 @@ const AccordionComponent: React.FC<AccordionProps> = ({
   );
 };
 
-type PatientCardProps = {
-  appointment: AppointmentList;
+type DoctorCardProps = {
+  appointment: AppointmentRecordList;
 };
 
-const PatientCard: React.FC<PatientCardProps> = ({ appointment }) => {
+const DoctorCard: React.FC<DoctorCardProps> = ({ appointment }) => {
   const age = useMemo(
     () =>
       differenceInYears(
         new Date(),
-        new Date(appointment?.patient?.profile.dateOfBirth)
+        new Date(appointment?.doctor?.profile.dateOfBirth)
       ),
-    [appointment.patient.profile.dateOfBirth]
+    [appointment.doctor.profile.dateOfBirth]
   );
 
   return (
@@ -215,13 +215,13 @@ const PatientCard: React.FC<PatientCardProps> = ({ appointment }) => {
             width="50px"
             borderRadius={10}
             objectFit="cover"
-            src={appointment?.patient?.avatar_url}
+            src={appointment?.doctor?.avatar_url}
             alt="Foto de perfil"
           />
         </GridItem>
         <GridItem area={"name"}>
           <Text fontSize="lg" fontWeight="bold">
-            {appointment?.patient?.name}
+            {appointment?.doctor?.name}
           </Text>
         </GridItem>
         <GridItem area={"age"}>
@@ -232,4 +232,4 @@ const PatientCard: React.FC<PatientCardProps> = ({ appointment }) => {
   );
 };
 
-export default AlphabeticalListPage;
+export default AlphabeticalListPageDoctors;

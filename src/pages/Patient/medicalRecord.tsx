@@ -1,28 +1,64 @@
 import React, { useEffect, useState } from "react";
 import { VStack, Badge } from "@chakra-ui/react";
 import Sidebar from "../../components/Main/DoctorSideBar/Sidebar";
-import CardHistoryPatient from "../../components/Style/Cards/CardHistoryPatient";
+import CardHistoryDoctor from "../../components/Style/Cards/CardHistoryDoctor";
 import { apiMed } from "../../services/api";
 import { AUTH_TOKEN_STORAGE } from "../../shared/storage/config";
 import { useParams } from "react-router-dom";
-import { MedicalRecordDataPatient } from "../../shared/interface";
 
-const MedicalRecord: React.FC = () => {
+export interface MedicalRecordData {
+  id: string;
+  type: string;
+  query: string;
+  date: string;
+  history: {
+    altura: string;
+    anotacoes: string;
+    freqcardiaca: string;
+    glasgow: string;
+    historiapatologica: string;
+    tiposanguineo: string;
+    medicamentos: string;
+    historiadoenca: string;
+    tax: string;
+    imc: string;
+    pressaoarterial: string;
+    queixaprincipal: string;
+    freqrespiratoria: string;
+    peso: string;
+    alergias: string;
+  };
+  doctor: {
+    name: string;
+    avatar_url: string;
+    profile: {
+      address: string;
+      state: string;
+      district: string;
+      city: string;
+      number: string;
+    };
+  };
+}
+
+const MedicalRecordPatient: React.FC = () => {
   const { id } = useParams();
-  const [medicalRecords, setMedicalRecords] = useState<MedicalRecordDataPatient[]>([]);
+  const [medicalRecords, setMedicalRecords] = useState<MedicalRecordData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const auth = localStorage.getItem(AUTH_TOKEN_STORAGE);
         const response = await apiMed.get(
-          `/appointment/history-infoPatient/${id}`,
+          `/appointment/history-infoDoctor/${id}`,
           {
             headers: {
               Authorization: `Bearer ${auth}`,
             },
           }
         );
+
+        console.log(response.data);
 
         const data = response.data;
         setMedicalRecords(data);
@@ -33,7 +69,7 @@ const MedicalRecord: React.FC = () => {
     fetchData();
   }, [id]);
 
-  const itemsByDate: { [date: string]: MedicalRecordDataPatient[] } = {};
+  const itemsByDate: { [date: string]: MedicalRecordData[] } = {};
 
   medicalRecords.forEach((record) => {
     const formattedDate = new Date(record.date).toLocaleDateString();
@@ -52,20 +88,20 @@ const MedicalRecord: React.FC = () => {
               {date}
             </Badge>
             {recordList.map((record) => (
-              <CardHistoryPatient
+              <CardHistoryDoctor
                 key={record.id}
                 id={record.id}
                 history={record.history}
-                city={record.patient.profile.city}
-                district={record.patient.profile.district}
-                number={record.patient.profile.number}
-                state={record.patient.profile.state}
+                city={record.doctor.profile.city}
+                district={record.doctor.profile.district}
+                number={record.doctor.profile.number}
+                state={record.doctor.profile.state}
                 type={record.type}
                 query={record.query}
-                patientName={record.patient.name}
-                patientAvatar={record.patient.avatar_url}
+                patientName={record.doctor.name}
+                patientAvatar={record.doctor.avatar_url}
                 date={record.date}
-                address={record.patient.profile.address}
+                address={record.doctor.profile.address}
               />
             ))}
           </VStack>
@@ -75,4 +111,4 @@ const MedicalRecord: React.FC = () => {
   );
 };
 
-export default MedicalRecord;
+export default MedicalRecordPatient;

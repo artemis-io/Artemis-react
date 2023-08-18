@@ -12,7 +12,7 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
-import Sidebar from "../../components/Main/SideBar/Sidebar";
+import Sidebar from "../../components/Main/DoctorSideBar/Sidebar";
 import { apiMed } from "../../services/api";
 
 const MedicalRecordPage = () => {

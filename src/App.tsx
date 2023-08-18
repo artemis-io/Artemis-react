@@ -11,7 +11,7 @@ const App = () => {
     <ChakraProvider theme={theme}>
       <AuthContextProvider>
         <Provider store={store}>
-          <AppRoutes />;
+          <AppRoutes />
         </Provider>
       </AuthContextProvider>
     </ChakraProvider>

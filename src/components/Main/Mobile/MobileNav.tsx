@@ -6,6 +6,7 @@ import { useAuth } from "../../../hooks/useAuth";
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const router = useNavigate();
+  
   const { user } = useAuth();
   const handleNav = () => {
     router(`../../${user?.role}/homepage`);
