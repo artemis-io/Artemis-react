@@ -33,31 +33,24 @@ export const MedicalRecordContent = ({
   setMedicalRecord,
   medicalRecord,
 }: MedicalRecordContentProps) => {
-  const { isOpen, onClose } = useDisclosure();
+  const { onClose } = useDisclosure();
 
   return (
-    <Flex
-      bg="rgba(0, 0, 0, 0.8)"
+    <Box
       pos="relative"
       top="0"
       left="0"
       right="0"
       bottom="0"
-      alignItems="center"
-      justifyContent="center"
       zIndex="999"
-      transition="opacity 0.5s ease-in-out"
+      transition="opacity 0.8s ease-in-out"
+      boxShadow="12pxg"
+      borderRadius="20px"
+      p={4}
+      borderWidth="sm"
     >
-      <Box
-        bg="white"
-        h="100vh"
-        w="100vw"
-        p="4"
-        boxShadow="lg"
-        borderRadius="md"
-        overflowY="scroll"
-      >
-        <Flex h="20" alignItems="center" justifyContent="space-between">
+      <Box bg="white" h="100vh" w={["100vw", "40vw"]} p="4" overflowY="scroll">
+        <Flex h="20" alignItems="center" justifyContent="space-between" mt={20}>
           <Text fontSize="xl" fontWeight="bold">
             Prontuário Médico
           </Text>
@@ -67,13 +60,12 @@ export const MedicalRecordContent = ({
           />
         </Flex>
 
-        <Divider my="4" />
         <Stack spacing={4} w={"full"} maxW={"md"} p={1}>
           <Text fontSize="md" fontWeight="semibold" color="#747B7D">
             Informações do Paciente
           </Text>
           <FormControl>
-            <StyledLabel>Nome</StyledLabel>
+            <StyledLabel fontSize="sm">Nome</StyledLabel>
             <Input
               value={medicalRecord.patientName}
               onChange={(event) =>
@@ -87,7 +79,7 @@ export const MedicalRecordContent = ({
 
           <HStack>
             <FormControl>
-              <StyledLabel>Data de Nascimento</StyledLabel>
+              <StyledLabel fontSize="sm">Data de Nascimento</StyledLabel>
               <Input
                 type="date"
                 defaultValue={medicalRecord.birthDate}
@@ -101,7 +93,7 @@ export const MedicalRecordContent = ({
             </FormControl>
 
             <FormControl>
-              <StyledLabel>Tipo sanguíneo</StyledLabel>
+              <StyledLabel fontSize="sm">Tipo sanguíneo</StyledLabel>
               <Input
                 value={medicalRecord.tiposanguineo}
                 onChange={(event) =>
@@ -120,7 +112,7 @@ export const MedicalRecordContent = ({
             Tratamento
           </Text>
           <FormControl>
-            <StyledLabel>Diagnóstico</StyledLabel>
+            <StyledLabel fontSize="sm">Diagnóstico</StyledLabel>
             <Textarea
               value={medicalRecord.diagnosis}
               onChange={(event) =>
@@ -132,7 +124,7 @@ export const MedicalRecordContent = ({
             />
           </FormControl>
           <FormControl>
-            <StyledLabel>Prescrição Médica</StyledLabel>
+            <StyledLabel fontSize="sm">Prescrição Médica</StyledLabel>
             <Textarea
               value={medicalRecord.prescription}
               onChange={(event) =>
@@ -144,7 +136,7 @@ export const MedicalRecordContent = ({
             />
           </FormControl>
           <FormControl>
-            <StyledLabel>Alergias</StyledLabel>
+            <StyledLabel fontSize="sm">Alergias</StyledLabel>
             <Textarea
               value={medicalRecord.alergias}
               onChange={(event) =>
@@ -157,7 +149,7 @@ export const MedicalRecordContent = ({
           </FormControl>
 
           <FormControl>
-            <StyledLabel>Medicamentos</StyledLabel>
+            <StyledLabel fontSize="sm">Medicamentos</StyledLabel>
             <Textarea
               value={medicalRecord.medicamentos}
               onChange={(event) =>
@@ -169,7 +161,7 @@ export const MedicalRecordContent = ({
             />
           </FormControl>
           <FormControl>
-            <StyledLabel>Anotações</StyledLabel>
+            <StyledLabel fontSize="sm">Anotações</StyledLabel>
             <Textarea
               value={medicalRecord.anotacoes}
               onChange={(event) =>
@@ -181,7 +173,7 @@ export const MedicalRecordContent = ({
             />
           </FormControl>
           <FormControl>
-            <StyledLabel>Queixa principal</StyledLabel>
+            <StyledLabel fontSize="sm">Queixa principal</StyledLabel>
             <Textarea
               value={medicalRecord.queixaprincipal}
               onChange={(event) =>
@@ -193,7 +185,7 @@ export const MedicalRecordContent = ({
             />
           </FormControl>
           <FormControl>
-            <StyledLabel>Histórico da Doença</StyledLabel>
+            <StyledLabel fontSize="sm">Histórico da Doença</StyledLabel>
             <Textarea
               value={medicalRecord.historiadoenca}
               onChange={(event) =>
@@ -205,7 +197,7 @@ export const MedicalRecordContent = ({
             />
           </FormControl>
           <FormControl>
-            <StyledLabel>Histórico Patológica</StyledLabel>
+            <StyledLabel fontSize="sm">Histórico Patológica</StyledLabel>
             <Textarea
               value={medicalRecord.historiapatologica}
               onChange={(event) =>
@@ -236,7 +228,7 @@ export const MedicalRecordContent = ({
               />
             </FormControl>
             <FormControl>
-              <StyledLabel>Peso</StyledLabel>
+              <StyledLabel fontSize="sm">Peso</StyledLabel>
               <Input
                 value={medicalRecord.peso}
                 onChange={(event) =>
@@ -264,7 +256,7 @@ export const MedicalRecordContent = ({
 
           <HStack>
             <FormControl>
-              <StyledLabel>IMC</StyledLabel>
+              <StyledLabel fontSize="sm">IMC</StyledLabel>
               <Input
                 value={medicalRecord.imc}
                 onChange={(event) =>
@@ -276,7 +268,7 @@ export const MedicalRecordContent = ({
               />
             </FormControl>
             <FormControl>
-              <StyledLabel fontSize="sm">Frequência Cardíaca</StyledLabel>
+              <StyledLabel fontSize="sm">Freq. Cardíaca</StyledLabel>
               <Input
                 value={medicalRecord.freqcardiaca}
                 onChange={(event) =>
@@ -305,7 +297,7 @@ export const MedicalRecordContent = ({
           <Box>
             <HStack>
               <FormControl>
-                <StyledLabel fontSize="sm">Frequência Respiratória</StyledLabel>
+                <StyledLabel fontSize="sm">Freq. Respiratória</StyledLabel>
                 <Input
                   value={medicalRecord.freqrespiratoria}
                   onChange={(event) =>
@@ -329,30 +321,18 @@ export const MedicalRecordContent = ({
                   mrm
                 </Text>
               </FormControl>
+
               <FormControl>
-                <StyledLabel fontSize="sm">Pressão Arterial</StyledLabel>
+                <StyledLabel fontSize="sm">Glasgow</StyledLabel>
                 <Input
-                  value={medicalRecord.pressaoarterial}
+                  value={medicalRecord.glasgow}
                   onChange={(event) =>
                     setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                       ...prevMedicalRecord,
-                      pressaoarterial: event.target.value,
+                      glasgow: event.target.value,
                     }))
                   }
-                  style={{ paddingRight: "40px" }}
                 />
-                <Text
-                  style={{
-                    position: "absolute",
-                    right: "10px",
-                    top: "70%",
-                    transform: "translateY(-50%)",
-                    fontSize: "12px",
-                    color: "#666",
-                  }}
-                >
-                  mmHg
-                </Text>
               </FormControl>
             </HStack>
           </Box>
@@ -384,16 +364,29 @@ export const MedicalRecordContent = ({
                 </Text>
               </FormControl>
               <FormControl>
-                <StyledLabel fontSize="sm">Glasgow</StyledLabel>
+                <StyledLabel fontSize="sm">Pressão Arterial</StyledLabel>
                 <Input
-                  value={medicalRecord.glasgow}
+                  value={medicalRecord.pressaoarterial}
                   onChange={(event) =>
                     setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                       ...prevMedicalRecord,
-                      glasgow: event.target.value,
+                      pressaoarterial: event.target.value,
                     }))
                   }
+                  style={{ paddingRight: "40px" }}
                 />
+                <Text
+                  style={{
+                    position: "absolute",
+                    right: "10px",
+                    top: "70%",
+                    transform: "translateY(-50%)",
+                    fontSize: "12px",
+                    color: "#666",
+                  }}
+                >
+                  mmHg
+                </Text>
               </FormControl>
             </HStack>
           </Box>
@@ -403,6 +396,6 @@ export const MedicalRecordContent = ({
           </Button>
         </Stack>
       </Box>
-    </Flex>
+    </Box>
   );
 };

@@ -7,8 +7,8 @@ import { apiMed } from "../../services/api";
 import { AUTH_TOKEN_STORAGE } from "../../shared/storage/config";
 import UpcomingAppointments from "../../components/Main/UpcomingAppointments";
 import PatientSidebar from "../../components/Main/PatientSideBar/PatientSideBar";
+import { LoadingCircle } from "../../components/Style/LoadingCircle";
 
-// Separate the fetchData function
 const fetchData = async (
   userId: any,
   setTotalAppointments: any,
@@ -40,13 +40,25 @@ export default function HomepagePatient() {
   const { user } = useAuth();
   const [totalAppointments, setTotalAppointments] = useState(0);
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch data when component mounts and when user changes
   useEffect(() => {
     if (user?.id) {
-      fetchData(user.id, setTotalAppointments, setUpcomingAppointments);
+      fetchData(user.id, setTotalAppointments, setUpcomingAppointments)
+        .then(() => {
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 400);
+        })
+        .catch((error) => {
+          setIsLoading(false);
+        });
     }
   }, [user]);
+
+  if (isLoading) {
+    return <LoadingCircle />;
+  }
 
   const handleNav = () => {
     router("/patient/appointment");
@@ -54,7 +66,7 @@ export default function HomepagePatient() {
 
   return (
     <PatientSidebar>
-      {totalAppointments > 0 ? (
+     { totalAppointments > 0 ? (
         <VStack spacing={5}>
           <UpcomingAppointments appointments={upcomingAppointments} />
           <Flex justify="center" position="fixed" bottom="0" mb={4}>
@@ -88,7 +100,6 @@ export default function HomepagePatient() {
           >
             Você ainda não agendou nenhum atendimento.
           </Text>
-
           <Button
             bg="#0078D7"
             w="293px"
