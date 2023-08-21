@@ -46,7 +46,7 @@ const MedicalRecordPage = () => {
   const handleCalcIMC = () => {
     const { altura, peso } = patientData;
     if (altura && peso) {
-      const alturaMetros = altura; // Convert height to meters
+      const alturaMetros = altura;
       const imc = (peso / (alturaMetros * alturaMetros)).toFixed(2);
       setPatientData((prevData) => ({
         ...prevData,

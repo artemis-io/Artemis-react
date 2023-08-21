@@ -42,6 +42,7 @@ export default function HomepagePatient() {
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+
   useEffect(() => {
     if (user?.id) {
       fetchData(user.id, setTotalAppointments, setUpcomingAppointments)
