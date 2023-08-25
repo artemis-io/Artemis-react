@@ -1,13 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Heading, VStack, Flex } from "@chakra-ui/react";
+import { Box, Heading, VStack, Flex, Text } from "@chakra-ui/react";
 
 interface RemoteParticipantProps {
   participant: any;
+  doctorId: string;
+  patientId: string;
 }
 
 const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   participant,
+  patientId,
+  doctorId,
 }) => {
+  console.log(doctorId);
+  console.log(patientId);
   const [videoTracks, setVideoTracks] = useState<any[]>([]);
   const [audioTracks, setAudioTracks] = useState<any[]>([]);
 
@@ -70,14 +76,14 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
   }, [audioTracks]);
 
   return (
-    <Flex bg="#202124" p={1} mt={12}>
+    <Flex borderColor="transparent" p={1} mt={12}>
       <VStack>
         <Box>
           <Box
             borderWidth="2px"
             borderRadius="lg"
             overflow="hidden"
-            borderColor="#202124"
+            borderColor="transparent"
           >
             <video ref={videoRef} autoPlay={true} />
           </Box>
@@ -85,7 +91,6 @@ const RemoteParticipant: React.FC<RemoteParticipantProps> = ({
             {participant.identity}
           </Heading>
         </Box>
-
         <audio ref={audioRef} autoPlay={true} style={{ display: "none" }} />
       </VStack>
     </Flex>

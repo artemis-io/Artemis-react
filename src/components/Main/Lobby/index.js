@@ -13,12 +13,11 @@ import {
 } from "@chakra-ui/react";
 import { FiUser, FiVideo } from "react-icons/fi";
 import StyledLabel from "../Forms/StyledLabel";
-import { useAuth } from "../../../hooks/useAuth";
+
 import { useNavigate } from "react-router-dom";
 
-const Lobby = ({ username, roomName, handleSubmit, connecting, role }) => {
+const Lobby = ({ username, roomName, handleSubmit, connecting, role, findAppointment }) => {
   const router = useNavigate();
-  const user = useAuth();
   const handleNav = () => {
     router(`../../${role}/homepage`);
   };
@@ -88,6 +87,16 @@ const Lobby = ({ username, roomName, handleSubmit, connecting, role }) => {
               width="full"
             >
               Voltar
+            </Button>
+            <Button
+              bg="#0078D7"
+              onClick={findAppointment}
+              mt={4}
+              colorScheme="blue"
+              size="lg"
+              width="full"
+            >
+              teste
             </Button>
           </form>
         </VStack>

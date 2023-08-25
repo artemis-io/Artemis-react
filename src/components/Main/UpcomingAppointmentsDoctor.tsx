@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { AiOutlineVideoCamera } from "react-icons/ai";
 import { Link as RouterLink } from "react-router-dom"; // Importe o Link correto
+import PatientDetails from "./PatientDetails";
 
 interface Appointment {
   id: string;
@@ -36,8 +37,6 @@ interface UpcomingAppointmentsProps {
 const UpcomingAppointmentsDoctor: React.FC<UpcomingAppointmentsProps> = ({
   appointments,
 }) => {
- 
-
   return (
     <VStack spacing={4} alignItems="flex-start" w="95%" mx="auto">
       <Text fontSize="xl" fontWeight="bold" mt={4}>
@@ -78,7 +77,9 @@ const UpcomingAppointmentsDoctor: React.FC<UpcomingAppointmentsProps> = ({
             </GridItem>
             <GridItem area={"spec"}>
               <Text fontSize="xm" color="gray.500" pt="5px">
-                {appointment?.query === "person" ? "Presencial" : "Teleconsulta"}
+                {appointment?.query === "person"
+                  ? "Presencial"
+                  : "Teleconsulta"}
               </Text>
             </GridItem>
             <GridItem area={"date"} pl="10px">

@@ -1,16 +1,22 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Box, Heading, VStack } from "@chakra-ui/react";
+import { Box, Heading, VStack, Text } from "@chakra-ui/react";
 import ControlsBar from "../Controls";
 
 interface ParticipantProps {
   participant: any;
   handleLogout: () => void;
+  patientId: string;
+  doctorId: string;
 }
 
 const Participant: React.FC<ParticipantProps> = ({
   participant,
   handleLogout,
+  doctorId,
+  patientId,
 }) => {
+  console.log(doctorId);
+  console.log(patientId);
   const [videoTracks, setVideoTracks] = useState<any[]>([]);
   const [audioTracks, setAudioTracks] = useState<any[]>([]);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
@@ -92,7 +98,7 @@ const Participant: React.FC<ParticipantProps> = ({
   }, [audioTracks]);
 
   return (
-    <Box textAlign="center" bg="#202124" p={1} mb={16}>
+    <Box textAlign="center" bg="transparent" p={1} mb={16}>
       <VStack>
         <Box textAlign="left">
           <Box
@@ -100,7 +106,7 @@ const Participant: React.FC<ParticipantProps> = ({
             borderWidth="2px"
             borderRadius="lg"
             overflow="hidden"
-            borderColor="#202124"
+            borderColor="transparent"
           >
             <video
               ref={videoRef}
@@ -109,11 +115,15 @@ const Participant: React.FC<ParticipantProps> = ({
             />
           </Box>
           <Heading color="#fafafa" fontSize="16px" mt={1}>
+            {doctorId}
+          </Heading>
+          <Heading color="#fafafa" fontSize="16px" mt={1}>
             {participant.identity}
           </Heading>
         </Box>
 
         <ControlsBar
+          patientId={patientId}
           handleLogout={handleLogout}
           isAudioEnabled={isAudioEnabled}
           isVideoEnabled={isVideoEnabled}

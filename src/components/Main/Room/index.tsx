@@ -5,13 +5,15 @@ import Participant from "../Participant/index";
 import RemoteParticipant from "../RemoteParticipant";
 
 interface RoomProps {
+  doctorId: string;
+  patientId: string;
   roomName: string | undefined;
   username: string | undefined;
   room: Room;
   handleLogout: () => void;
 }
 
-const RoomVideo = ({ room, handleLogout }: RoomProps) => {
+const RoomVideo = ({ room, handleLogout, doctorId, patientId }: RoomProps) => {
   const [participants, setParticipants] = useState<any[]>([]);
 
   const participantConnected = (participant: any) => {
@@ -35,7 +37,12 @@ const RoomVideo = ({ room, handleLogout }: RoomProps) => {
   }, [room]);
 
   const remoteParticipants = participants.map((participant) => (
-    <RemoteParticipant key={participant.sid} participant={participant} />
+    <RemoteParticipant
+      key={participant.sid}
+      participant={participant}
+      doctorId={doctorId}
+      patientId={patientId}
+    />
   ));
 
   return (
@@ -63,6 +70,8 @@ const RoomVideo = ({ room, handleLogout }: RoomProps) => {
       >
         {room && (
           <Participant
+            doctorId={doctorId}
+            patientId={patientId}
             key={room.localParticipant.sid}
             participant={room.localParticipant}
             handleLogout={handleLogout}

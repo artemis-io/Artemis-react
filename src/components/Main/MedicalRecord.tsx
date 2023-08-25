@@ -8,6 +8,7 @@ import {
   Flex,
   FormControl,
   HStack,
+  Heading,
   Input,
   Stack,
   Text,
@@ -28,16 +29,19 @@ export default function MedicalRecord({ children }: MedicalRecordProps) {
 interface MedicalRecordContentProps {
   medicalRecord: PatientInfoData;
   setMedicalRecord: React.Dispatch<React.SetStateAction<PatientInfoData>>;
+  patientId: string;
 }
 
 export const MedicalRecordContent = ({
   setMedicalRecord,
   medicalRecord,
+  patientId,
 }: MedicalRecordContentProps) => {
   const { onClose } = useDisclosure();
 
   return (
     <Box
+      p={4}
       pos="relative"
       top="0"
       left="0"
@@ -45,9 +49,8 @@ export const MedicalRecordContent = ({
       bottom="0"
       zIndex="999"
       transition="opacity 0.8s ease-in-out"
-      boxShadow="12pxg"
+      boxShadow="12px"
       borderRadius="20px"
-      p={4}
       borderWidth="sm"
     >
       <Box bg="white" h="100vh" w={["100vw", "40vw"]} p="4" overflowY="scroll">
@@ -65,7 +68,9 @@ export const MedicalRecordContent = ({
             <Text fontSize="md" fontWeight="semibold" color="#747B7D">
               Informações do Paciente
             </Text>
+            <Heading>{patientId}</Heading>
             <FormControl>
+            
               <StyledLabel fontSize="sm">Nome</StyledLabel>
               <Input
                 value={medicalRecord.patientName}
