@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -17,6 +17,9 @@ import {
 } from "@chakra-ui/react";
 import { PatientInfoData } from "./Controls";
 import StyledLabel from "./Forms/StyledLabel";
+import { apiMed } from "../../services/api";
+import { Patient } from "../../shared/interface";
+
 
 interface MedicalRecordProps {
   children: React.ReactNode;
@@ -37,7 +40,22 @@ export const MedicalRecordContent = ({
   medicalRecord,
   patientId,
 }: MedicalRecordContentProps) => {
+  const [patient, setPatient] = useState<Patient | null>(null);
   const { onClose } = useDisclosure();
+
+  useEffect(() => {
+    const fetchPatient = async () => {
+      try {
+        const response = await apiMed.get(`user/patient/${patientId}`);
+        setPatient(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Erro ao obter os dados do paciente", error);
+      }
+    };
+
+    fetchPatient();
+  }, [patientId, patient]);
 
   return (
     <Box
@@ -68,19 +86,23 @@ export const MedicalRecordContent = ({
             <Text fontSize="md" fontWeight="semibold" color="#747B7D">
               Informações do Paciente
             </Text>
+
             <Heading>{patientId}</Heading>
+            <Text color="blue">{patient?.name}</Text>
+
             <FormControl>
-            
               <StyledLabel fontSize="sm">Nome</StyledLabel>
-              <Input
-                value={medicalRecord.patientName}
+
+              {/*  <Input
+                defaultValue={patientName}
+                value={patientName}
                 onChange={(event) =>
                   setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                     ...prevMedicalRecord,
                     patientName: event.target.value,
                   }))
                 }
-              />
+              /> */}
             </FormControl>
 
             <HStack>

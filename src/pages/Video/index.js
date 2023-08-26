@@ -84,6 +84,10 @@ const VideoChat = () => {
   }, []);
 
   useEffect(() => {
+    findAppointment();
+  }, []);
+
+  useEffect(() => {
     if (room) {
       const tidyUp = (event) => {
         if (event.persisted) {

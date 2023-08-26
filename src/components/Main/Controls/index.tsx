@@ -23,7 +23,6 @@ interface ControlsBarProps {
 }
 
 export interface PatientInfoData {
-  patientName: string;
   birthDate: string;
   diagnosis: string;
   prescription: string;
@@ -54,7 +53,6 @@ const ControlsBar = ({
 }: ControlsBarProps) => {
   const [showMedicalRecord, setShowMedicalRecord] = useState(false);
   const [medicalRecord, setMedicalRecord] = useState<PatientInfoData>({
-    patientName: "",
     birthDate: "",
     diagnosis: "",
     prescription: "",
@@ -159,7 +157,7 @@ const ControlsBar = ({
             {showMedicalRecord && (
               <MedicalRecord>
                 <MedicalRecordContent
-                patientId={patientId}
+                  patientId={patientId}
                   medicalRecord={medicalRecord}
                   setMedicalRecord={setMedicalRecord}
                 />

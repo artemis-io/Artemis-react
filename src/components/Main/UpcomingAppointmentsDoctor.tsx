@@ -9,8 +9,7 @@ import {
   GridItem,
 } from "@chakra-ui/react";
 import { AiOutlineVideoCamera } from "react-icons/ai";
-import { Link as RouterLink } from "react-router-dom"; // Importe o Link correto
-import PatientDetails from "./PatientDetails";
+import { Link as RouterLink } from "react-router-dom"; 
 
 interface Appointment {
   id: string;

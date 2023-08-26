@@ -16,7 +16,7 @@ import StyledLabel from "../Forms/StyledLabel";
 
 import { useNavigate } from "react-router-dom";
 
-const Lobby = ({ username, roomName, handleSubmit, connecting, role, findAppointment }) => {
+const Lobby = ({ username, roomName, handleSubmit, connecting, role }) => {
   const router = useNavigate();
   const handleNav = () => {
     router(`../../${role}/homepage`);
@@ -87,16 +87,6 @@ const Lobby = ({ username, roomName, handleSubmit, connecting, role, findAppoint
               width="full"
             >
               Voltar
-            </Button>
-            <Button
-              bg="#0078D7"
-              onClick={findAppointment}
-              mt={4}
-              colorScheme="blue"
-              size="lg"
-              width="full"
-            >
-              teste
             </Button>
           </form>
         </VStack>
