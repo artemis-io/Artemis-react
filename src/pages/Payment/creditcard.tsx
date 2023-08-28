@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Input,
@@ -25,27 +25,80 @@ import {
 } from "../../utils/credit-card";
 import PrimaryButton from "../../components/Style/Buttons/Primarybutton";
 import PatientSidebar from "../../components/Main/PatientSideBar/PatientSideBar";
+import { useSearchParams } from "react-router-dom";
+import { apiMed } from "../../services/api";
+import { AUTH_TOKEN_STORAGE } from "../../shared/storage/config";
+import { PatientPaymentData } from "../../shared/types";
 
 const PaymentPage = () => {
   const [paymentData, setPaymentData] = useState({
     urlretorno: "",
     chaveerp: "",
-    valor: "", //appointmentprice
+    valor: "",
     numeroparcela: 1,
     nome: "",
     identificador: "",
     email: "",
-    telefone: "",
-    uf: "",
-    cidade: "",
-    logradouro: "",
     cartaonome: "",
     cartaonumero: "",
     cartaovencimento: "",
     cartaocodigoseguranca: "",
-    name: "",
   });
   const [loading, setLoading] = useState(false);
+  const [idPatient, setIdPatient] = useState<string | null>(null);
+  const [idDoctor, setIdDoctor] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
+  const appointmentId = searchParams.get("appointmentId");
+  const [patient, setPatient] = useState<PatientPaymentData | null>(null);
+  const [pricing, setPricing] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchAppointmentData = async () => {
+      const token = localStorage.getItem(AUTH_TOKEN_STORAGE);
+      try {
+        const response = await apiMed.get(`/appointment/${appointmentId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setIdPatient(response.data.id_patient);
+        setIdDoctor(response.data.id_doctor);
+
+        if (idPatient !== null) {
+          try {
+            const response = await apiMed.get(`/user/${idPatient}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            setPatient(response.data);
+            console.log("User", response.data);
+          } catch (error) {
+            console.error("Erro ao obter dados:", error);
+          }
+        }
+        if (idDoctor !== null) {
+          try {
+            const response = await apiMed.get(`/user/doctor/${idDoctor}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            setPricing(response.data.doctor.pricing);
+          } catch (error) {
+            console.error("Erro ao obter dados:", error);
+          }
+        }
+      } catch (error) {
+        console.error("Erro ao obter dados:", error);
+      }
+    };
+
+    fetchAppointmentData();
+  }, [appointmentId, idPatient, idDoctor , pricing]);
 
   const handleInputFocus = ({ target }: { target: { name: string } }) => {
     setPaymentData((prevState) => ({ ...prevState, focused: target.name }));
@@ -70,9 +123,7 @@ const PaymentPage = () => {
   const handleSubmit = async () => {
     try {
       setLoading(false);
-      const data = {
-        
-      }
+      const data = {};
     } catch (error) {
       setLoading(false);
     }
@@ -196,7 +247,7 @@ const PaymentPage = () => {
                     placeholder="Nome"
                     name="nome"
                     onChange={handleInputChange}
-                    value={paymentData.nome}
+                    value={patient?.name}
                   />
                 </FormControl>
 
@@ -206,7 +257,7 @@ const PaymentPage = () => {
                     placeholder="Identificador (CPF ou CNPJ)"
                     name="identificador"
                     onChange={handleInputChange}
-                    value={paymentData.identificador}
+                    value={patient?.profile.cpf}
                   />
                 </FormControl>
 
@@ -215,47 +266,15 @@ const PaymentPage = () => {
                     placeholder="Email"
                     name="email"
                     onChange={handleInputChange}
-                    value={paymentData.email}
+                    value={patient?.email}
                     type="email"
-                  />
-                </FormControl>
-                <FormControl>
-                  <Input
-                    placeholder="Telefone"
-                    name="telefone"
-                    onChange={handleInputChange}
-                    value={paymentData.telefone}
-                  />
-                </FormControl>
-                <FormControl>
-                  <Input
-                    placeholder="UF"
-                    name="uf"
-                    onChange={handleInputChange}
-                    value={paymentData.uf}
-                  />
-                </FormControl>
-                <FormControl>
-                  <Input
-                    placeholder="Cidade"
-                    name="cidade"
-                    onChange={handleInputChange}
-                    value={paymentData.cidade}
-                  />
-                </FormControl>
-                <FormControl>
-                  <Input
-                    placeholder="Logradouro"
-                    name="logradouro"
-                    onChange={handleInputChange}
-                    value={paymentData.logradouro}
                   />
                 </FormControl>
               </Box>
               <Divider />
               <Flex justify="space-between" color="#494949" mt={8}>
                 <Heading fontSize="20px">Total</Heading>
-                <Heading fontSize="20px">R$ 1500,00</Heading>
+                <Heading fontSize="20px">{pricing}</Heading>
               </Flex>
               <Divider />
               <Center>

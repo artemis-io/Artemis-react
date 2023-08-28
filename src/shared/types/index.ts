@@ -129,6 +129,14 @@ export type CardCompleteProps = {
   appointments: Appointment[];
 };
 
+export type PatientPaymentData = {
+  name: string,
+  email: string,
+  profile: {
+    cpf: string,
+  }
+};
+
 export type PaymentCardStep1Data = {
 
 }

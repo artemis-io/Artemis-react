@@ -1,4 +1,3 @@
-// pages/ChoicePage.tsx
 import {
   VStack,
   Heading,
@@ -25,6 +24,7 @@ import React, { useEffect } from "react";
 import PatientSidebar from "../../components/Main/PatientSideBar/PatientSideBar";
 import { Appointment } from "../../shared/entities/appointments.entities";
 import AppointmentConfirmButton from "../../components/Style/Buttons/AppointmentConfirmButton";
+import { useNavigate } from "react-router-dom";
 
 interface OrderProps {
   selectedAppointment: Appointment | null;
@@ -35,6 +35,7 @@ export default function ChoicePage({ selectedAppointment }: OrderProps) {
     <ModalOverlay bg="#2b2727" backdropFilter="blur(10px) hue-rotate(90deg)" />
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
 
   useEffect(() => {
     onOpen(); // Abre o modal assim que a página for carregada
@@ -77,9 +78,7 @@ export default function ChoicePage({ selectedAppointment }: OrderProps) {
               </GridItem>
               <GridItem area={"name"}>
                 <Text fontSize="lg" fontWeight="bold">
-                  {selectedAppointment.doctor.profile.gender === "male"
-                    ? "Dr. "
-                    : "Dra. "}
+                  
                   {selectedAppointment.doctor.name}
                 </Text>
               </GridItem>
@@ -116,7 +115,7 @@ export default function ChoicePage({ selectedAppointment }: OrderProps) {
         )}
         <Box mt={4}>
           <VStack spacing={2}>
-            <Link to="/payment/creditcard">
+            
               <Button
                 boxSize={40}
                 display="flex"
@@ -124,12 +123,17 @@ export default function ChoicePage({ selectedAppointment }: OrderProps) {
                 colorScheme="blue"
                 size="lg"
                 gap="2"
+                onClick={() => {
+                  if (selectedAppointment) {
+                    navigate(`/payment/creditcard?appointmentId=${selectedAppointment.id}`);
+                  }
+                }}
               >
                 <FaCreditCard size={80} />
                 Cartão
               </Button>
-            </Link>
-            <Link to="/payment/billet">
+            
+            {/* <Link to="/payment/billet">
               <Button
                 boxSize={40}
                 display="flex"
@@ -141,7 +145,7 @@ export default function ChoicePage({ selectedAppointment }: OrderProps) {
                 <FaBarcode size={80} />
                 Boleto
               </Button>
-            </Link>
+            </Link> */}
           </VStack>
         </Box>
       </Box>

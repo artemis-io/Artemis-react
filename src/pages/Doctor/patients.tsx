@@ -37,7 +37,7 @@ const AlphabeticalListPage: React.FC = () => {
 
   const fetchPatients = useCallback(async () => {
     try {
-      setIsLoading(true); // Defina o estado de loading como true
+      setIsLoading(true); 
 
       const auth = localStorage.getItem(AUTH_TOKEN_STORAGE);
 
@@ -50,10 +50,10 @@ const AlphabeticalListPage: React.FC = () => {
       console.log(response.data);
 
       setAppointment(response.data);
-      setIsLoading(false); // Defina o estado de loading como false após receber os dados
+      setIsLoading(false); 
     } catch (error) {
       console.error("Error fetching patients:", error);
-      setIsLoading(false); // Certifique-se de definir o estado de loading como false em caso de erro também
+      setIsLoading(false); 
     }
   }, []);
 
@@ -78,7 +78,7 @@ const AlphabeticalListPage: React.FC = () => {
         {filteredPatients.map((appointment) => (
           <div
             key={appointment.id}
-            onClick={() => handleNav(appointment.id_patient)} // Chama a função handleNav
+            onClick={() => handleNav(appointment.id_patient)} 
           >
             <PatientCard appointment={appointment} />
           </div>
@@ -102,8 +102,8 @@ const AlphabeticalListPage: React.FC = () => {
         </Heading>
         <SearchBar />
         <VStack align="start" w="100%" spacing={4} mt={5}>
-          {isLoading ? ( // Verifique se isLoading é verdadeiro
-            <LoadingCircle /> // Renderize o componente de loading
+          {isLoading ? ( 
+            <LoadingCircle /> 
           ) : (
             Array.from(Array(26), (_, i) => String.fromCharCode(65 + i)).map(
               (letter) => (
@@ -198,7 +198,7 @@ const PatientCard: React.FC<PatientCardProps> = ({ appointment }) => {
       width="360px"
       padding="12px"
       _hover={{
-        background: "gray.100", // Change this color to your desired hover color
+        background: "gray.100",
         cursor: "pointer",
       }}
     >
