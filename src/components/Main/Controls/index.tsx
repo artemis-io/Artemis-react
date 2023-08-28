@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   HStack,
   IconButton,
@@ -12,6 +12,8 @@ import { MdMic, MdMicOff, MdVideocam, MdVideocamOff } from "react-icons/md";
 import { FiPhone } from "react-icons/fi";
 import MedicalRecord, { MedicalRecordContent } from "../MedicalRecord";
 import { FaNotesMedical } from "react-icons/fa";
+import { apiMed } from "../../../services/api";
+import { Patient } from "../../../shared/interface";
 
 interface ControlsBarProps {
   handleLogout: () => void;
@@ -20,12 +22,11 @@ interface ControlsBarProps {
   toggleVideoEnabled: () => void;
   toggleAudioEnabled: () => void;
   patientId: string;
+  roomName: string | undefined;
 }
 
 export interface PatientInfoData {
-  birthDate: string;
   diagnosis: string;
-  prescription: string;
   queixaprincipal: string;
   historiadoenca: string;
   historiapatologica: string;
@@ -50,18 +51,18 @@ const ControlsBar = ({
   toggleAudioEnabled,
   toggleVideoEnabled,
   patientId,
+  roomName,
 }: ControlsBarProps) => {
   const [showMedicalRecord, setShowMedicalRecord] = useState(false);
+  const [patient, setPatient] = useState<Patient | null>(null);
   const [medicalRecord, setMedicalRecord] = useState<PatientInfoData>({
-    birthDate: "",
     diagnosis: "",
-    prescription: "",
     queixaprincipal: "",
     historiadoenca: "",
     historiapatologica: "",
     alergias: "",
-    peso: "",
     altura: "",
+    peso: "",
     imc: "",
     freqcardiaca: "",
     freqrespiratoria: "",
@@ -76,6 +77,20 @@ const ControlsBar = ({
   const handleToggleMedicalRecord = () => {
     setShowMedicalRecord(!showMedicalRecord);
   };
+
+  useEffect(() => {
+    const fetchPatient = async () => {
+      try {
+        const response = await apiMed.get(`user/patient/${patientId}`);
+        setPatient(response.data.user);
+        console.log(response.data.user);
+      } catch (error) {
+        console.error("Erro ao obter os dados do paciente", error);
+      }
+    };
+
+    fetchPatient();
+  }, [patientId]);
 
   return (
     <Flex
@@ -157,6 +172,8 @@ const ControlsBar = ({
             {showMedicalRecord && (
               <MedicalRecord>
                 <MedicalRecordContent
+                  roomName={roomName}
+                  patient={patient}
                   patientId={patientId}
                   medicalRecord={medicalRecord}
                   setMedicalRecord={setMedicalRecord}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, VStack, Text } from "@chakra-ui/react";
+import { Box, Flex, VStack, Text, Heading } from "@chakra-ui/react";
 import { Room } from "twilio-video";
 import Participant from "../Participant/index";
 import RemoteParticipant from "../RemoteParticipant";
@@ -13,7 +13,13 @@ interface RoomProps {
   handleLogout: () => void;
 }
 
-const RoomVideo = ({ room, handleLogout, doctorId, patientId }: RoomProps) => {
+const RoomVideo = ({
+  room,
+  handleLogout,
+  doctorId,
+  patientId,
+  roomName,
+}: RoomProps) => {
   const [participants, setParticipants] = useState<any[]>([]);
 
   const participantConnected = (participant: any) => {
@@ -53,6 +59,7 @@ const RoomVideo = ({ room, handleLogout, doctorId, patientId }: RoomProps) => {
       flexDirection="column"
       alignItems="center"
     >
+      <Heading color="white">{roomName}</Heading>
       <VStack spacing={4} align="center">
         <Text fontSize="lg" fontWeight="bold">
           Remote Participants
@@ -70,6 +77,7 @@ const RoomVideo = ({ room, handleLogout, doctorId, patientId }: RoomProps) => {
       >
         {room && (
           <Participant
+            roomName={roomName}
             doctorId={doctorId}
             patientId={patientId}
             key={room.localParticipant.sid}

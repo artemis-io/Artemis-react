@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 import { FiUser, FiVideo } from "react-icons/fi";
 import StyledLabel from "../Forms/StyledLabel";
-
 import { useNavigate } from "react-router-dom";
 
 const Lobby = ({ username, roomName, handleSubmit, connecting, role }) => {

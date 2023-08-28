@@ -7,6 +7,7 @@ interface ParticipantProps {
   handleLogout: () => void;
   patientId: string;
   doctorId: string;
+  roomName: string | undefined;
 }
 
 const Participant: React.FC<ParticipantProps> = ({
@@ -14,6 +15,7 @@ const Participant: React.FC<ParticipantProps> = ({
   handleLogout,
   doctorId,
   patientId,
+  roomName,
 }) => {
   console.log(doctorId);
   console.log(patientId);
@@ -123,6 +125,7 @@ const Participant: React.FC<ParticipantProps> = ({
         </Box>
 
         <ControlsBar
+        roomName={roomName}
           patientId={patientId}
           handleLogout={handleLogout}
           isAudioEnabled={isAudioEnabled}

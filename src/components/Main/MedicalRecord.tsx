@@ -8,7 +8,6 @@ import {
   Flex,
   FormControl,
   HStack,
-  Heading,
   Input,
   Stack,
   Text,
@@ -19,7 +18,7 @@ import { PatientInfoData } from "./Controls";
 import StyledLabel from "./Forms/StyledLabel";
 import { apiMed } from "../../services/api";
 import { Patient } from "../../shared/interface";
-
+import { AUTH_TOKEN_STORAGE } from "../../shared/storage/config";
 
 interface MedicalRecordProps {
   children: React.ReactNode;
@@ -33,29 +32,65 @@ interface MedicalRecordContentProps {
   medicalRecord: PatientInfoData;
   setMedicalRecord: React.Dispatch<React.SetStateAction<PatientInfoData>>;
   patientId: string;
+  patient: Patient | null;
+  roomName: string | undefined;
 }
 
 export const MedicalRecordContent = ({
   setMedicalRecord,
   medicalRecord,
   patientId,
+  patient,
+  roomName,
 }: MedicalRecordContentProps) => {
-  const [patient, setPatient] = useState<Patient | null>(null);
   const { onClose } = useDisclosure();
+  /* 
+  const handleSubmit = async () => {
+    try {
+      const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
+      const updatedMedicalRecordData = {
+       
+      };
 
-  useEffect(() => {
-    const fetchPatient = async () => {
-      try {
-        const response = await apiMed.get(`user/patient/${patientId}`);
-        setPatient(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Erro ao obter os dados do paciente", error);
+      const response = await apiMed.put(
+        `/appointment/update-infoPatient/${roomName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${item}`,
+          },
+        }
+      );
+      if (response.data) {
+        setMedicalRecord(medi);
+        console.log("Patient information updated:", response.data);
+        console.log("Response Headers:", response.headers);
       }
-    };
+    } catch (error) {
+      console.error("Error updating patient information:", error);
+    }
+  }; */
 
-    fetchPatient();
-  }, [patientId, patient]);
+  const handleSubmit = async () => {
+    try {
+      const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
+      const response = await apiMed.post(
+        `/appointment/update-infoPatient/${roomName}`,
+        { ...medicalRecord },
+        {
+          headers: {
+            Authorization: `Bearer ${item}`,
+          },
+        }
+      );
+
+      if (response.data) {
+        setMedicalRecord(medicalRecord);
+        console.log("Patient information updated:", response.data);
+      }
+    } catch (error) {
+      console.error("Error updating patient information:", error);
+    }
+  };
 
   return (
     <Box
@@ -87,26 +122,15 @@ export const MedicalRecordContent = ({
               Informações do Paciente
             </Text>
 
-            <Heading>{patientId}</Heading>
-            <Text color="blue">{patient?.name}</Text>
-
             <FormControl>
               <StyledLabel fontSize="sm">Nome</StyledLabel>
-
-              {/*  <Input
-                defaultValue={patientName}
-                value={patientName}
-                onChange={(event) =>
-                  setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
-                    ...prevMedicalRecord,
-                    patientName: event.target.value,
-                  }))
-                }
-              /> */}
+              <Text>{patient?.name}</Text>
+              <Text>{patient?.profile.dateOfBirth}</Text>
+              <Text>{roomName}</Text>
             </FormControl>
 
             <HStack>
-              <FormControl>
+              {/*      <FormControl>
                 <StyledLabel fontSize="sm">Data de Nascimento</StyledLabel>
                 <Input
                   type="date"
@@ -118,7 +142,7 @@ export const MedicalRecordContent = ({
                     }))
                   }
                 />
-              </FormControl>
+              </FormControl> */}
 
               <FormControl>
                 <StyledLabel fontSize="sm">Tipo sanguíneo</StyledLabel>
@@ -151,18 +175,7 @@ export const MedicalRecordContent = ({
                 }
               />
             </FormControl>
-            <FormControl>
-              <StyledLabel fontSize="sm">Prescrição Médica</StyledLabel>
-              <Textarea
-                value={medicalRecord.prescription}
-                onChange={(event) =>
-                  setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
-                    ...prevMedicalRecord,
-                    prescription: event.target.value,
-                  }))
-                }
-              />
-            </FormControl>
+
             <FormControl>
               <StyledLabel fontSize="sm">Alergias</StyledLabel>
               <Textarea
@@ -427,7 +440,7 @@ export const MedicalRecordContent = ({
               </HStack>
             </Box>
             <Divider my="4" />
-            <Button colorScheme="blue" onClick={onClose}>
+            <Button colorScheme="blue" onClick={handleSubmit}>
               Salvar
             </Button>
           </Stack>
