@@ -23,6 +23,7 @@ import { AppointmentRecordList } from "../../shared/types";
 import Sidebar from "../../components/Main/DoctorSideBar/Sidebar";
 import { useNavigate } from "react-router-dom";
 import { LoadingCircle } from "../../components/Style/LoadingCircle";
+import PatientSidebar from "../../components/Main/PatientSideBar/PatientSideBar";
 
 const AlphabeticalListPageDoctors: React.FC = () => {
   const history = useNavigate();
@@ -95,7 +96,7 @@ const AlphabeticalListPageDoctors: React.FC = () => {
   };
 
   return (
-    <Sidebar>
+    <PatientSidebar>
       <Flex direction="column" align="center" justify="center" px={4}>
         <Heading size="lg" color="#747B7D" alignSelf="flex-start">
           Meus Doutores
@@ -121,7 +122,7 @@ const AlphabeticalListPageDoctors: React.FC = () => {
           )}
         </VStack>
       </Flex>
-    </Sidebar>
+    </PatientSidebar>
   );
 };
 
