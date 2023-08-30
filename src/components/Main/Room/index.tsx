@@ -59,11 +59,7 @@ const RoomVideo = ({
       flexDirection="column"
       alignItems="center"
     >
-      <Heading color="white">{roomName}</Heading>
       <VStack spacing={4} align="center">
-        <Text fontSize="lg" fontWeight="bold">
-          Remote Participants
-        </Text>
         {remoteParticipants}
       </VStack>
 

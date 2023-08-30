@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Button,
@@ -12,7 +12,8 @@ import {
   Stack,
   Text,
   Textarea,
-  useDisclosure,
+  VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { PatientInfoData } from "./Controls";
 import StyledLabel from "./Forms/StyledLabel";
@@ -39,42 +40,22 @@ interface MedicalRecordContentProps {
 export const MedicalRecordContent = ({
   setMedicalRecord,
   medicalRecord,
-  patientId,
   patient,
   roomName,
 }: MedicalRecordContentProps) => {
-  const { onClose } = useDisclosure();
-  /* 
-  const handleSubmit = async () => {
-    try {
-      const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
-      const updatedMedicalRecordData = {
-       
-      };
+  const toast = useToast();
 
-      const response = await apiMed.put(
-        `/appointment/update-infoPatient/${roomName}`,
-        {
-          headers: {
-            Authorization: `Bearer ${item}`,
-          },
-        }
-      );
-      if (response.data) {
-        setMedicalRecord(medi);
-        console.log("Patient information updated:", response.data);
-        console.log("Response Headers:", response.headers);
-      }
-    } catch (error) {
-      console.error("Error updating patient information:", error);
-    }
-  }; */
-
+  /*  const age = useMemo(
+    () => differenceInYears(new Date(), new Date(patient?.profile.dateOfBirth)),
+    [patient?.profile.dateOfBirth]
+  );
+ */
   const handleSubmit = async () => {
+    const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
+    console.log("Dados enviados:", medicalRecord);
     try {
-      const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
       const response = await apiMed.post(
-        `/appointment/update-infoPatient/${roomName}`,
+        `/appointment/create-infoPatient/${roomName}`,
         { ...medicalRecord },
         {
           headers: {
@@ -84,17 +65,68 @@ export const MedicalRecordContent = ({
       );
 
       if (response.data) {
-        setMedicalRecord(medicalRecord);
-        console.log("Patient information updated:", response.data);
+        console.log("Informações do paciente atualizadas:", response.data);
+        toast({
+          description: "Dados atualizados com sucesso!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setMedicalRecord(response.data);
       }
-    } catch (error) {
-      console.error("Error updating patient information:", error);
+    } catch (error: any) {
+      console.error("Erro ao atualizar as informações do paciente:", error);
+
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message === "Histórico já registrado"
+      ) {
+        try {
+          const putResponse = await apiMed.put(
+            `/appointment/update-infoPatient/${roomName}`,
+            { ...medicalRecord },
+            {
+              headers: {
+                Authorization: `Bearer ${item}`,
+              },
+            }
+          );
+
+          if (putResponse.data) {
+            console.log(
+              "Informações do paciente atualizadas:",
+              putResponse.data
+            );
+            toast({
+              description: "Dados atualizados com sucesso!",
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+            });
+            setMedicalRecord(putResponse.data);
+          }
+        } catch (putError) {
+          console.error(
+            "Erro ao atualizar as informações do paciente:",
+            putError
+          );
+        }
+      } else {
+        toast({
+          position: "bottom",
+          description:
+            "Ocorreu um erro, verifique as informações e tente novamente.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     }
   };
 
   return (
     <Box
-      p={4}
       pos="relative"
       top="0"
       left="0"
@@ -106,44 +138,24 @@ export const MedicalRecordContent = ({
       borderRadius="20px"
       borderWidth="sm"
     >
-      <Box bg="white" h="100vh" w={["100vw", "40vw"]} p="4" overflowY="scroll">
-        <Flex h="20" alignItems="center" justifyContent="center" mt={20}>
-          <Text fontSize="xl" fontWeight="bold">
-            Prontuário Médico
-          </Text>
-          <CloseButton
-            display={{ base: "flex", md: "none" }}
-            onClick={onClose}
-          />
-        </Flex>
+      <Box bg="white" h="90vh" w={["100vw", "40vw"]} p="4" overflowY="scroll">
+        {/*   <Flex h="20" alignItems="center" justifyContent="center" mt={20}>
+          <CloseButton display={{ base: "flex", md: "none" }} />
+        </Flex> */}
         <Center>
-          <Stack spacing={4} w={"full"} maxW={"md"} p={1}>
-            <Text fontSize="md" fontWeight="semibold" color="#747B7D">
-              Informações do Paciente
-            </Text>
+          <Stack spacing={4} w={"full"} maxW={"md"} p={1} mt={8}>
+            <VStack>
+              <StyledLabel fontSize="md" fontWeight="semibold">
+                Prontuário Eletrônico
+              </StyledLabel>
+              <StyledLabel fontSize="md" fontWeight="semibold">
+                {patient?.name}
+              </StyledLabel>
+            </VStack>
 
-            <FormControl>
-              <StyledLabel fontSize="sm">Nome</StyledLabel>
-              <Text>{patient?.name}</Text>
-              <Text>{patient?.profile.dateOfBirth}</Text>
-              <Text>{roomName}</Text>
-            </FormControl>
-
+            <Text>{patient?.profile.dateOfBirth}</Text>
+            {/*    <Text>{age}</Text> */}
             <HStack>
-              {/*      <FormControl>
-                <StyledLabel fontSize="sm">Data de Nascimento</StyledLabel>
-                <Input
-                  type="date"
-                  defaultValue={medicalRecord.birthDate}
-                  onChange={(event) =>
-                    setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
-                      ...prevMedicalRecord,
-                      birthDate: event.target.value,
-                    }))
-                  }
-                />
-              </FormControl> */}
-
               <FormControl>
                 <StyledLabel fontSize="sm">Tipo sanguíneo</StyledLabel>
                 <Input
@@ -257,7 +269,7 @@ export const MedicalRecordContent = ({
             </Text>
             <HStack>
               <FormControl>
-                <StyledLabel>Altura</StyledLabel>
+                <StyledLabel fontSize="sm">Altura</StyledLabel>
                 <Input
                   value={medicalRecord.altura}
                   onChange={(event) =>
@@ -440,7 +452,7 @@ export const MedicalRecordContent = ({
               </HStack>
             </Box>
             <Divider my="4" />
-            <Button colorScheme="blue" onClick={handleSubmit}>
+            <Button bg="#0078D7" color="#fafafa" onClick={handleSubmit}>
               Salvar
             </Button>
           </Stack>

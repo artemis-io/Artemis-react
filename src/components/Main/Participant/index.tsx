@@ -100,7 +100,7 @@ const Participant: React.FC<ParticipantProps> = ({
   }, [audioTracks]);
 
   return (
-    <Box textAlign="center" bg="transparent" p={1} mb={16}>
+    <Box textAlign="center" bg="transparent" p={1} mb={20}>
       <VStack>
         <Box textAlign="left">
           <Box
@@ -117,15 +117,11 @@ const Participant: React.FC<ParticipantProps> = ({
             />
           </Box>
           <Heading color="#fafafa" fontSize="16px" mt={1}>
-            {doctorId}
-          </Heading>
-          <Heading color="#fafafa" fontSize="16px" mt={1}>
             {participant.identity}
           </Heading>
         </Box>
-
         <ControlsBar
-        roomName={roomName}
+          roomName={roomName}
           patientId={patientId}
           handleLogout={handleLogout}
           isAudioEnabled={isAudioEnabled}
@@ -133,7 +129,6 @@ const Participant: React.FC<ParticipantProps> = ({
           toggleAudioEnabled={toggleAudioEnabled}
           toggleVideoEnabled={toggleVideoEnabled}
         />
-
         <audio ref={audioRef} autoPlay={true} style={{ display: "none" }} />
       </VStack>
     </Box>

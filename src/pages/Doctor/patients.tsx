@@ -198,7 +198,7 @@ const PatientCard: React.FC<PatientCardProps> = ({ appointment }) => {
       width="360px"
       padding="12px"
       _hover={{
-        background: "gray.100", // Change this color to your desired hover color
+        background: "gray.100", 
         cursor: "pointer",
       }}
     >

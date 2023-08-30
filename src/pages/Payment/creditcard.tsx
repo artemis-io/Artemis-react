@@ -30,7 +30,7 @@ const PaymentPage = () => {
   const [paymentData, setPaymentData] = useState({
     urlretorno: "",
     chaveerp: "",
-    valor: "", //appointmentprice
+    valor: "", 
     numeroparcela: 1,
     nome: "",
     identificador: "",
