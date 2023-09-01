@@ -85,7 +85,7 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/payment/creditcard"
+        path="/payment/creditcard/:appointmentId"
         element={
           <PrivateRoute>
             <CreditCard />
