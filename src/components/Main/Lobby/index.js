@@ -39,7 +39,7 @@ const Lobby = ({ username, roomName, handleSubmit, connecting, role }) => {
                 <Input
                   type="text"
                   id="name"
-                  value={username}
+                  defaultValue={username}
                   readOnly={connecting}
                   required
                 />
@@ -57,7 +57,7 @@ const Lobby = ({ username, roomName, handleSubmit, connecting, role }) => {
                 <Input
                   type="text"
                   id="room"
-                  value={roomName}
+                  defaultValue={roomName}
                   readOnly={connecting}
                   required
                 />

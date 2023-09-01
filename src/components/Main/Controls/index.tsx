@@ -14,6 +14,8 @@ import MedicalRecord, { MedicalRecordContent } from "../MedicalRecord";
 import { FaNotesMedical } from "react-icons/fa";
 import { apiMed } from "../../../services/api";
 import { Patient } from "../../../shared/interface";
+import { AUTH_TOKEN_STORAGE } from "../../../shared/storage/config";
+
 
 interface ControlsBarProps {
   handleLogout: () => void;
@@ -25,24 +27,24 @@ interface ControlsBarProps {
   roomName: string | undefined;
 }
 
-export interface PatientInfoData {
-  diagnosis: string;
-  queixaprincipal: string;
-  historiadoenca: string;
-  historiapatologica: string;
-  alergias: string;
-  peso: string;
-  altura: string;
-  imc: string;
-  freqcardiaca: string;
-  freqrespiratoria: string;
-  pressaoarterial: string;
-  tax: string;
-  glasgow: string;
-  tiposanguineo: string;
-  medicamentos: string;
-  anotacoes: string;
-}
+// export interface PatientInfoData {
+//   diagnosis: string;
+//   queixaprincipal: string;
+//   historiadoenca: string;
+//   historiapatologica: string;
+//   alergias: string;
+//   peso: string;
+//   altura: string;
+//   imc: string;
+//   freqcardiaca: string;
+//   freqrespiratoria: string;
+//   pressaoarterial: string;
+//   tax: string;
+//   glasgow: string;
+//   tiposanguineo: string;
+//   medicamentos: string;
+//   anotacoes: string;
+// }
 
 const ControlsBar = ({
   handleLogout,
@@ -55,24 +57,25 @@ const ControlsBar = ({
 }: ControlsBarProps) => {
   const [showMedicalRecord, setShowMedicalRecord] = useState(false);
   const [patient, setPatient] = useState<Patient | null>(null);
-  const [medicalRecord, setMedicalRecord] = useState<PatientInfoData>({
-    diagnosis: "",
-    queixaprincipal: "",
-    historiadoenca: "",
-    historiapatologica: "",
-    alergias: "",
-    altura: "",
-    peso: "",
-    imc: "",
-    freqcardiaca: "",
-    freqrespiratoria: "",
-    pressaoarterial: "",
-    tax: "",
-    glasgow: "",
-    tiposanguineo: "",
-    medicamentos: "",
-    anotacoes: "",
-  });
+  // const [medicalRecord, setMedicalRecord] = useState<PatientInfoData>({
+  //   diagnosis: "",
+  //   queixaprincipal: "",
+  //   historiadoenca: "",
+  //   historiapatologica: "",
+  //   alergias: "",
+  //   altura: "",
+  //   peso: "",
+  //   imc: "",
+  //   freqcardiaca: "",
+  //   freqrespiratoria: "",
+  //   pressaoarterial: "",
+  //   tax: "",
+  //   glasgow: "",
+  //   tiposanguineo: "",
+  //   medicamentos: "",
+  //   anotacoes: "",
+  // });
+  const [history, setHistory] = useState(null);
 
   const handleToggleMedicalRecord = () => {
     setShowMedicalRecord(!showMedicalRecord);
@@ -91,6 +94,7 @@ const ControlsBar = ({
 
     fetchPatient();
   }, [patientId]);
+
 
   return (
     <Flex
@@ -175,8 +179,8 @@ const ControlsBar = ({
                   roomName={roomName}
                   patient={patient}
                   patientId={patientId}
-                  medicalRecord={medicalRecord}
-                  setMedicalRecord={setMedicalRecord}
+                  // medicalRecord={medicalRecord}
+                  // setMedicalRecord={setMedicalRecord}
                 />
               </MedicalRecord>
             )}
