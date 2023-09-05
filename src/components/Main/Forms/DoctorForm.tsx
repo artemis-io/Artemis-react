@@ -1,4 +1,4 @@
-import { Box, Heading, VStack, Image, Button } from "@chakra-ui/react";
+import { Box, Center, Heading, Image, VStack, Button } from "@chakra-ui/react";
 import { useState } from "react";
 import { DoctorData } from "../Multiform/StepsDoctorForm/DoctorData";
 import { DoctorInfo } from "../Multiform/StepsDoctorForm/DoctorInfo";

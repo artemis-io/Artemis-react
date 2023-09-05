@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   HStack,
   IconButton,
@@ -7,14 +7,14 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Drawer,
-  DrawerContent,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { MdMic, MdMicOff, MdVideocam, MdVideocamOff } from "react-icons/md";
 import { FiPhone } from "react-icons/fi";
 import MedicalRecord, { MedicalRecordContent } from "../MedicalRecord";
 import { FaNotesMedical } from "react-icons/fa";
+import { apiMed } from "../../../services/api";
+import { Patient } from "../../../shared/interface";
+import { AUTH_TOKEN_STORAGE } from "../../../shared/storage/config";
 
 interface ControlsBarProps {
   handleLogout: () => void;
@@ -22,29 +22,28 @@ interface ControlsBarProps {
   isVideoEnabled: boolean;
   toggleVideoEnabled: () => void;
   toggleAudioEnabled: () => void;
+  patientId: string;
+  roomName: string | undefined;
 }
 
-export interface PatientInfoData {
-  patientName: string;
-  birthDate: string;
-  diagnosis: string;
-  prescription: string;
-  queixaprincipal: string;
-  historiadoenca: string;
-  historiapatologica: string;
-  alergias: string;
-  peso: string;
-  altura: string;
-  imc: string;
-  freqcardiaca: string;
-  freqrespiratoria: string;
-  pressaoarterial: string;
-  tax: string;
-  glasgow: string;
-  tiposanguineo: string;
-  medicamentos: string;
-  anotacoes: string;
-}
+// export interface PatientInfoData {
+//   diagnosis: string;
+//   queixaprincipal: string;
+//   historiadoenca: string;
+//   historiapatologica: string;
+//   alergias: string;
+//   peso: string;
+//   altura: string;
+//   imc: string;
+//   freqcardiaca: string;
+//   freqrespiratoria: string;
+//   pressaoarterial: string;
+//   tax: string;
+//   glasgow: string;
+//   tiposanguineo: string;
+//   medicamentos: string;
+//   anotacoes: string;
+// }
 
 const ControlsBar = ({
   handleLogout,
@@ -52,34 +51,48 @@ const ControlsBar = ({
   isVideoEnabled,
   toggleAudioEnabled,
   toggleVideoEnabled,
+  patientId,
+  roomName,
 }: ControlsBarProps) => {
-
   const [showMedicalRecord, setShowMedicalRecord] = useState(false);
-  const [medicalRecord, setMedicalRecord] = useState<PatientInfoData>({
-    patientName: "",
-    birthDate: "",
-    diagnosis: "",
-    prescription: "",
-    queixaprincipal: "",
-    historiadoenca: "",
-    historiapatologica: "",
-    alergias: "",
-    peso: "",
-    altura: "",
-    imc: "",
-    freqcardiaca: "",
-    freqrespiratoria: "",
-    pressaoarterial: "",
-    tax: "",
-    glasgow: "",
-    tiposanguineo: "",
-    medicamentos: "",
-    anotacoes: "",
-  });
+  const [patient, setPatient] = useState<Patient | null>(null);
+  // const [medicalRecord, setMedicalRecord] = useState<PatientInfoData>({
+  //   diagnosis: "",
+  //   queixaprincipal: "",
+  //   historiadoenca: "",
+  //   historiapatologica: "",
+  //   alergias: "",
+  //   altura: "",
+  //   peso: "",
+  //   imc: "",
+  //   freqcardiaca: "",
+  //   freqrespiratoria: "",
+  //   pressaoarterial: "",
+  //   tax: "",
+  //   glasgow: "",
+  //   tiposanguineo: "",
+  //   medicamentos: "",
+  //   anotacoes: "",
+  // });
+  const [history, setHistory] = useState(null);
 
   const handleToggleMedicalRecord = () => {
     setShowMedicalRecord(!showMedicalRecord);
   };
+
+  useEffect(() => {
+    const fetchPatient = async () => {
+      try {
+        const response = await apiMed.get(`user/patient/${patientId}`);
+        setPatient(response.data.user);
+        console.log(response.data.user);
+      } catch (error) {
+        console.error("Erro ao obter os dados do paciente", error);
+      }
+    };
+
+    fetchPatient();
+  }, [patientId]);
 
   return (
     <Flex
@@ -98,7 +111,7 @@ const ControlsBar = ({
         bg="rgba(0, 0, 0, 0.5)"
         p="12px 36px"
         gap="24px"
-        marginBottom="20px" //
+        marginBottom="20px"
       >
         <IconButton
           aria-label=""
@@ -159,14 +172,15 @@ const ControlsBar = ({
           </PopoverTrigger>
           <PopoverContent css={{ all: "unset" }}>
             {showMedicalRecord && (
-             
-                  <MedicalRecord>
-                    <MedicalRecordContent
-                      medicalRecord={medicalRecord}
-                      setMedicalRecord={setMedicalRecord}
-                    />
-                  </MedicalRecord>
-             
+              <MedicalRecord>
+                <MedicalRecordContent
+                  roomName={roomName}
+                  patient={patient}
+                  patientId={patientId}
+                  // medicalRecord={medicalRecord}
+                  // setMedicalRecord={setMedicalRecord}
+                />
+              </MedicalRecord>
             )}
           </PopoverContent>
         </Popover>

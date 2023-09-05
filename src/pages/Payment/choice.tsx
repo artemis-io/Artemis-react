@@ -34,11 +34,12 @@ export default function ChoicePage({ selectedAppointment }: OrderProps) {
   const OverlayOne = () => (
     <ModalOverlay bg="#2b2727" backdropFilter="blur(10px) hue-rotate(90deg)" />
   );
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
   useEffect(() => {
-    onOpen(); // Abre o modal assim que a página for carregada
+    onOpen(); 
   }, []);
 
   return (
@@ -78,7 +79,6 @@ export default function ChoicePage({ selectedAppointment }: OrderProps) {
               </GridItem>
               <GridItem area={"name"}>
                 <Text fontSize="lg" fontWeight="bold">
-                  
                   {selectedAppointment.doctor.name}
                 </Text>
               </GridItem>
@@ -87,7 +87,7 @@ export default function ChoicePage({ selectedAppointment }: OrderProps) {
                   {selectedAppointment.doctor.doctor.speciality.join(", ")}
                 </Text>
                 <Heading color="#494949" fontSize="16px" mt={2}>
-                  R${selectedAppointment.doctor.doctor.pricing},00
+                  R$ {selectedAppointment.doctor.doctor.pricing}
                 </Heading>
               </GridItem>
               <GridItem area={"date"} pl="8px">
@@ -115,24 +115,25 @@ export default function ChoicePage({ selectedAppointment }: OrderProps) {
         )}
         <Box mt={4}>
           <VStack spacing={2}>
-            
-              <Button
-                boxSize={40}
-                display="flex"
-                flexDir="column"
-                colorScheme="blue"
-                size="lg"
-                gap="2"
-                onClick={() => {
-                  if (selectedAppointment) {
-                    navigate(`/payment/creditcard?appointmentId=${selectedAppointment.id}`);
-                  }
-                }}
-              >
-                <FaCreditCard size={80} />
-                Cartão
-              </Button>
-            
+            <Button
+              boxSize={40}
+              display="flex"
+              flexDir="column"
+              colorScheme="blue"
+              size="lg"
+              gap="2"
+              onClick={() => {
+                if (selectedAppointment) {
+                  navigate(
+                    `/payment/creditcard/${selectedAppointment.id}`
+                  );
+                }
+              }}
+            >
+              <FaCreditCard size={80} />
+              Cartão
+            </Button>
+
             {/* <Link to="/payment/billet">
               <Button
                 boxSize={40}

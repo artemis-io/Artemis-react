@@ -16,12 +16,10 @@ interface APIInstanceProps extends AxiosInstance {
   }: RegisterInterceptTokenManager) => void;
 }
 
-export const apiMed = axios.create({
-  // baseURL: process.env.REACT_APP_BASE_URL,
-  baseURL: "  http://localhost:3333/api",
-  // baseURL: "https://artemis-api-production.up.railway.app/api",
-  timeout: 50000,
-
+const api = axios.create({
+  // Configure your default baseURL, headers, and other settings here
+  baseURL: "http://localhost:3333/api",
+  timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -31,7 +29,7 @@ export const apiMed = axios.create({
 let isRefreshing = false;
 let refreshSubscribers: ((accessToken: string) => void)[] = [];
 
-apiMed.interceptors.response.use(
+api.interceptors.response.use(
   (response) => response,
   (error) => {
     const originalRequest = error.config;
@@ -57,7 +55,7 @@ apiMed.interceptors.response.use(
 
                 // Retry the original request
                 originalRequest.headers.Authorization = `Bearer ${response.accessToken}`;
-                return apiMed.request(originalRequest);
+                return api.request(originalRequest);
               }
             })
             .catch(() => {
@@ -72,7 +70,7 @@ apiMed.interceptors.response.use(
       return new Promise((resolve) => {
         refreshSubscribers.push((accessToken) => {
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-          resolve(apiMed.request(originalRequest));
+          resolve(api.request(originalRequest));
         });
       });
     }
@@ -88,4 +86,6 @@ function registerInterceptTokenManager({
   // Define other management logic as needed
 }
 
-apiMed.registerInterceptTokenManager = registerInterceptTokenManager;
+api.registerInterceptTokenManager = registerInterceptTokenManager;
+
+export default api;

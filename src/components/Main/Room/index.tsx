@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, VStack, Text } from "@chakra-ui/react";
+import { Box, Flex, VStack, Text, Heading } from "@chakra-ui/react";
 import { Room } from "twilio-video";
 import Participant from "../Participant/index";
 import RemoteParticipant from "../RemoteParticipant";
 
 interface RoomProps {
+  doctorId: string;
+  patientId: string;
   roomName: string | undefined;
   username: string | undefined;
   room: Room;
   handleLogout: () => void;
 }
 
-const RoomVideo = ({ room, handleLogout }: RoomProps) => {
+const RoomVideo = ({
+  room,
+  handleLogout,
+  doctorId,
+  patientId,
+  roomName,
+}: RoomProps) => {
   const [participants, setParticipants] = useState<any[]>([]);
 
   const participantConnected = (participant: any) => {
@@ -35,7 +43,12 @@ const RoomVideo = ({ room, handleLogout }: RoomProps) => {
   }, [room]);
 
   const remoteParticipants = participants.map((participant) => (
-    <RemoteParticipant key={participant.sid} participant={participant} />
+    <RemoteParticipant
+      key={participant.sid}
+      participant={participant}
+      doctorId={doctorId}
+      patientId={patientId}
+    />
   ));
 
   return (
@@ -47,9 +60,6 @@ const RoomVideo = ({ room, handleLogout }: RoomProps) => {
       alignItems="center"
     >
       <VStack spacing={4} align="center">
-        <Text fontSize="lg" fontWeight="bold">
-          Remote Participants
-        </Text>
         {remoteParticipants}
       </VStack>
 
@@ -63,6 +73,9 @@ const RoomVideo = ({ room, handleLogout }: RoomProps) => {
       >
         {room && (
           <Participant
+            roomName={roomName}
+            doctorId={doctorId}
+            patientId={patientId}
             key={room.localParticipant.sid}
             participant={room.localParticipant}
             handleLogout={handleLogout}

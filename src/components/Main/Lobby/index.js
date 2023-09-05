@@ -13,12 +13,10 @@ import {
 } from "@chakra-ui/react";
 import { FiUser, FiVideo } from "react-icons/fi";
 import StyledLabel from "../Forms/StyledLabel";
-import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 const Lobby = ({ username, roomName, handleSubmit, connecting, role }) => {
   const router = useNavigate();
-  const user = useAuth();
   const handleNav = () => {
     router(`../../${role}/homepage`);
   };
@@ -41,7 +39,7 @@ const Lobby = ({ username, roomName, handleSubmit, connecting, role }) => {
                 <Input
                   type="text"
                   id="name"
-                  value={username}
+                  defaultValue={username}
                   readOnly={connecting}
                   required
                 />
@@ -59,7 +57,7 @@ const Lobby = ({ username, roomName, handleSubmit, connecting, role }) => {
                 <Input
                   type="text"
                   id="room"
-                  value={roomName}
+                  defaultValue={roomName}
                   readOnly={connecting}
                   required
                 />

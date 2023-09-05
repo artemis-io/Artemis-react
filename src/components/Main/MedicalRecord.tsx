@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Button,
@@ -12,10 +12,14 @@ import {
   Stack,
   Text,
   Textarea,
-  useDisclosure,
+  VStack,
+  useToast,
 } from "@chakra-ui/react";
-import { PatientInfoData } from "./Controls";
+
 import StyledLabel from "./Forms/StyledLabel";
+import { apiMed } from "../../services/api";
+import { Patient } from "../../shared/interface";
+import { AUTH_TOKEN_STORAGE } from "../../shared/storage/config";
 
 interface MedicalRecordProps {
   children: React.ReactNode;
@@ -25,16 +29,171 @@ export default function MedicalRecord({ children }: MedicalRecordProps) {
   return <Box>{children}</Box>;
 }
 
+export interface PatientInfoData {
+  diagnosis: string;
+  queixaprincipal: string;
+  historiadoenca: string;
+  historiapatologica: string;
+  alergias: string;
+  peso: string;
+  altura: string;
+  imc: string;
+  freqcardiaca: string;
+  freqrespiratoria: string;
+  pressaoarterial: string;
+  tax: string;
+  glasgow: string;
+  tiposanguineo: string;
+  medicamentos: string;
+  anotacoes: string;
+}
+
 interface MedicalRecordContentProps {
-  medicalRecord: PatientInfoData;
-  setMedicalRecord: React.Dispatch<React.SetStateAction<PatientInfoData>>;
+  // medicalRecord: PatientInfoData;
+  // setMedicalRecord: React.Dispatch<React.SetStateAction<PatientInfoData>>;
+  patientId: string;
+  patient: Patient | null;
+  roomName: string | undefined;
 }
 
 export const MedicalRecordContent = ({
-  setMedicalRecord,
-  medicalRecord,
-}: MedicalRecordContentProps) => {
-  const { onClose } = useDisclosure();
+  patient,
+  roomName,
+}: // setMedicalRecord,
+// medicalRecord,
+MedicalRecordContentProps) => {
+  const [history, setHistory] = useState(null);
+  const [isFetchSuccessful, setIsFetchSuccessful] = useState(false);
+  const [medRecUpdate, setmedRecUpdate] = useState(false);
+  const [medicalRecord, setMedicalRecord] = useState<PatientInfoData>({
+    diagnosis: "",
+    queixaprincipal: "",
+    historiadoenca: "",
+    historiapatologica: "",
+    alergias: "",
+    altura: "",
+    peso: "",
+    imc: "",
+    freqcardiaca: "",
+    freqrespiratoria: "",
+    pressaoarterial: "",
+    tax: "",
+    glasgow: "",
+    tiposanguineo: "",
+    medicamentos: "",
+    anotacoes: "",
+  });
+  const toast = useToast();
+
+  /*  const age = useMemo(
+    () => differenceInYears(new Date(), new Date(patient?.profile.dateOfBirth)),
+    [patient?.profile.dateOfBirth]
+  );
+ */
+
+  useEffect(() => {
+    const fetchMedicalHistoryData = async () => {
+      const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
+      try {
+        const response = await apiMed.get(
+          `/appointment/findHistoryById/${roomName}`,
+          {
+            headers: {
+              Authorization: `Bearer ${item}`,
+            },
+          }
+        );
+        if (!response.data) {
+          console.log("Prontuário não localizado");
+          setIsFetchSuccessful(false);
+        } else {
+          setHistory(response.data);
+          setMedicalRecord(response.data);
+          setIsFetchSuccessful(true);
+          console.log("Dados do prontuário:", response.data);
+        }
+      } catch (error) {
+        console.error("Erro ao obter prontuário", error);
+      }
+    };
+    fetchMedicalHistoryData();
+  }, [roomName, setMedicalRecord, medRecUpdate]);
+
+  const handleSubmit = async () => {
+    const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
+    console.log("Dados enviados:", medicalRecord);
+    const requestData = {
+      diagnosis: medicalRecord.diagnosis,
+      queixaprincipal: medicalRecord.queixaprincipal,
+      historiadoenca: medicalRecord.historiadoenca,
+      historiapatologica: medicalRecord.historiapatologica,
+      alergias: medicalRecord.alergias,
+      peso: medicalRecord.peso,
+      altura: medicalRecord.altura,
+      imc: medicalRecord.imc,
+      freqcardiaca: medicalRecord.freqcardiaca,
+      freqrespiratoria: medicalRecord.freqrespiratoria,
+      pressaoarterial: medicalRecord.pressaoarterial,
+      tax: medicalRecord.tax,
+      glasgow: medicalRecord.glasgow,
+      tiposanguineo: medicalRecord.tiposanguineo,
+      medicamentos: medicalRecord.medicamentos,
+      anotacoes: medicalRecord.anotacoes,
+    };
+
+    if (isFetchSuccessful) {
+      try {
+        const response = await apiMed.put(
+          `/appointment/update-infoPatient/${roomName}`,
+          requestData,
+          {
+            headers: {
+              Authorization: `Bearer ${item}`,
+            },
+          }
+        );
+
+        if (response.data) {
+          console.log("Prontuário atualizado:", response.data);
+          toast({
+            description: "Dados atualizados com sucesso!",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+          setMedicalRecord(response.data);
+          setmedRecUpdate(true);
+        }
+      } catch (error) {
+        console.error("Erro ao atualizar prontuário", error);
+      }
+    } else {
+      try {
+        const response = await apiMed.post(
+          `/appointment/create-infoPatient/${roomName}`,
+          requestData,
+          {
+            headers: {
+              Authorization: `Bearer ${item}`,
+            },
+          }
+        );
+
+        if (response.data) {
+          console.log("Informações do paciente registradas:", response.data);
+          toast({
+            description: "Prontuário registrado com sucesso!",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+          setMedicalRecord(response.data);
+        }
+      } catch (error) {
+        console.error("Erro ao registrar prontuário:", error);
+      }
+    }
+  };
 
   return (
     <Box
@@ -45,58 +204,32 @@ export const MedicalRecordContent = ({
       bottom="0"
       zIndex="999"
       transition="opacity 0.8s ease-in-out"
-      boxShadow="12pxg"
+      boxShadow="12px"
       borderRadius="20px"
-      p={4}
       borderWidth="sm"
     >
-      <Box bg="white" h="100vh" w={["100vw", "40vw"]} p="4" overflowY="scroll">
-        <Flex h="20" alignItems="center" justifyContent="center" mt={20}>
-          <Text fontSize="xl" fontWeight="bold">
-            Prontuário Médico
-          </Text>
-          <CloseButton
-            display={{ base: "flex", md: "none" }}
-            onClick={onClose}
-          />
-        </Flex>
+      <Box bg="white" h="90vh" w={["100vw", "40vw"]} p="4" overflowY="scroll">
+        {/*   <Flex h="20" alignItems="center" justifyContent="center" mt={20}>
+          <CloseButton display={{ base: "flex", md: "none" }} />
+        </Flex> */}
         <Center>
-          <Stack spacing={4} w={"full"} maxW={"md"} p={1}>
-            <Text fontSize="md" fontWeight="semibold" color="#747B7D">
-              Informações do Paciente
-            </Text>
-            <FormControl>
-              <StyledLabel fontSize="sm">Nome</StyledLabel>
-              <Input
-                value={medicalRecord.patientName}
-                onChange={(event) =>
-                  setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
-                    ...prevMedicalRecord,
-                    patientName: event.target.value,
-                  }))
-                }
-              />
-            </FormControl>
+          <Stack spacing={4} w={"full"} maxW={"md"} p={1} mt={8}>
+            <VStack>
+              <StyledLabel fontSize="md" fontWeight="semibold">
+                Prontuário Eletrônico
+              </StyledLabel>
+              <StyledLabel fontSize="md" fontWeight="semibold">
+                {patient?.name}
+              </StyledLabel>
+            </VStack>
 
+            <Text>{patient?.profile.dateOfBirth}</Text>
+            {/*    <Text>{age}</Text> */}
             <HStack>
-              <FormControl>
-                <StyledLabel fontSize="sm">Data de Nascimento</StyledLabel>
-                <Input
-                  type="date"
-                  defaultValue={medicalRecord.birthDate}
-                  onChange={(event) =>
-                    setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
-                      ...prevMedicalRecord,
-                      birthDate: event.target.value,
-                    }))
-                  }
-                />
-              </FormControl>
-
               <FormControl>
                 <StyledLabel fontSize="sm">Tipo sanguíneo</StyledLabel>
                 <Input
-                  value={medicalRecord.tiposanguineo}
+                  defaultValue={medicalRecord.tiposanguineo}
                   onChange={(event) =>
                     setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                       ...prevMedicalRecord,
@@ -115,7 +248,7 @@ export const MedicalRecordContent = ({
             <FormControl>
               <StyledLabel fontSize="sm">Diagnóstico</StyledLabel>
               <Textarea
-                value={medicalRecord.diagnosis}
+                defaultValue={medicalRecord.diagnosis}
                 onChange={(event) =>
                   setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                     ...prevMedicalRecord,
@@ -124,22 +257,11 @@ export const MedicalRecordContent = ({
                 }
               />
             </FormControl>
-            <FormControl>
-              <StyledLabel fontSize="sm">Prescrição Médica</StyledLabel>
-              <Textarea
-                value={medicalRecord.prescription}
-                onChange={(event) =>
-                  setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
-                    ...prevMedicalRecord,
-                    prescription: event.target.value,
-                  }))
-                }
-              />
-            </FormControl>
+
             <FormControl>
               <StyledLabel fontSize="sm">Alergias</StyledLabel>
               <Textarea
-                value={medicalRecord.alergias}
+                defaultValue={medicalRecord.alergias}
                 onChange={(event) =>
                   setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                     ...prevMedicalRecord,
@@ -152,7 +274,7 @@ export const MedicalRecordContent = ({
             <FormControl>
               <StyledLabel fontSize="sm">Medicamentos</StyledLabel>
               <Textarea
-                value={medicalRecord.medicamentos}
+                defaultValue={medicalRecord.medicamentos}
                 onChange={(event) =>
                   setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                     ...prevMedicalRecord,
@@ -164,7 +286,7 @@ export const MedicalRecordContent = ({
             <FormControl>
               <StyledLabel fontSize="sm">Anotações</StyledLabel>
               <Textarea
-                value={medicalRecord.anotacoes}
+                defaultValue={medicalRecord.anotacoes}
                 onChange={(event) =>
                   setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                     ...prevMedicalRecord,
@@ -176,7 +298,7 @@ export const MedicalRecordContent = ({
             <FormControl>
               <StyledLabel fontSize="sm">Queixa principal</StyledLabel>
               <Textarea
-                value={medicalRecord.queixaprincipal}
+                defaultValue={medicalRecord.queixaprincipal}
                 onChange={(event) =>
                   setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                     ...prevMedicalRecord,
@@ -188,7 +310,7 @@ export const MedicalRecordContent = ({
             <FormControl>
               <StyledLabel fontSize="sm">Histórico da Doença</StyledLabel>
               <Textarea
-                value={medicalRecord.historiadoenca}
+                defaultValue={medicalRecord.historiadoenca}
                 onChange={(event) =>
                   setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                     ...prevMedicalRecord,
@@ -200,7 +322,7 @@ export const MedicalRecordContent = ({
             <FormControl>
               <StyledLabel fontSize="sm">Histórico Patológica</StyledLabel>
               <Textarea
-                value={medicalRecord.historiapatologica}
+                defaultValue={medicalRecord.historiapatologica}
                 onChange={(event) =>
                   setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                     ...prevMedicalRecord,
@@ -217,21 +339,25 @@ export const MedicalRecordContent = ({
             </Text>
             <HStack>
               <FormControl>
-                <StyledLabel>Altura</StyledLabel>
+                <StyledLabel fontSize="sm">Altura</StyledLabel>
                 <Input
-                  value={medicalRecord.altura}
+                  defaultValue={medicalRecord.altura}
                   onChange={(event) =>
                     setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                       ...prevMedicalRecord,
                       altura: event.target.value,
                     }))
                   }
+                  maxLength={4}
+                  pattern="^\d/d+.(\.\d{1,2})?$"
                 />
               </FormControl>
               <FormControl>
                 <StyledLabel fontSize="sm">Peso</StyledLabel>
                 <Input
-                  value={medicalRecord.peso}
+                maxLength={6}
+                 pattern="^\d+(\.\d{1,2})?$"
+                  defaultValue={medicalRecord.peso}
                   onChange={(event) =>
                     setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                       ...prevMedicalRecord,
@@ -259,7 +385,8 @@ export const MedicalRecordContent = ({
               <FormControl>
                 <StyledLabel fontSize="sm">IMC</StyledLabel>
                 <Input
-                  value={medicalRecord.imc}
+                  maxLength={6}
+                  defaultValue={medicalRecord.imc}
                   onChange={(event) =>
                     setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                       ...prevMedicalRecord,
@@ -271,7 +398,8 @@ export const MedicalRecordContent = ({
               <FormControl>
                 <StyledLabel fontSize="sm">Freq. Cardíaca</StyledLabel>
                 <Input
-                  value={medicalRecord.freqcardiaca}
+                 maxLength={3}
+                  defaultValue={medicalRecord.freqcardiaca}
                   onChange={(event) =>
                     setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
                       ...prevMedicalRecord,
@@ -300,7 +428,8 @@ export const MedicalRecordContent = ({
                 <FormControl>
                   <StyledLabel fontSize="sm">Freq. Respiratória</StyledLabel>
                   <Input
-                    value={medicalRecord.freqrespiratoria}
+                      maxLength={2}
+                    defaultValue={medicalRecord.freqrespiratoria}
                     onChange={(event) =>
                       setMedicalRecord(
                         (prevMedicalRecord: PatientInfoData) => ({
@@ -328,7 +457,8 @@ export const MedicalRecordContent = ({
                 <FormControl>
                   <StyledLabel fontSize="sm">Glasgow</StyledLabel>
                   <Input
-                    value={medicalRecord.glasgow}
+                   maxLength={2}
+                    defaultValue={medicalRecord.glasgow}
                     onChange={(event) =>
                       setMedicalRecord(
                         (prevMedicalRecord: PatientInfoData) => ({
@@ -346,7 +476,8 @@ export const MedicalRecordContent = ({
                 <FormControl>
                   <StyledLabel fontSize="sm">TAX</StyledLabel>
                   <Input
-                    value={medicalRecord.tax}
+                   maxLength={3}
+                    defaultValue={medicalRecord.tax}
                     onChange={(event) =>
                       setMedicalRecord(
                         (prevMedicalRecord: PatientInfoData) => ({
@@ -373,7 +504,8 @@ export const MedicalRecordContent = ({
                 <FormControl>
                   <StyledLabel fontSize="sm">Pressão Arterial</StyledLabel>
                   <Input
-                    value={medicalRecord.pressaoarterial}
+                   maxLength={7}
+                    defaultValue={medicalRecord.pressaoarterial}
                     onChange={(event) =>
                       setMedicalRecord(
                         (prevMedicalRecord: PatientInfoData) => ({
@@ -400,7 +532,7 @@ export const MedicalRecordContent = ({
               </HStack>
             </Box>
             <Divider my="4" />
-            <Button colorScheme="blue" onClick={onClose}>
+            <Button bg="#0078D7" color="#fafafa" onClick={handleSubmit}>
               Salvar
             </Button>
           </Stack>

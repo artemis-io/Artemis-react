@@ -22,7 +22,11 @@ const initialState: DoctorState = {
   },
   doctorStep3Data: {
     crm: "",
+<<<<<<< HEAD
+    pricing: 0,
+=======
     pricing: "",
+>>>>>>> main
     bio: "",
     speciality: [],
   },

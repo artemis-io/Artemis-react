@@ -63,7 +63,7 @@ export type DoctorStep2Data = {
 
 export type DoctorStep3Data = {
   crm: string;
-  pricing: string;
+  pricing: number | undefined | readonly string[] | string;
   bio: string;
   speciality: string[];
 };
@@ -130,17 +130,13 @@ export type CardCompleteProps = {
 };
 
 export type PatientPaymentData = {
-  name: string,
-  email: string,
+  name: string;
+  email: string;
   profile: {
-    cpf: string,
-  }
+    cpf: string;
+  };
 };
 
-export type PaymentCardStep1Data = {
+export type PaymentCardStep1Data = {};
 
-}
-
-export type PaymentCardStep2Data = {
-
-}
+export type PaymentCardStep2Data = {};

@@ -40,7 +40,7 @@ const HomepageDoctor = () => {
 
   useEffect(() => {
     if (user) {
-      fetchData(user.id).then(({ totalAppointments, upcomingAppointments }) => {
+      fetchData(user.id).then(({ totalAppointments, upcomingAppointments }: any) => {
         setTotalAppointments(totalAppointments);
         setUpcomingAppointments(upcomingAppointments);
       });

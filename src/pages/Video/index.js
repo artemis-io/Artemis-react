@@ -7,12 +7,16 @@ import { useParams } from "react-router-dom";
 import { apiMed } from "../../services/api";
 import RoomVideo from "../../components/Main/Room";
 import Lobby from "../../components/Main/Lobby";
+import { AUTH_TOKEN_STORAGE } from "../../shared/storage/config";
 
 const VideoChat = () => {
+  const [doctorId, setdoctorId] = useState("");
+  const [patientId, setpatientId] = useState("");
   const { roomName } = useParams();
   const { user } = useAuth();
   const [room, setRoom] = useState(null);
   const [connecting, setConnecting] = useState(false);
+  const item = localStorage.getItem(AUTH_TOKEN_STORAGE);
 
   const handleSubmit = useCallback(
     async (event) => {
@@ -44,8 +48,28 @@ const VideoChat = () => {
         setConnecting(false);
       }
     },
-    [roomName, user]
+    [roomName, user, doctorId, patientId]
   );
+
+  const findAppointment = useCallback(async () => {
+    try {
+      const response = await apiMed.get(`/appointment/${roomName}`, {
+        headers: {
+          Authorization: `Bearer ${item}`,
+        },
+      });
+      console.log(response.data);
+      if (!response.data.id_doctor || !response.data.id_patient) {
+        console.error("idDoctor or idPatient is missing.");
+        return;
+      }
+
+      setdoctorId(response.data.id_doctor);
+      setpatientId(response.data.id_patient);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [roomName, doctorId, patientId]);
 
   const handleLogout = useCallback(() => {
     setRoom((prevRoom) => {
@@ -57,6 +81,10 @@ const VideoChat = () => {
       }
       return null;
     });
+  }, []);
+
+  useEffect(() => {
+    findAppointment();
   }, []);
 
   useEffect(() => {
@@ -82,6 +110,8 @@ const VideoChat = () => {
     <Box>
       {room ? (
         <RoomVideo
+          doctorId={doctorId}
+          patientId={patientId}
           roomName={roomName}
           username={user?.name}
           room={room}
@@ -89,6 +119,7 @@ const VideoChat = () => {
         />
       ) : (
         <Lobby
+          findAppointment={findAppointment}
           role={user?.role}
           username={user?.name}
           roomName={roomName}

@@ -65,9 +65,10 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
     router("/payment/choice", { state: { selectedAppointment } });
   };
 
+  console.log(selectedAppointment);
 
   return (
-    <VStack spacing={4} alignItems="flex-start" w="95%" mx="auto">
+    <VStack spacing={4} alignItems="flex-start" w="95%" mx="auto" mb={16}>
       <Text fontSize="xl" fontWeight="bold" mt={4}>
         Próximas Consultas
       </Text>
@@ -102,7 +103,6 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
             </GridItem>
             <GridItem area={"name"}>
               <Text fontSize="lg" fontWeight="bold" pt="5px ">
-                
                 {appointment.doctor.name}
               </Text>
             </GridItem>
@@ -215,7 +215,7 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
                       : "Teleconsulta"}
                   </Text>
                   <Text fontSize="md" color="gray.500" pt="5px">
-                    R${selectedAppointment.doctor.doctor.pricing},00
+                    R$ {selectedAppointment.doctor.doctor.pricing}
                   </Text>
 
                   <Button

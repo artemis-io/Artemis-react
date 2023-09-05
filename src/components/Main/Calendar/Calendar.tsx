@@ -186,7 +186,7 @@ export default function Calendar({
                   return (
                     <Td key={date.toString()}>
                       <CalendarButton
-                        isSelected={isSelected || false} // Provide a default value of false
+                        isSelected={isSelected || false}
                         onClick={() => onDateSelected(date.toDate())}
                         isDisabled={isDisabled}
                       >
