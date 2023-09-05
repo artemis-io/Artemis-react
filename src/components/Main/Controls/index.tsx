@@ -16,7 +16,6 @@ import { apiMed } from "../../../services/api";
 import { Patient } from "../../../shared/interface";
 import { AUTH_TOKEN_STORAGE } from "../../../shared/storage/config";
 
-
 interface ControlsBarProps {
   handleLogout: () => void;
   isAudioEnabled: boolean;
@@ -94,7 +93,6 @@ const ControlsBar = ({
 
     fetchPatient();
   }, [patientId]);
-
 
   return (
     <Flex

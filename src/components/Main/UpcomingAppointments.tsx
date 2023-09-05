@@ -215,7 +215,7 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
                       : "Teleconsulta"}
                   </Text>
                   <Text fontSize="md" color="gray.500" pt="5px">
-                    R${selectedAppointment.doctor.doctor.pricing},00
+                    R$ {selectedAppointment.doctor.doctor.pricing}
                   </Text>
 
                   <Button

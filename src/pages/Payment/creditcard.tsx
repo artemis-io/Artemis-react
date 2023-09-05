@@ -20,7 +20,7 @@ import {
   formatCreditCardNumber,
   formatCVC,
   formatExpirationDate,
-} from "../../utils/credit-card";
+} from "../../utils/credit-card-validations";
 import PrimaryButton from "../../components/Style/Buttons/Primarybutton";
 import PatientSidebar from "../../components/Main/PatientSideBar/PatientSideBar";
 import { useParams } from "react-router-dom";
@@ -183,8 +183,8 @@ const PaymentPage = () => {
           as={SimpleGrid}
           maxW={"7xl"}
           columns={{ base: 1, md: 2 }}
-          spacing={{ base: 5, lg: 16 }}
-          py={{ base: 2, sm: 10, lg: 10 }}
+          spacing={{ base: 1, lg: 16 }}
+          py={{ base: 0, sm: 10, lg: 10 }}
         >
           <Stack spacing={{ base: 4, md: 4 }}>
             <Heading color="#747B7D" fontSize="20px">
@@ -205,7 +205,7 @@ const PaymentPage = () => {
                   {paymentData.cartaonumero || "0000 0000 0000 0000"}
                 </Text>
                 <Text fontWeight="bold" textTransform="uppercase" mb={4}>
-                  {paymentData.cartaonome || "João da Silva"}
+                  {paymentData.cartaonome || "NOME DO TITULAR"}
                 </Text>
               </Flex>
 
@@ -313,7 +313,7 @@ const PaymentPage = () => {
               </FormControl>
             </Box>
             <Divider />
-            <Flex justify="space-between" color="#494949" mt={8}>
+            <Flex justify="space-between" color="#494949">
               <Heading fontSize="20px">Total</Heading>
               <Heading fontSize="20px">R$ {pricing}</Heading>
             </Flex>
@@ -323,7 +323,6 @@ const PaymentPage = () => {
                 w="400px"
                 h="50px"
                 type="submit"
-                mt={8}
                 isLoading={loading}
                 onClick={handleSubmit}
               >

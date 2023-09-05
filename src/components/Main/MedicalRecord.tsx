@@ -348,11 +348,15 @@ MedicalRecordContentProps) => {
                       altura: event.target.value,
                     }))
                   }
+                  maxLength={4}
+                  pattern="^\d/d+.(\.\d{1,2})?$"
                 />
               </FormControl>
               <FormControl>
                 <StyledLabel fontSize="sm">Peso</StyledLabel>
                 <Input
+                maxLength={6}
+                 pattern="^\d+(\.\d{1,2})?$"
                   defaultValue={medicalRecord.peso}
                   onChange={(event) =>
                     setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
@@ -381,6 +385,7 @@ MedicalRecordContentProps) => {
               <FormControl>
                 <StyledLabel fontSize="sm">IMC</StyledLabel>
                 <Input
+                  maxLength={6}
                   defaultValue={medicalRecord.imc}
                   onChange={(event) =>
                     setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
@@ -393,6 +398,7 @@ MedicalRecordContentProps) => {
               <FormControl>
                 <StyledLabel fontSize="sm">Freq. Cardíaca</StyledLabel>
                 <Input
+                 maxLength={3}
                   defaultValue={medicalRecord.freqcardiaca}
                   onChange={(event) =>
                     setMedicalRecord((prevMedicalRecord: PatientInfoData) => ({
@@ -422,6 +428,7 @@ MedicalRecordContentProps) => {
                 <FormControl>
                   <StyledLabel fontSize="sm">Freq. Respiratória</StyledLabel>
                   <Input
+                      maxLength={2}
                     defaultValue={medicalRecord.freqrespiratoria}
                     onChange={(event) =>
                       setMedicalRecord(
@@ -450,6 +457,7 @@ MedicalRecordContentProps) => {
                 <FormControl>
                   <StyledLabel fontSize="sm">Glasgow</StyledLabel>
                   <Input
+                   maxLength={2}
                     defaultValue={medicalRecord.glasgow}
                     onChange={(event) =>
                       setMedicalRecord(
@@ -468,6 +476,7 @@ MedicalRecordContentProps) => {
                 <FormControl>
                   <StyledLabel fontSize="sm">TAX</StyledLabel>
                   <Input
+                   maxLength={3}
                     defaultValue={medicalRecord.tax}
                     onChange={(event) =>
                       setMedicalRecord(
@@ -495,6 +504,7 @@ MedicalRecordContentProps) => {
                 <FormControl>
                   <StyledLabel fontSize="sm">Pressão Arterial</StyledLabel>
                   <Input
+                   maxLength={7}
                     defaultValue={medicalRecord.pressaoarterial}
                     onChange={(event) =>
                       setMedicalRecord(

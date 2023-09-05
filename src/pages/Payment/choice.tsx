@@ -39,7 +39,7 @@ export default function ChoicePage({ selectedAppointment }: OrderProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    onOpen(); // Abre o modal assim que a página for carregada
+    onOpen(); 
   }, []);
 
   return (
@@ -87,7 +87,7 @@ export default function ChoicePage({ selectedAppointment }: OrderProps) {
                   {selectedAppointment.doctor.doctor.speciality.join(", ")}
                 </Text>
                 <Heading color="#494949" fontSize="16px" mt={2}>
-                  R${selectedAppointment.doctor.doctor.pricing},00
+                  R$ {selectedAppointment.doctor.doctor.pricing}
                 </Heading>
               </GridItem>
               <GridItem area={"date"} pl="8px">
