@@ -14,11 +14,15 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { setStep3Data } from "../../../../shared/reducer/DoctorReducer";
-import StyledLabel from "../../Forms/StyledLabel";
+import {
+  setStep3Data,
+  submitDoctorData,
+} from "../../../../shared/reducer/DoctorReducer";
+import { DoctorStep3Data } from "../../../../shared/types";
 import { useNavigate } from "react-router-dom";
 import { apiMed } from "../../../../services/api";
 import { useToast } from "@chakra-ui/react";
+import StyledLabel from "../../Forms/StyledLabel";
 
 
 function DoctorChose() {
@@ -35,6 +39,7 @@ function DoctorChose() {
     crm: "",
     pricing: "",
     bio: "",
+    speciality: [],
   });
   const toast = useToast();
 

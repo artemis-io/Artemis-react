@@ -30,19 +30,27 @@ export function DoctorData({ handleNextStep }: any) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setStep1((prevFormData) => ({ ...prevFormData, [name]: value }));
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+  
+    // Update the state in the action dispatch using the new value
+    dispatch(
+      setStep1Data({
+        name: name === 'name' ? value : step1.name,
+        email: name === 'email' ? value : step1.email,
+        password: name === 'password' ? value : step1.password,
+        confirmPassword: name === 'confirmPassword' ? value : step1.confirmPassword,
+      })
+    );
   };
 
   const isPasswordValid = () => {
     const { password } = step1;
     const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/;
     return passwordRegex.test(password);
   };
-
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isPasswordValid()) {
@@ -104,7 +112,7 @@ export function DoctorData({ handleNextStep }: any) {
               onChange={handleInputChange}
             />
             <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={togglePasswordVisibility}>
+              <Button h="1.75rem" size="sm" onClick={handleTogglePasswordVisibility}>
                 {showPassword ? (
                   <ViewOffIcon color="gray.500" />
                 ) : (
@@ -127,6 +135,7 @@ export function DoctorData({ handleNextStep }: any) {
             />
           </InputGroup>
         </FormControl>
+
         <Button
           onClick={handleSubmit}
           bg={"blue.400"}
